@@ -7,3 +7,16 @@
     box-sizing: border-box; /* inclui a borda e preenchimento dentro da largura e altura especificadas */
     box-shadow: inset 0 0 1000px #cab602; /* adiciona uma sombra interna */
 }
+table
+    {
+      border-radius: 30px;  
+    }
+tr, td, th
+    {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+    }
+body {
+  overflow: hidden; 
+}
