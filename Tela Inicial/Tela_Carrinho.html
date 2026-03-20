@@ -7,46 +7,89 @@
     <title>Document</title>
     <link rel="stylesheet" href="css.css">
 </head>
-
-<body class="furos">
-    <!-- Tabela de produtos -->
-    <table border="1" align="right" style="height:400px; width: 300px; border-collapse: collapse;">
+<body>
+<!-- 
+    width: Largura
+    height: Altura    
+-->
+<!-- Tabela de produtos -->
+    <table border="" align="right" style=" width: 50%; height: 99vh;" class="bordatabela">
         <tr>
-            <th style="height: 20px;">
-                <img src="Carrinho de supermercado.png" width="50" height="50">
+<!-- Imagem do carrinho -->
+            <th style="height: 50%; height: 10vh;">
+                <img src="Carrinho de supermercado.png" width="10%" height="100%">
             </th>
         </tr>
+<!-- Itens -->
         <tr>
-            <td>
-
+            <td style="height: 50%; height: 69vh;">
+                
             </td>
         </tr>
     </table>
-    <table border="1"  style="height: 300px; width: 161px;">
-        <tr>
-            <td>
-
+<!-- Tabela de dados do cliente -->
+    <table border="" style="width: 50%; height: 79vh; border-radius: 30px;">
+        <tr style="height: 10%;">
+<!-- Telefone -->
+            <td style="font-size: 4vh;">
+                Telefone:
+            </td>
+<!-- Caixa de texto do telefone -->
+            <td align="center">
+                <input type="text" name="telefone" id="telefone" placeholder="Digite seu telefone" style="font-size: 5vh;">
             </td>
         </tr>
-    </table>
-    <table border="1" style="border-collapse: collapse;">
-        <tr style="height: 40px; width: 40px;">
-            <th style="font-size: 20px;">
-                Total:
+        <tr style="height: 10%;">
+<!-- Nome -->
+            <td style="font-size: 4vh;">
+                Nome:
+            </td>
+<!-- Caixa de texto do nome -->            
+            <td align="center">
+                <input type="text" name="nome" id="nome" placeholder="Digite seu nome" style="font-size: 5vh;">
+            </td>
+        </tr>
+        <tr style="height: 10%;">
+<!-- Forma de pagamento -->
+            <td style="font-size: 4vh;">
+                forma de pagamento:
+            </td>
+<!-- Caixa de seleção da forma de pagamento -->
+            <td align="center">
+                <select name="pagamento" id="pagamento" style="font-size: 5vh;">
+                    <option value="dinheiro">Dinheiro</option>
+                    <option value="cartao">Cartão de crédito/débito</option>
+                    <option value="pix">Pix</option>
+                    <option value="crediario">Crediário</option>
+                </select>
+            </td>
+        </tr>
+<!-- Espaçamento -->
+        <tr style="height: 70%;">
+        </tr>
+    </table>    
+<!-- Tabela de desconto e total -->
+    <table border="1" style=" width: 50%; height: 20vh; border-radius: 30px;">
+        <tr>
+<!-- Desconto -->
+            <th style="font-size: 4vh;">
+                Desconto:
             </th>
-            <td style="font-size: 20px;">
+<!-- Valor do desconto -->
+            <td style="font-size: 4vh;">
                 R$00,00
             </td>
         </tr>
-        <tr style="height: 40px; width: 40px;">
-            <th style="font-size: 20px;">
-                Desconto:
+<!-- Total -->
+        <tr>
+            <th style="font-size: 4vh;">
+                Total:
             </th>
-            <td style="font-size: 20px;">
+<!-- Valor total -->
+            <td style="font-size: 4vh;">
                 R$00,00
             </td>
         </tr>
     </table>
 </body>
-
 </html>
