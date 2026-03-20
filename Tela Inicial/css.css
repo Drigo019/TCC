@@ -1,9 +1,9 @@
 .borda {
     background-color: #FFFACD; /* define a cor do fundo */
     border: solid; /* coloca uma borda sólida */
-    border-color: #ff0000; /* define a cor da borda */
+    border-color: #c7a900ec; /* define a cor da borda */
     margin: 0; /* remove a margem */
     min-height: 100vh; /* define a altura mínima */
     box-sizing: border-box; /* inclui a borda e preenchimento dentro da largura e altura especificadas */
-    box-shadow: inset 0 0 1000px #000000; /* adiciona uma sombra interna */
+    box-shadow: inset 0 0 1000px #cab602; /* adiciona uma sombra interna */
 }
