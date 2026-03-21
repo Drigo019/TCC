@@ -8,54 +8,61 @@
     <script src="script.js"></script>
 </head>
 <body> 
-    <table id="minhaTabela" border="1">
+    <!-- width: Largura  height: Altura    -->
+<!-- Tabela do Menu -->
+    <table id="minhaTabela" border="1" width="20%" height="600vh" align="left">
         <tr>
             <td>
                 
             </td>
         </tr>
     </table>
-    <table align="center">
+    <table style="width: 80%;" border="1">
 <!-- Logo -->
         <tr>
-            <td>
+            <td align="center">
                 <img src="Logo.png" width="400" height="400">    
             </td>
         </tr>
     </table>
-    <table align="center">
+    <table style="width: 80%;" border="1">
 <!-- Botão Menu -->
         <tr>
-            <td> 
+            <td style="width: 25%;" align="center"> 
                 <button type="button" onclick="menu()">
                     <img src="botao_menu.png" style="width: 85px; height: 85px;">
                 </button>
             </td>
-<!-- Espaçamento de um botão para outro-->
-            <td style="width: 25px;"></td>
 <!-- Botão de Novo Pedido  -->
-            <td>
+            <td style="width: 25%;" align="center"> 
                 <button type="button" onclick="window.location.href='Tela_Carrinho.html'">
                     <img src="botao_novo_pedido.png" style="width: 85px; height: 85px;">
                 </button>
             </td>
-<!-- Espaçamento de um botão para outro-->
-            <td style="width: 25px;"></td>
 <!-- Botão Estoque -->
-            <td>
+            <td style="width: 25%;" align="center">
                 <button type="button" onclick="estoque()">
                     <img src="botao_estoque.png" style="width: 85px; height: 85px;">
                 </button>
             </td>
-<!-- Espaçamento de um botão para outro-->
-            <td style="width: 25px;"></td>
 <!-- Botão Sair -->
-            <td>
-                <button type="button" onclick="window.location.href='Tela_de_Login.html'">
+            <td style="width: 25%;" align="center">
+                <button type="button" onclick="window.location.href='Tela_de_Login.html'" style="height: 50vh;">
                     <img src="botao_sair.png" style="width: 85px; height: 85px;">
                 </button>
             </td>
         </tr>
     </table>
 </body>
+<!-- Estilo para a tabela menu aparecer e desaparecer -->
+<style>
+     #minhaTabela 
+        {
+            display: none;
+        }
+    body
+        {
+            overflow: hidden;
+        }
+</style>
 </html>
