@@ -14,3 +14,8 @@ function sair()
     {
         alert("Sair");
     }
+function finalizarPedido()    
+    {
+        var formadepagamento = document.getElementById("pagamento").value;
+        alert("Forma de pagamento selecionada: " + formadepagamento);
+    }
