@@ -1,17 +1,13 @@
 function menu()
     {
-// Obter referências dos elementos
-        var select = document.getElementById("pagamento");
         var tabela = document.getElementById("minhaTabela");
-
-// 4. Lógica JavaScript para mostrar/esconder
-        if (select.value === "Dinheiro") 
+        if (tabela.style.display === "none" || tabela.style.display === "") 
             {
-                tabela.style.display = "table"; // Exibe a tabela
+                tabela.style.display = "table"; // Mostra
             } 
         else 
             {
-                tabela.style.display = "none"; // Oculta a tabela
+                tabela.style.display = "none"; // Esconde
             }
     }
 function novoPedido()
