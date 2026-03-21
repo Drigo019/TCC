@@ -26,9 +26,4 @@ tr, td, th
 body {
   overflow: hidden; 
 }
-#minhaTabela {
-            display: none;
-            margin-top: 20px;
-            border-collapse: collapse;
-            width: 50%;
-        }
+
