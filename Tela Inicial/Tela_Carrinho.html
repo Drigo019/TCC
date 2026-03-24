@@ -11,7 +11,7 @@
 <body class="fundo"> 
 <!-- width: Largura  height: Altura -->
 <!-- Tabela de produtos -->
-    <table border="" align="right" style=" width: 49%; height: 99vh;" class="bordatabela">
+    <table border="" align="right" style=" width: 49%; height: 99vh; background-color: rgba(255, 230, 2, 0.719);" class="bordatabela">
         <tr>
 <!-- Imagem do carrinho -->
             <th style="width: 50%; height: 10vh;">
@@ -25,40 +25,51 @@
             </td>
         </tr>
     </table>
+
+
 <!-- Tabela de dados do cliente -->
-    <table border="" style="width: 50%; height: 79vh; border-radius: 30px;">
+    <table border="" style="width:50%; height: 75vh; border-radius: 30px;  background-color: rgba(255, 230, 2, 0.719);">
         <tr style="height: 10%;">
 <!-- Telefone -->
-            <td style="font-size: 4vh;">
+            <td style="font-size: 4vh;" align="center">
                 Telefone:
             </td>
 <!-- Caixa de texto do telefone -->
-            <td align="center">
-                <input type="text" name="telefone" id="telefone" placeholder="Digite seu telefone" style="font-size: 5vh;">
+            <td align="center" align="center">
+                <input type="text" name="telefone" id="telefone" placeholder="Digite seu telefone" style="font-size: 5vh; border-radius: 5px;">
             </td>
         </tr>
         <tr style="height: 10%;">
 <!-- Nome -->
-            <td style="font-size: 4vh;">
+            <td style="font-size: 4vh;" align="center">
                 Nome:
             </td>
 <!-- Caixa de texto do nome -->            
-            <td align="center">
-                <input type="text" name="nome" id="nome" placeholder="Digite seu nome" style="font-size: 5vh;">
+            <td align="center" align="center">
+                <input type="text" name="nome" id="nome" placeholder="Digite seu nome" style="font-size: 5vh; border-radius: 5px;">
+            </td>
+        </tr>
+<!-- CPF -->
+            <td style="font-size: 4vh;" align="center">
+                CPF:
+            </td>
+<!-- Caixa de texto do CPF -->            
+            <td align="center" align="center">
+                <input type="text" name="cpf" id="cpf" placeholder="XXX.XXX.XXX-XX" style="font-size: 5vh; border-radius: 5px;">
             </td>
         </tr>
         <tr style="height: 10%;">
 <!-- Forma de pagamento -->
-            <td style="font-size: 4vh;">
+            <td style="font-size: 4vh;" align="center">
                 Forma de pagamento:
             </td>
 <!-- Caixa de seleção da forma de pagamento -->
-            <td align="center" >
-                <select name="pagamento" id="pagamento" style="font-size: 5vh;" onclick="formadepagamento()">
-                    <option value="dinheiro">Dinheiro</option>
-                    <option value="cartao">Cartão de crédito/débito</option>
-                    <option value="pix">Pix</option>
-                    <option value="crediario">Crediário</option>
+            <td align="center">
+                <select name="pagamento" id="pagamento" style="font-size: 5vh; border-radius: 10px;" onclick="formadepagamento()">
+                    <option value="Dinheiro"> Dinheiro </option>
+                    <option value="Cartão"> Cartão de crédito/débito </option>
+                    <option value="Pix"> Pix </option>
+                    <option value="Crediário"> Crediário </option>
                 </select>
             </td>
 <!-- Espaçamento -->
@@ -71,9 +82,10 @@
                 </button>
             </td>
         </tr>
-    </table>    
+    </table>  
+    <br>
 <!-- Tabela de desconto e total -->
-    <table border="1" style=" width: 50%; height: 20vh; border-radius: 30px;">
+    <table border="1" style=" width: 50%; height: 20vh; border-radius: 30px; background-color: rgba(255, 230, 2, 0.719);" >
         <tr>
 <!-- Desconto -->
             <th style="font-size: 4vh;">
