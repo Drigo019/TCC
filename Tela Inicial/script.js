@@ -1,14 +1,6 @@
-function menu()
+function configuracao()
     {
-        var tabela = document.getElementById("minhaTabela");
-        if (tabela.style.display === "none" || tabela.style.display === "") 
-            {
-                tabela.style.display = "table"; // Mostra
-            } 
-        else 
-            {
-                tabela.style.display = "none"; // Esconde
-            }
+        alert("Configuração")
     }
 function novoPedido()
     {
@@ -27,6 +19,3 @@ function finalizarPedido()
         var formadepagamento = document.getElementById("pagamento").value;
         alert("Forma de pagamento selecionada: " + formadepagamento);
     }
-function mostrarTabela() {
-           
-        }
