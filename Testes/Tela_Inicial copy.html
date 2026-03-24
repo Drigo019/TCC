@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="script.js"></script>
+</head>
+<body> 
+    <!-- width: Largura  height: Altura    -->
+<!-- Tabela do Menu -->
+    <table id="minhaTabela" border="1" style=" width: 20%; height: 99vh;" align="left">
+        <tr>
+            <td>
+                    
+            </td>
+        </tr>
+    </table>
+    <table style="width: 80%; height: 99vh;" border="1">
+<!-- Logo -->
+        <tr>
+            <td align="center" colspan="4">
+                <img src="Logo.png" width="400" height="400">    
+            </td>
+        </tr>
+<!-- Botão Menu -->
+        <tr style="height: 17vh;">
+            <td style="width: 25%;" align="center"> 
+                <button type="button" onclick="menu()">
+                    <img src="botao_menu.png" style="width: 85px; height: 85px;">
+                </button>
+            </td>
+<!-- Botão de Novo Pedido  -->
+            <td style="width: 25%;" align="center"> 
+                <button type="button" onclick="window.location.href='Tela_Carrinho.html'">
+                    <img src="botao_novo_pedido.png" style="width: 85px; height: 85px;">
+                </button>
+            </td>
+<!-- Botão Estoque -->
+            <td style="width: 25%;" align="center">
+                <button type="button" onclick="estoque()">
+                    <img src="botao_estoque.png" style="width: 85px; height: 85px;">
+                </button>
+            </td>
+<!-- Botão Sair -->
+            <td style="width: 25%;" align="center">
+                <button type="button" onclick="window.location.href='Tela_de_Login.html'" style="width: 50%;">
+                    <img src="botao_sair.png" style="width: 85px; height: 85px;">
+                </button>
+            </td>
+        </tr>
+    </table>
+</body>
+<!-- Estilo para a tabela menu aparecer e desaparecer -->
+<style>
+     #minhaTabela 
+        {
+            display: none;
+        }
+    body
+        {
+            overflow: hidden;
+        }
+</style>
+</html>
