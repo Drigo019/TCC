@@ -2,65 +2,69 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=100%, initial-scale=1.0">
 
     <title>Document</title>
     <link rel="stylesheet" href="css.css">
     <link rel="stylesheet" href="script.js">
 </head>
-<body class="borda" > 
-<!-- Botão de Cadastrar -->
-    <div align="right"> 
-        <input type="button" value="Cadastrar"  onclick="window.location.href='Tela_Cadastro.html'" >
-    </div>
-    <table align="center" style="width: 5vw; height: 50%;">
+<body class="borda"> 
+    </table>
+    <table align="center" style="width: 10%; height: 100vh;">
         <tr>
 <!-- Logo -->
             <td colspan="2">
-                <img src="Logo.png" width="200" height="200">
+                <img src="Logo.png" width="225vw" height="225vh">
             </td>
         </tr>
         <tr>
 <!-- Email -->
-            <td style="font-size: 125%">
+            <td style="font-size: 125%; height: 10%;" align="left">
                 Email:
             </td>
         </tr>
         <tr>
-            <td style="width: 100%; height: 100%;">
+            <td style="width: 100%; height: 10%;">
 <!-- caixa de texto do email -->
                 <input type="email" name="Email" id="Email" placeholder="Digite seu email">
             </td>
         </tr>
         <tr>
 <!-- Senha -->
-            <td style="font-size: 125%;">
+            <td style="font-size: 125%; height: 10%;">
                 Senha:
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="height: 10%;">
 <!-- Caixa de texto da senha -->
                 <input type="password" name="Senha" id="Senha" placeholder="Digite sua senha">
             </td>
         </tr>
 <!-- Espaçamento -->
-        <tr style="height:20%;"></tr>
+        <tr style="height:10%;"></tr>
         <tr>
 <!-- Botão de Entrar -->
             <td align="center">
-                <input type="button" value="Entrar" style="font-size: 30px;" onclick="window.location.href='Tela_Inicial.html'">
+                <input type="button" value="Entrar" style="font-size: 100%;" onclick="window.location.href='Tela_Inicial.html'">
+                <input type="button" value="Cadastrar" style="font-size: 100%;" onclick="window.location.href='Tela_Cadastro.html'">
             </td>
         </tr>
-    </table>
 </body>
 
 <!-- Estilos -->
 <style>
+    .semborda
+        {
+           border-top: none; /* Tira a boda de cima */
+            border-right: none; /* Tira a borda da direita */
+            border-left: none; /* Tira a borda da esquerda */
+            border-bottom: none; /* Tira a borda de baixo */ 
+        }
     td, tr, th
         {   
             border-top: none; /* Tira a boda de cima */
-            border-width: none; /* Tira a borda da direita */
+            border-right: none; /* Tira a borda da direita */
             border-left: none; /* Tira a borda da esquerda */
             border-bottom: none; /* Tira a borda de baixo */
         }
