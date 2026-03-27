@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css.css">
 </head>
-<body>
+<body class="borda">
     <table align="center">
         <tr>
             <td colspan="2">
 <!-- Logo -->  
-                <img src="Logo.png" width="200" height="200">
+                <img src="Imagens/Logo.png" width="200" height="200">
             </td>
         </tr>
         <tr>
@@ -37,14 +38,22 @@
                 <input type="password" name="senha" id="senha" placeholder="Digite sua senha" > 
             </td>
         </tr>
-<!-- Espaçamento -->
-        <tr style="height:20px;"></tr>
-        <tr>
 <!-- Botão de Cadastrar -->
             <td align="center">
-                <input type="button" value="Cadastrar" style="font-size: 30px;" onclick="window.location.href='Tela_de_Login.html'">
+                <button type="button" value="cadastrar" style="font-size: 100%;" onclick="window.location.href='Tela_Login.html'">
+                    Cadastrar
+                </button>
             </td>
         </tr>
     </table>
 </body>
+<style>
+    tr, td, th
+        {
+            border-bottom: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+</style>
 </html>
