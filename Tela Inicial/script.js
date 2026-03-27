@@ -19,5 +19,8 @@ function finalizarPedido()
         var formadepagamento = document.getElementById("pagamento").value;
         alert("Forma de pagamento selecionada: " + formadepagamento);
     }
-
+function ClienteSemCadastro() 
+    {
+        alert("Cliente não Cadastrado:");
+    }
 
