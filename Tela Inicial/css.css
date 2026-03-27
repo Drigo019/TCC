@@ -23,7 +23,7 @@ tr, td, th
         border-right: none;
         border-bottom: 2px solid black; 
     }
-body 
+.body 
     {
         overflow: hidden; 
     }
