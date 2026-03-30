@@ -1,7 +1,7 @@
 .borda {
     background-color:rgb(252, 227, 188); /* define a cor do fundo */
     border: solid; /* coloca uma borda sólida */
-    border-color: #eba44e; /* define a cor da borda */
+    border-color: #ff8c00; /* define a cor da borda */
     margin: 0; /* remove a margem */
     min-height: 100vh; /* define a altura mínima */
     box-sizing: border-box; /* inclui a borda e preenchimento dentro da largura e altura especificadas */
@@ -10,6 +10,10 @@
 .fundo
     {
         background-color: rgba(70, 69, 69, 0.719);
+    }
+.body 
+    {
+        overflow: hidden; 
     }
 table
     {
@@ -22,8 +26,4 @@ tr, td, th
         border-left: none;
         border-right: none;
         border-bottom: 2px solid black; 
-    }
-.body 
-    {
-        overflow: hidden; 
     }
