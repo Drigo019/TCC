@@ -9,62 +9,44 @@
     <link rel="stylesheet" href="script.js">
 </head>
 <body class="borda"> 
-    <table align="center" style="width: 10%; height:vh;">
+    <table align="center">
         <tr>
-            <td align="center">
-<!-- Logo -->
+            <td align="center" colspan="2">
                 <img src="Imagens/Logo.png" style="width: 150px; height: 150px;"> 
             </td>
         </tr>
         <tr>
-<!-- Email -->
-            <td style="font-size: 125%; height: 10%;" align="left">
+            <th>
                 Email:
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 100%; height: 10%;">
-<!-- Caixa de texto do email -->
+            </th>
+            <td>
                 <input type="email" name="Email" id="Email" placeholder="Digite seu email">
             </td>
         </tr>
         <tr>
-<!-- Senha -->
-            <td style="font-size: 125%; height: 10%;">
+            <th>
                 Senha:
-            </td>
-        </tr>
-        <tr>
-            <td style="height: 10%;">
-<!-- Caixa de texto da senha -->
+            </th>
+
+            <td>
                 <input type="password" name="Senha" id="Senha" placeholder="Digite sua senha">
             </td>
         </tr>
-<!-- Espaçamento -->
-        <tr style="height:10%;"></tr>
         <tr>
-<!-- Botão de Entrar -->
-            <td align="center">
+            <td align="center" colspan="2">
                 <button type="button" value="Entrar" style="font-size: 100%;" onclick="Cadastrar()">
-                     Entrar
+                    Entrar
                 </button>
                 <button type="button" value="Entrar" style="font-size: 100%;" onclick="window.location.href='Tela_Inicial.html'">
-                     Entrar.
+                    Entrar.
                 </button>
             </td>
         </tr>
+    </table> 
 </body>
-
 <!-- Estilos -->
 <style>
-    .semborda
-        {
-           border-top: none; /* Tira a boda de cima */
-            border-right: none; /* Tira a borda da direita */
-            border-left: none; /* Tira a borda da esquerda */
-            border-bottom: none; /* Tira a borda de baixo */ 
-        }
-    td, tr, th
+    table, td, tr, th
         {   
             border-top: none; /* Tira a boda de cima */
             border-right: none; /* Tira a borda da direita */
