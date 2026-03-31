@@ -7,35 +7,38 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body class="borda">
-    <table align="center">
-        <tr> 
-            <td align="center" colspan="2">
-                <img src="Imagens/Logo.png" style="width: 150px; height: 150px;">
-            </td>
-        </tr>
-        <tr>
-            <th style="font-size: 20px;">
-                Email:
-            </th>
-            <td>
-                <input type="email" name="email" id="email" placeholder="Digite seu email">
-            </td>
-        </tr>
-        <tr>
-            <th style="font-size: 20px;">
-                Senha:
-            </th>
-            <td>
-                <input type="password" name="senha" id="senha" placeholder="Digite sua senha" > 
-            </td>
-        </tr>
-            <td align="center" colspan="2">
-                <button type="button" value="cadastrar" style="font-size: 100%;" onclick="window.location.href='Tela_Login.html'">
-                    Cadastrar
-                </button>
-            </td>
-        </tr>
-    </table>
+    <form action="cadastro_de_cliente.php" method="post"></form>
+        <table align="center">
+            <tr> 
+                <td align="center" colspan="2">
+                    <img src="Imagens/Logo.png" style="width: 150px; height: 150px;">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>E-mail:</label>
+                </td>
+                <td>
+                    <input type="email" name="email" required>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Senha:</label>
+                </td>
+                <td>
+                    <input type="tex" name="senha" required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <button type="submit"> 
+                        Cadastrar
+                    </button>
+                </td>
+            </tr>
+        </table>
+    </form>
 </body>
 <style>
     table, tr, td, th
