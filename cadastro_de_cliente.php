@@ -1,13 +1,10 @@
 <?php
+    require("conexao.php");
+
+    $id_usuario = $_POST["id_usuario"];
     $email = $_POST["email"];
     $senha = $_POST["senha"];
 
-    if ( $email == "rcarvalho15022009@gmail.com" and $senha = "Drigo")
-        {
-            echo "Login correto";
-        }
-    else 
-        {
-            echo "Login incorreto";
-        }
-?>
+    $query = "INSERT INTO usuario(id_usuario, email, senha) VALUE('id_usuario','$email', '$senha')";  
+    
+    header("Location: Tela_Login.html?criado=sucesso");
