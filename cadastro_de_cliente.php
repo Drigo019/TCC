@@ -13,7 +13,7 @@
 
             $query = "SELECT * FROM usuario WHERE nome = ? AND id_usuario = ? AND email = ? AND senha = ? AND ativo = ?";
             
-            $stm = $pdo -> prepare();
+            $stm = $pdo -> prepare( );
             $stm -> bindValue(1, $nome);
             $stm -> bindValue(2, $id_usuario);
             $stm -> bindValue(3, $email);
