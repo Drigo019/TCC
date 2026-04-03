@@ -9,16 +9,15 @@
             $senha = $_POST["senha"];
             $ativo = "ativo";
 
+            $query = "SELECT * FROM usuario WHERE $id_usuario = ? AND $email = ? AND $senha = ?";
 
-
-            $query = "SELECT * FROM usuario WHERE nome = ? AND id_usuario = ? AND email = ? AND senha = ? AND ativo = ?";
-            
-            $stm = $pdo -> prepare( );
+            var_dump($pdo);
+            $stm = $pdo -> prepare($query);
             $stm -> bindValue(1, $nome);
-            $stm -> bindValue(2, $id_usuario);
-            $stm -> bindValue(3, $email);
-            $stm -> bindValue(4, $senha);
-            $stm -> bindValue(5, $ativo);
+            $stm -> bindValue(2, $email);
+            $stm -> bindValue(3, $senha);
+            $stm -> bindValue(4, $id_usuario);
+
 
             if ($stm -> execute()) 
                 {
