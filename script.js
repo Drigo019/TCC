@@ -6,7 +6,7 @@ function novoPedido()
     {
         alert("Novo Pedido");
     }
-function estoque()
+function estoque()  
     {
         alert("Estoque");
     }   
@@ -19,4 +19,12 @@ function finalizarPedido()
         var formadepagamento = document.getElementById("pagamento").value;
         alert("Forma de pagamento selecionada: " + formadepagamento);
     }
+function Cadastro()
+    {
+        let resposta = confirm("Cliente Cadastrado com sucesso!! Deseja fazer login?");
 
+        if (resposta) 
+            {
+                window.location.href='Tela_Login.html';
+            } 
+    }

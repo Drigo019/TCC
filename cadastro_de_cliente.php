@@ -6,11 +6,5 @@
     $email = $_POST["email"];
     $senha = $_POST["senha"];
 
-    if ($_SERVER["REQUEST_METHOD"] === "POST")
-        {
-            $dados = "INSERT INTO usuario (nome, email, senha) VALUES ('$nome', '$email', '$senha')";
-
-            echo "<script>alert('Cliente cadastrado com sucesso!!');</script>";
-        }
-
-    
+    $sql = "insert into usuario(nome, email, senha) values('$nome', '$email', '$senha')";
+    $result = mysqli_query($conexao, $sql);
