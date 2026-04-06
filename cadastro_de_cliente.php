@@ -2,7 +2,15 @@
     require("conexao.php");
     require("Tela_cadastro.html");
 
+    $nome = $_POST["nome"];
+    $email = $_POST["email"];
+    $senha = $_POST["senha"];
+
     if ($_SERVER["REQUEST_METHOD"] === "POST")
         {
-            INSERT INTO usuario ('id_usuario', 'nome', 'email', 'senha', 'ativo') VALUES ('[value-1]','[value-2]','[value-3]','[value-4]','[value-5]')
+            $dados = "INSERT INTO usuario (nome, email, senha) VALUES ('$nome', '$email', '$senha')";
+
+            echo "<script>alert('Cliente cadastrado com sucesso!!');</script>";
         }
+
+    

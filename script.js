@@ -20,4 +20,3 @@ function finalizarPedido()
         alert("Forma de pagamento selecionada: " + formadepagamento);
     }
 
-
