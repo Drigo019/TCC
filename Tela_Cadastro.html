@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body class="borda">
-    <form action="cadastro_de_cliente.php">
+    <form action="cadastro_de_cliente.php" method="post">
         <table align="center">
             <tr> 
                 <td align="center" colspan="2">
@@ -38,9 +38,14 @@
                 </td>
             </tr>
                 <td colspan="2" align="center">
-                    <button type="submit"> 
+                    <button type="submit" onclick="window.location.href='Tela_Login.html'"> 
                         Cadastrar
                     </button>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="hidden" id="id_usuario" name="id_usuario">
                 </td>
             </tr>
         </table>

@@ -1,10 +1,24 @@
 <?php
     require("conexao.php");
-    require("Tela_cadastro.html");
 
-    $nome = $_POST["nome"];
-    $email = $_POST["email"];
-    $senha = $_POST["senha"];
+    if ($_SERVER["REQUEST_METHOD"] === "POST") 
+        {
+            $nome  = $_POST["nome"];
+            $email = $_POST["email"];
+            $senha = $_POST["senha"];
 
-    $sql = "insert into usuario(nome, email, senha) values('$nome', '$email', '$senha')";
-    $result = mysqli_query($conexao, $sql);
+            $sql  = "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)";
+            $stmt = mysqli_prepare($conexao, $sql);
+            mysqli_stmt_bind_param($stmt, "sss", $nome, $email, $senha);
+            $result = mysqli_stmt_execute($stmt);
+
+            if ($result) 
+                {
+                    echo "<script>alert('Cliente cadastrado com sucesso!!');</script>";
+                    echo "<script>window.location.href='Tela_Login.html';</script>";
+                } 
+            else 
+                {
+                    echo "<script>alert('Erro ao cadastrar. Tente novamente.');</script>";
+                }
+        }

@@ -1,8 +1,12 @@
 <?php
-    $servidor = '127.0.0.1';
-    $usuario = 'root';
-    $senha = "";
-    $banco = 'clientes';
-    $porta = '3306';
-    $conexao = mysqli_connect($servidor, $usuario, $senha, $banco, $porta);
+    $host = "localhost";
+    $usuario = "root";        
+    $senha = "";           
+    $banco = "Clientes"; 
 
+    $conexao = mysqli_connect($host, $usuario, $senha, $banco);
+
+    if (!$conexao) 
+        {
+            die("Erro na conexão: " . mysqli_connect_error());
+        }
