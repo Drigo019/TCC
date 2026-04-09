@@ -14,7 +14,7 @@
 
             if ($result) 
                 {
-                    echo "<script>alert('Cliente cadastrado com sucesso!!');</script>";
+                    echo "<script>alert('Cadastro feito com sucesso!!');</script>";
                     echo "<script>window.location.href='Tela_Login.html';</script>";
                 } 
             else 
