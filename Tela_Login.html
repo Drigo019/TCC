@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css.css">
 </head>
 <body class="borda"> 
+    <form action="Verificacao_de_cadastro.php" method="post">
     <table align="center">
         <tr>
             <td align="center" colspan="2">
@@ -34,15 +35,13 @@
         </tr>
         <tr>
             <td align="center" colspan="2">
-                <button type="button" value="Entrar" style="font-size: 100%;" onclick="Cadastrar()">
+                <button type="submit" value="Entrar" style="font-size: 100%;">
                     Entrar
-                </button>
-                <button type="button" value="Entrar" style="font-size: 100%;" onclick="window.location.href='Tela_Inicial.html'">
-                    Entrar.
                 </button>
             </td>
         </tr>
     </table> 
+    </form>
 </body>
 <!-- Estilos -->
 <style>
@@ -54,24 +53,4 @@
             border-bottom: none; /* Tira a borda de baixo */
         }
 </style>
-
-<!-- Scripts -->
-<script>
-    function Cadastrar() 
-    {
-        // Exibe a caixa de confirmação
-        let resposta = confirm("Login incorreto, você deseja fazer o cadastro?");
-        
-        // Se o cliente clicar em ok, isso faz com que ele vai para pagina de cadastro
-        if (resposta) 
-            {
-                window.location.href='Tela_Cadastro.html';
-            } 
-        // Se o cliente clicar em cancelar que continua na pagina de Login
-        else 
-            {
-                alert("Verifique se sua E-Mail/Senha esta correto");
-            };
-    }
-</script>
 </html>
