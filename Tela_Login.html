@@ -3,44 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Documet</title>
+    <title>Document</title>
     <link rel="stylesheet" href="script.js">
     <link rel="stylesheet" href="css.css">
 </head>
-<body class="borda"> 
+<body class="body"> 
     <form action="Verificacao_de_cadastro.php" method="post">
-    <table align="center">
-        <tr>
-            <td align="center" colspan="2">
-                <img src="Imagens/Logo.png" style="width: 150px; height: 150px;"> 
-            </td>
-        </tr>
-        <tr>
-            <th color >
-                Email:
-            </th>
-            <td>
-                <input type="email" name="email" id="email_tela_de_login" placeholder="Digite seu email" required>
-            </td>
-        </tr>
-        <tr>
-            <th>
-                Senha:
-            </th>
+        <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
+            <table align="center">
+                <tr>
+                    <td align="center" colspan="2">
+                        <img src="Imagens/Logo.png" style="width: 150px; height: 150px;"> 
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Email:
+                    </th>
+                    <td>
+                        <input type="email" name="email" id="email_tela_de_login" placeholder="Digite seu email" required>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Senha:
+                    </th>
 
-            <td>
-                <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
-            </td>
-        </tr>
-        <tr>
-            <td align="center" colspan="2">
-                <button type="submit" value="Entrar">
-                    Entrar
-                </button>
-            </td>
-        </tr>
-    </table> 
+                    <td>
+                        <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" colspan="2">
+                        <button type="submit" value="Entrar">
+                            Entrar
+                        </button>
+                    </td>
+                </tr>
+            </table> 
+        </div>
     </form>
 </body>
 <!-- Estilos -->

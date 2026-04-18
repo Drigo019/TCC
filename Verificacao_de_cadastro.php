@@ -54,8 +54,8 @@ $stmt->fetch();
 // password_verify criptografa a senha digitada e compara com o hash
     if (password_verify($senha, $senhaHash)) 
         {
-            // Senha correta - redireciona para a tela inicial
-            echo "<script>window.location.href='Tela_Inicial.html';</script>";
+            // Senha correta - redireciona para a tela principal
+            echo "<script>window.location.href='Tela_Principal.html';</script>";
         } 
     else 
         {
