@@ -46,7 +46,15 @@
 </body>
 <!-- Estilos -->
 <style>
-    table, td, tr, th
+    table
+        {
+            border: black 2px solid;
+            border-radius: 15px;
+            border-collapse: separate; /* Necessário para funcionar */
+            border-spacing: 10px;      /* Espaço horizontal e vertical */
+
+        }
+    td, tr, th
         {   
             border-top: none; /* Tira a boda de cima */
             border-right: none; /* Tira a borda da direita */

@@ -10,46 +10,54 @@
     <form action="cadastro_de_cliente.php" method="post">
         <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
         <table>
-            <tr> 
-                <td align="center" colspan="2">
-                    <img src="Imagens/Logo.png" style="width: 150px; height: 150px;">
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <label>Nome:</label>
-                </th>
-                <td>
-                    <input type="text" name="nome" required placeholder="Digite seu Nome:">
-                </td>
-            <tr>
-                <th>
-                    <label>E-mail:</label>
-                </th>
-                <td>
-                    <input type="email" name="email" required placeholder="Digite seu E-mail">
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    <label>Senha:</label>
-                </th>
-                <td>
-                    <input type="password" name="senha" required placeholder="Digite sua senha">
-                </td>
-            </tr>
-                <td colspan="2" align="center">
-                    <button type="submit" onclick="window.location.href='Tela_Login.html'"> 
-                        Cadastrar
-                    </button>
-                </td>
-            </tr>
+                <tr> 
+                    <td align="center" colspan="2">
+                        <img src="Imagens/Logo.png" style="width: 150px; height: 150px;">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label>Nome:</label>
+                    </th>
+                    <td>
+                        <input type="text" name="nome" required placeholder="Digite seu Nome:">
+                    </td>
+                <tr>
+                    <th>
+                        <label>E-mail:</label>
+                    </th>
+                    <td>
+                        <input type="email" name="email" required placeholder="Digite seu E-mail">
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <label>Senha:</label>
+                    </th>
+                    <td>
+                        <input type="password" name="senha" required placeholder="Digite sua senha">
+                    </td>
+                </tr>
+                    <td colspan="2" align="center">
+                        <button type="submit" onclick="window.location.href='Tela_Login.html'"> 
+                            Cadastrar
+                        </button>
+                    </td>
+                </tr>
         </table>
     </div>
     </form>
 </body>
 <style>
-    table, tr, td, th
+    table
+        {
+            border: black 2px solid;
+            border-radius: 15px;
+            border-collapse: separate; /* Necessário para funcionar */
+            border-spacing: 10px;      /* Espaço horizontal e vertical */
+
+        }
+    tr, td, th
         {
             border-bottom: none;
             border-top: none;
