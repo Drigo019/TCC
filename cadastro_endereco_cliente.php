@@ -3,22 +3,13 @@ include("conexao.php");
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") 
     {
-        $nome  = $_POST["nome"];
-        $email = $_POST["email"];
-        $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT); 
-
-        $sql  = "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($conexao, $sql);
-        mysqli_stmt_bind_param($stmt, "sss", $nome, $email, $senha);
-        $result = mysqli_stmt_execute($stmt);
-
         $rua  = $_POST["rua"];
         $numero = $_POST["numero"];
         $bairro = $_POST["bairro"]; 
 
-        $sql  = "INSERT INTO endereco_cliente (rua, numero, bairro) VALUES (?, ?, ?)";
+        $sql  = "INSERT INTO endereco (rua, numero, bairro) VALUES (?, ?, ?)";
         $stmt = mysqli_prepare($conexao, $sql);
-        mysqli_stmt_bind_param($stmt, "sss", $rua, $numero, $bairro);
+        mysqli_stmt_bind_param($stmt, "sssi", $rua, $numero, $bairro, $id_usuario);
         $result = mysqli_stmt_execute($stmt);
 
         if ($result) 
