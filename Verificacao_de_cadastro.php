@@ -2,17 +2,17 @@
 // Inclui o arquivo de conexão com o banco de dados
 include("conexao.php");
 
-// Captura o e-mail do formulário e já valida se é um e-mail válido
+// Captura o CPF do formulário e já valida se é um CPF válido
 // Retorna false se inválido, null se o campo não existir
-$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$cpf = filter_input(INPUT_POST, 'cpf', FILTER_SANITIZE_NUMBER_INT);
 
 // Captura a senha do formulário e remove caracteres especiais perigosos
 $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    // Verifica se o e-mail é inválido ou não foi enviado
-    if ($email === false || $email === null) 
+    // Verifica se o CPF é inválido ou não foi enviado
+    if (empty($cpf)) 
         {
-            echo "<script>alert('E-mail inválido!');</script>";
+            echo "<script>alert('CPF inválido!');</script>";
             exit; // Para a execução do código aqui
         }
 
@@ -23,13 +23,16 @@ $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS);
             exit; // Para a execução do código aqui
         }
 
-// Prepara a consulta SQL para buscar a senha do usuário pelo e-mail
-// O "?" é um placeholder que será substituído pelo e-mail com segurança (evita SQL Injection)
-$stmt = $conexao->prepare("SELECT senha FROM usuario WHERE email = ?");
+// Prepara a consulta SQL para buscar a senha do usuário pelo CPF
+// O "?" é um placeholder que será substituído pelo CPF com segurança (evita SQL Injection)
+$stmt = $conexao->prepare("SELECT senha FROM usuario WHERE cpf = ?");
 
-// Substitui o "?" pelo valor de $email
+$cpf = str_replace(['.', '-'], '', $cpf);
+$cpf = preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $cpf);
+
+// Substitui o "?" pelo valor de $cpf
 // "s" significa que o valor é do tipo string
-$stmt->bind_param("s", $email);
+$stmt->bind_param("s", $cpf);
 
 // Executa a consulta no banco de dados
 $stmt->execute();
@@ -37,7 +40,7 @@ $stmt->execute();
 // Armazena o resultado da consulta na memória para poder usar num_rows
 $stmt->store_result();
 
-    // Verifica se nenhum usuário foi encontrado com esse e-mail
+    // Verifica se nenhum usuário foi encontrado com esse CPF
     if ($stmt->num_rows === 0) 
         {
             echo "<script>alert('Usuário não encontrado!');</script>";
