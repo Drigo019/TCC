@@ -2,18 +2,16 @@
     {
         overflow: hidden; 
     }
-.center 
+#cliente
     {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh; /* Ajuste a altura conforme necessário */
+        border-left:  20px solid transparent;
+        border-bottom: 10px solid transparent;
     }
-.cadastro
-    {    
-        text-align: right;    
-    }
-.icon
+#login
     {
-
+        border-left: 26px solid transparent;
+    }
+#lupa
+    {
+        border-left: 10px solid transparent;
     }
