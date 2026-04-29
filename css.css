@@ -2,10 +2,21 @@
     {
         overflow: hidden; 
     }
-.center 
+#cliente
     {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh; /* Ajuste a altura conforme necessário */
+
+        border-right: 50px solid;
+    }
+#login
+    {
+        padding: 0;
+        border-right: 60px solid;
+    }
+#lupa
+    {
+        border-left: 10px solid;
+    }
+.top
+    {
+        border-top: 15px solid;
     }

@@ -28,3 +28,8 @@ function Cadastro()
                 window.location.href='Tela_Login.html';
             } 
     }
+function pesquisa()
+    {
+        
+    }
+      

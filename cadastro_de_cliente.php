@@ -6,10 +6,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
         $nome  = $_POST["nome"];
         $email = $_POST["email"];
         $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT); 
+        $cpf = $_POST["cpf"];
 
-        $sql  = "INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)";
+        $sql  = "INSERT INTO usuario (nome, email, cpf, senha) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($conexao, $sql);
-        mysqli_stmt_bind_param($stmt, "sss", $nome, $email, $senha);
+        mysqli_stmt_bind_param($stmt, "ssss", $nome, $email, $cpf, $senha);
         $result = mysqli_stmt_execute($stmt);
 
         $rua  = $_POST["rua"];

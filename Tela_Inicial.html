@@ -4,8 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="css.css">
 </head>
-<body>
-    
+<body>  
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: 10%;" class="top">
+                <img src="Imagens/Logo.png" style="height: 75px;">
+            </td>
+            <td style="width: 2%;">
+                <button style=" background: transparent; border: none; cursor: pointer;" onclick="pesquisa()">
+                    <img id="lupa" src="Imagens/Lupa_pesquisa.png" style="height: 40px;">
+                </button>
+            </td>
+            <td style="width: 80%;">
+                 <input type="text" name="pesquisa" id="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" style="height: 40px; width: 90%;">
+            </td>
+            <td>
+                <img id="cliente" src="Imagens/Cliente.png" style="height: 50px;" align="center">
+            </td>
+        </tr>
+        <tr>
+            <td align="right" colspan="4">
+                <a id="login" href="Tela_Login.html" align="center">login</a>
+            </td>
+        </tr>
+    </table>
 </body>
+<style>
+    table 
+    {
+        border: 1px solid black;
+    }
+</style>
 </html>
