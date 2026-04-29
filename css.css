@@ -4,14 +4,19 @@
     }
 #cliente
     {
-        border-left:  20px solid transparent;
-        border-bottom: 10px solid transparent;
+
+        border-right: 50px solid;
     }
 #login
     {
-        border-left: 26px solid transparent;
+        padding: 0;
+        border-right: 60px solid;
     }
 #lupa
     {
-        border-left: 10px solid transparent;
+        border-left: 10px solid;
+    }
+.top
+    {
+        border-top: 15px solid;
     }
