@@ -29,6 +29,9 @@
 
     $itens = array
                 (
+                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
                     ['imagem' => 'logo.jpeg','preco' => 10.00], 
                     ['imagem' => 'logo.jpeg','preco' => 10.00], 
                     ['imagem' => 'logo.jpeg','preco' => 10.00]
@@ -54,7 +57,14 @@
             if(isset($itens[$idProduto]))
                 {
                     if(isset($_SESSION['idproduto']))
-                        
+                        {
+                            $_SESSION[$idProduto]['quantdade']++;
+                        }
+                    else 
+                        {
+                           $_SESSION[$idProduto] = array('quantidade' => 1, 'nome' => $itens[$idProduto]['nome'], 'preco' => $itens[$idProduto]['preco']);
+                        }
+                    echo '<script> alert("Produto adicionado ao carrinho"); </script>';   
                 }     
             else
                 {
