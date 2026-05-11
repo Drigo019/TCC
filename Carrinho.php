@@ -32,9 +32,10 @@
                     ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
                     ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
                     ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
-                    ['imagem' => 'logo.jpeg','preco' => 10.00], 
-                    ['imagem' => 'logo.jpeg','preco' => 10.00], 
-                    ['imagem' => 'logo.jpeg','preco' => 10.00]
+                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    ['nome' => 'Curso 6', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00]
+                    
                 );
     foreach($itens as $key => $value)
         {
@@ -56,13 +57,13 @@
             $idProduto = (int) $_GET['adicionar'];
             if(isset($itens[$idProduto]))
                 {
-                    if(isset($_SESSION['idproduto']))
+                    if(isset($_SESSION['carrinho']['idproduto']))
                         {
-                            $_SESSION[$idProduto]['quantdade']++;
+                            $_SESSION['carrinho'][$idProduto]['quantdade']++;
                         }
                     else 
                         {
-                           $_SESSION[$idProduto] = array('quantidade' => 1, 'nome' => $itens[$idProduto]['nome'], 'preco' => $itens[$idProduto]['preco']);
+                           $_SESSION['carrinho'][$idProduto] = array('quantidade' => 1, "nome" => $itens[$idProduto]["nome"], 'preco' => $itens[$idProduto]['preco']);
                         }
                     echo '<script> alert("Produto adicionado ao carrinho"); </script>';   
                 }     
@@ -72,6 +73,21 @@
                 }
         }
 ?>
+
+    <h2>
+        Carrinho:
+    </h2>
+    <?php
+        foreach($_SESSION['carrinho'] as $key => $value)
+            {
+                //nome do produto
+
+                //quantidade
+
+                //preço
+                echo '<p> Nome: '.$value['nome'].' | Quantidade: '.$value['quantidade'].' | Preço: '.($value['quantidade'] * $value['preco']).'</p>';
+            }
+    ?>
 </body>
 </html>
 
