@@ -1,0 +1,79 @@
+body{
+    padding: 2px;
+    margin: 1px;
+    width: 100%;
+    height: 100dvh;
+    font-family: monospace;
+    background-color: black;
+    color: white;
+}
+#centro{
+    height: 100dvh;
+    padding: 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slider{
+    min-width: 400px;
+    width: 600px;;
+    height: 400px;
+    overflow: hidden; /* tira partes da imagem que passarem da borda do slider*/
+    position: relative;
+    margin: auto;
+    border: 4px solid rgb(255, 255, 255) ;
+    border-radius: 20px;
+    box-shadow: 0px 10px 17px rgba(251, 255, 0, 0.564);
+    opacity: 0;
+    transform: translateY(-30px);
+    animation: FadeIn 1s ease forwards; /*define uma animação, que vai ser chama com 'keyframes'*/
+}
+
+@keyframes FadeIn{
+    to{
+        opacity: 1;
+        transform: translateY(0px) ;
+    }
+}
+
+.slides{
+    display: flex;
+    width: 300%; /** aumentamos a largura em 100% pra cada imagem no carrosel, mas mantemos sua altura */
+    height: 100%; 
+    transition: transform 1s ease-in-out; /*adiciona transição durante mudança de slide*/
+}
+
+.slide{
+    min-width: 400px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.indicators{
+    background-color: rgba(240, 248, 255, 0.107);
+    position: absolute;
+    bottom: 0px;
+    height: 10%;
+    width: 100%;
+    text-align: center;
+    line-height: 40px; 
+}
+
+.dot{
+    height: 12px;
+    width: 12px;
+    margin: 0 5px;
+    background-color: #bbb;
+    display: inline-block;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.6s ease;
+}
+
+.dot.active{
+    background-color: #333333;
+    outline: 2px solid #bbb; /*cria uma borda sem mudar sua margin ou paddin, mantendo a posição dos outros */
+    bottom: 10px;
+}

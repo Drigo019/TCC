@@ -24,11 +24,11 @@ session_start();
                 </button>
             </td>
             <td style="width: 75%;">
-                 <input type="text" name="pesquisa" id="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" style="height: 20px; width: 90%;">
+                 <input type="text" name="pesquisa" id="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" style="height: 20px; width: 95%;">
             </td>
             <td>
                 <a href="Carrinho.php">
-                <img id="cliente" src="Imagens/Cliente.png" style="height: 40px;" align="center">
+                <img id="cliente" src="Imagens/Carrinho.png" style="height: 40px" align="center">
                 </a>
             </td>
             <td style="width: 5%;">
