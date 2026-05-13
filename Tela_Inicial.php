@@ -26,6 +26,11 @@ session_start();
             <td style="width: 75%;">
                  <input type="text" name="pesquisa" id="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" style="height: 20px; width: 90%;">
             </td>
+            <td>
+                <a href="Carrinho.php">
+                <img id="cliente" src="Imagens/Cliente.png" style="height: 40px;" align="center">
+                </a>
+            </td>
             <td style="width: 5%;">
                 <img id="cliente" src="Imagens/Cliente.png" style="height: 40px;" align="center">
                 <a id="login" href="Tela_Login.html" align="center">login</a>
