@@ -1,35 +1,10 @@
-function configuracao()
-    {
-        alert("Configuração")
-    }
-function novoPedido()
-    {
-        alert("Novo Pedido");
-    }
-function estoque()  
-    {
-        alert("Estoque");
-    }   
-function sair()
-    {
-        alert("Sair");
-    }
-function finalizarPedido()    
-    {
-        var formadepagamento = document.getElementById("pagamento").value;
-        alert("Forma de pagamento selecionada: " + formadepagamento);
-    }
-function Cadastro()
-    {
-        let resposta = confirm("Cliente Cadastrado com sucesso!! Deseja fazer login?");
+function mostrarMensagem(texto) {
+    let msg = document.getElementById("msg");
 
-        if (resposta) 
-            {
-                window.location.href='Tela_Login.html';
-            } 
-    }
-function pesquisa()
-    {
-        
-    }
-      
+    msg.textContent = texto;
+    msg.classList.remove("d-none"); 
+
+    setTimeout(() => {
+        msg.classList.add("d-none"); 
+    }, 2000);
+}
