@@ -11,6 +11,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container do Queijo</title>
     <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="style_carrosel.css">
 </head>
 <body>  
     <table style="width: 100%;">
@@ -71,34 +72,31 @@ session_start();
             </div>
         </div>
     </div>
-    <div class="carrinho-container">
-           <div class="carrinho-container">
-                <?php
-                    // Array contendo todos os produtos
-                    $itens = array
-                                (
+    <div>
+        <div class="carrinho-container">
+            <?php
+                // Array contendo todos os produtos
+                $itens = array(
 
-                                    // Produto 1
-                                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    // Produto 1
+                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
 
-                                    // Produto 2
-                                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 20.00],
+                    // Produto 2
+                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 20.00],
 
-                                    // Produto 3
-                                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 30.00],
+                    // Produto 3
+                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 30.00],
 
-                                    // Produto 4
-                                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
+                    // Produto 4
+                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
 
-                                    // Produto 5
-                                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
-                                );
+                    // Produto 5
+                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
+                );
 
-                    // foreach percorre todos os produtos do array
-                    foreach($itens as $key => $value){
-
-                ?>
-
+                // foreach percorre todos os produtos do array
+                foreach($itens as $key => $value){
+            ?>
                     <!-- Caixa do produto -->
                     <div class="produto">
 
@@ -116,67 +114,72 @@ session_start();
                         <a href="?adicionar=<?php echo $key; ?>">
                             Adicionar ao Carrinho
                         </a>
-
                     </div>
+                    <?php 
+                } 
+                    ?>
+        </div>
+        <?php
+            // Verifica se existe "adicionar" na URL
+            if(isset($_GET['adicionar'])){
+                // Converte o valor recebido para inteiro
+                $idProduto = (int) $_GET['adicionar'];
 
-                <?php } ?>
-
-                </div>
-
-                <?php
-
-                // Verifica se existe "adicionar" na URL
-                if(isset($_GET['adicionar'])){
-
-                    // Converte o valor recebido para inteiro
-                    $idProduto = (int) $_GET['adicionar'];
-
-                    // Verifica se o produto existe no array
-                    if(isset($itens[$idProduto])){
-
-                        // Verifica se o produto já está no carrinho
-                        if(isset($_SESSION['carrinho'][$idProduto])){
-
-                            // Soma +1 na quantidade
-                            $_SESSION['carrinho'][$idProduto]['quantidade']++;
-
-                        }else{
-
-                            // Cria um novo produto no carrinho
-                            $_SESSION['carrinho'][$idProduto] = array(
-
-                                // Quantidade inicial
-                                'quantidade' => 1,
-
-                                // Nome do produto
-                                'nome' => $itens[$idProduto]['nome'],
-
-                                // Preço do produto
-                                'preco' => $itens[$idProduto]['preco']
-                            );
-                        }
-
-                        // Exibe mensagem na tela
-                        echo '<script>alert("Produto adicionado ao carrinho!");</script>';
-                        echo "<script>window.location.href='Carrinho.php';</script>";
-
+                // Verifica se o produto existe no array
+                if(isset($itens[$idProduto])){
+                    // Verifica se o produto já está no carrinho
+                    if(isset($_SESSION['carrinho'][$idProduto])){
+                        // Soma +1 na quantidade
+                        $_SESSION['carrinho'][$idProduto]['quantidade']++;
                     }else{
+                        // Cria um novo produto no carrinho
+                        $_SESSION['carrinho'][$idProduto] = array(
+                            // Quantidade inicial
+                            'quantidade' => 1,
 
-                        // Caso tentem adicionar um produto inexistente
-                        die("Você não pode adicionar um produto que não existe.");
+                            // Nome do produto
+                            'nome' => $itens[$idProduto]['nome'],
 
+                            // Preço do produto
+                            'preco' => $itens[$idProduto]['preco']
+                        );
                     }
-                }
 
-                ?>     
+        // Exibe mensagem na tela
+        echo '<script>alert("Produto adicionado ao carrinho!");</script>';
+        echo "<script>window.location.href='Carrinho.php';</script>";
+
+                }else{
+                    // Caso tentem adicionar um produto inexistente
+                    die("Você não pode adicionar um produto que não existe.");
+                }
+            }
+
+        ?> 
+    </div>
+    <div>
+        <h1 align="center">
+            Promoções 
+        </h1>
+    </div>
+    <div>
+        <div id="centro">
+            <div class="slider">
+                <div class="slides"> <!--? Onde estarão as imagens -->
+                    <img src="../TCC/Imagens/Carrinho.png" alt="imagem 1" class="slide active">
+                    <img src="../TCC/Imagens/Cliente.png" alt="imagem 2" class="slide">
+                    <img src="../TCC/Imagens/Configuracao.png" alt="imagem 3" class="slide">
+                </div>
+                
+                <div class="indicators"> <!--? seletores-->
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                </div>
             </div>
         </div>
-    <h1 align="center">
-        Promoções 
-    </h1>
-    <div>
-        
     </div>
+    <script src="script_carrosel.js"></script>
     <style>
         /* Página */
         body{
@@ -230,8 +233,6 @@ session_start();
 
         /* Imagem do produto */
         .produto img{
-            width: 100%;
-            height: 150px;
             object-fit: cover;
             border-radius: 10px;
         }
