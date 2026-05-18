@@ -50,18 +50,6 @@
 
     /* bordas arredondadas */
     border-radius: 20px;
-
-    /* começa invisível */
-    opacity: 0;
-
-    /* começa 30px acima */
-    transform: translateY(-30px);
-
-    /* executa animação FadeIn:
-       duração = 1s
-       easing = ease
-       forwards = mantém estado final */
-    animation: FadeIn 1s ease forwards;
 }
 
 

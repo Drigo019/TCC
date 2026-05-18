@@ -39,7 +39,28 @@ session_start();
         </tr> 
     </table>
     <div>
-        <div style="display: flex; justify-content:center; align-items: center; height: 100%;">
+        <h1 align="center" style="color: black;">
+            Promoções 
+        </h1>
+    </div>
+    <div id="centro" style="height: auto; min-height: 100px;">
+        <div class="slider">
+            <div class="slides"> <!--? Onde estarão as imagens -->
+                <img src="../TCC/fotos_queijos/queijo1.jpeg" alt="imagem 1" class="slide active" style="width: 900px;">
+                <img src="../TCC/fotos_queijos/queijo2.jpeg" alt="imagem 2" class="slide"        style="width: 900px;">
+                <img src="../TCC/fotos_queijos/queijo3.jpeg" alt="imagem 3" class="slide"        style="width: 900px;">
+            </div>
+            
+            <div class="indicators"> <!--? seletores-->
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+        </div>
+    </div>
+    <script src="script_carrosel.js"></script>
+    <div style="margin: 0;">
+        <div style="display: flex; justify-content:center; align-items: center; height: 100%; margin: 0;">
             <div class="btn">
                 <button onclick="window.location.href='Categorias/Promocoes.html'">
                     <img src="Imagens/Promocoes.png" style="height: 30px;"> <br>
@@ -158,26 +179,6 @@ session_start();
         ?> 
     </div>
     <div>
-        <h1 align="center" style="color: black; margin: 0;">
-            Promoções 
-        </h1>
-    </div>
-    <div id="centro">
-        <div class="slider" style="margin-top: 25px;">
-            <div class="slides"> <!--? Onde estarão as imagens -->
-                <img src="../TCC/fotos_queijos/queijo1.jpeg" alt="imagem 1" class="slide active" style="width: 900px;">
-                <img src="../TCC/fotos_queijos/queijo2.jpeg" alt="imagem 2" class="slide"        style="width: 900px;">
-                <img src="../TCC/fotos_queijos/queijo3.jpeg" alt="imagem 3" class="slide"        style="width: 900px;">
-            </div>
-            
-            <div class="indicators"> <!--? seletores-->
-                <span class="dot active" data-index="0"></span>
-                <span class="dot" data-index="1"></span>
-                <span class="dot" data-index="2"></span>
-            </div>
-        </div>
-    </div>
-    <script src="script_carrosel.js"></script>
 </body>
 </html>
 <style>
