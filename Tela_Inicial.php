@@ -10,8 +10,8 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container do Queijo</title>
-    <link rel="stylesheet" href="css.css">
     <link rel="stylesheet" href="style_carrosel.css">
+    <link rel="stylesheet" href="css.css">
 </head>
 <body>  
     <table style="width: 100%;">
@@ -158,115 +158,108 @@ session_start();
         ?> 
     </div>
     <div>
-        <h1 align="center">
+        <h1 align="center" style="color: black; margin: 0;">
             Promoções 
         </h1>
     </div>
-    <div>
-        <div id="centro">
-            <div class="slider">
-                <div class="slides"> <!--? Onde estarão as imagens -->
-                    <img src="../TCC/Imagens/Carrinho.png" alt="imagem 1" class="slide active">
-                    <img src="../TCC/Imagens/Cliente.png" alt="imagem 2" class="slide">
-                    <img src="../TCC/Imagens/Configuracao.png" alt="imagem 3" class="slide">
-                </div>
-                
-                <div class="indicators"> <!--? seletores-->
-                    <span class="dot active" data-index="0"></span>
-                    <span class="dot" data-index="1"></span>
-                    <span class="dot" data-index="2"></span>
-                </div>
+    <div id="centro">
+        <div class="slider" style="margin-top: 25px;">
+            <div class="slides"> <!--? Onde estarão as imagens -->
+                <img src="../TCC/fotos_queijos/queijo1.jpeg" alt="imagem 1" class="slide active" style="width: 900px;">
+                <img src="../TCC/fotos_queijos/queijo2.jpeg" alt="imagem 2" class="slide"        style="width: 900px;">
+                <img src="../TCC/fotos_queijos/queijo3.jpeg" alt="imagem 3" class="slide"        style="width: 900px;">
+            </div>
+            
+            <div class="indicators"> <!--? seletores-->
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
             </div>
         </div>
     </div>
     <script src="script_carrosel.js"></script>
-    <style>
-        /* Página */
-        body{
-            margin: 0;
-            padding: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #f5f5f5;
-        }
-
-        .btn
-        {
-            border: 10px solid transparent;
-        }
-
-        /* Topo */
-        .topo{
-            width: 100%;
-            background-color: white;
-            padding: 10px;
-            box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
-        }
-
-        /* Botões das categorias */
-        .menu{
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        /* Produtos */
-        .carrinho-container{
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        /* Card */
-        .produto{
-            width: 220px;
-            background-color: white;
-            border-radius: 10px;
-            padding: 15px;
-            text-align: center;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Imagem do produto */
-        .produto img{
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        /* Botão adicionar */
-        .produto a{
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 15px;
-            background-color: #0d6efd;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-
-        .produto a:hover{
-            background-color: #084298;
-        }
-
-        /* Carrinho */
-        .carrinho{
-            width: 90%;
-            max-width: 800px;
-            margin: 30px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-        }
-
-        /* Títulos */
-        h1,h2{
-            text-align: center;
-        }
-    </style>
 </body>
 </html>
+<style>
+    /* Página */
+    body{
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background-color: #c5c5c5;
+    }
+
+    .btn
+    {
+        border: 10px solid transparent;
+    }
+
+    /* Topo */
+    .topo{
+        width: 100%;
+        background-color: white;
+        padding: 10px;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Botões das categorias */
+    .menu{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    /* Produtos */
+    .carrinho-container{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* Card */
+    .produto{
+        width: 220px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Imagem do produto */
+    .produto img{
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* Botão adicionar */
+    .produto a{
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 15px;
+        background-color: #0d6efd;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .produto a:hover{
+        background-color: #084298;
+    }
+
+    /* Carrinho */
+    .carrinho{
+        width: 90%;
+        max-width: 800px;
+        margin: 30px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+    }
+</style>
