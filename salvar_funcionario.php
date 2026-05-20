@@ -1,5 +1,5 @@
 <?php
-include 'conexao.php';
+include 'conexaoPDV.php';
 
 $nome = $_POST['nome'];
 $cargo = $_POST['cargo'];

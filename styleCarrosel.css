@@ -52,25 +52,6 @@
     border-radius: 20px;
 }
 
-
-/* =========================
-   ANIMAÇÃO
-========================= */
-
-@keyframes FadeIn{
-
-    /* estado final da animação */
-    to{
-
-        /* totalmente visível */
-        opacity: 1;
-
-        /* volta posição original */
-        transform: translateY(0px);
-    }
-}
-
-
 /* =========================
    CONTAINER DOS SLIDES
 ========================= */

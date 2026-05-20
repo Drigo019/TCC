@@ -58,7 +58,7 @@ $stmt->fetch();
     if (password_verify($senha, $senhaHash)) 
         {
             // Senha correta - redireciona para a tela principal
-            echo "<script>window.location.href='Tela_Principal.html';</script>";
+            echo "<script>window.location.href='TelaPrincipal.html';</script>";
         } 
     else 
         {

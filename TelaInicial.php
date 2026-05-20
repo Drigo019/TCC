@@ -10,7 +10,7 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container do Queijo</title>
-    <link rel="stylesheet" href="style_carrosel.css">
+    <link rel="stylesheet" href="styleCarrosel.css">
     <link rel="stylesheet" href="css.css">
 </head>
 <body>  
@@ -34,7 +34,7 @@ session_start();
             </td>
             <td style="width: 5%;">
                 <img id="cliente" src="Imagens/Cliente.png" style="height: 40px;" align="center">
-                <a id="login" href="Tela_Login.html" align="center">login</a>
+                <a id="login" href="TelaLogin.html" align="center">login</a>
             </td>
         </tr> 
     </table>

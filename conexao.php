@@ -1,9 +1,12 @@
 <?php
+    $host = "localhost";
+    $usuario = "root";        
+    $senha = "";           
+    $banco = "Clientes"; 
 
-$conn = new mysqli("localhost", "root", "", "pdv");
+    $conexao = mysqli_connect($host, $usuario, $senha, $banco);
 
-if ($conn->connect_error){
-    die("Erro: " . $conn->connect_error);
-}
-
-?>
+    if (!$conexao) 
+        {
+            die("Erro na conexão: " . mysqli_connect_error());
+        }

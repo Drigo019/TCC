@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
         if ($result) 
             {
                 echo "<script>alert('Cadastro feito com sucesso!!');</script>";
-                echo "<script>window.location.href='Tela_Login.html';</script>";
+                echo "<script>window.location.href='TelaLogin.html';</script>";
             }
         else 
             {
