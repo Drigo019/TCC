@@ -44,12 +44,6 @@
 
     /* centraliza horizontalmente */
     margin: auto;
-
-    /* borda branca */
-    border: 2px solid rgb(0, 0, 0);
-
-    /* bordas arredondadas */
-    border-radius: 20px;
 }
 
 /* =========================
@@ -167,4 +161,14 @@
     /* distância inferior
        (não funciona sem position) */
     bottom: 10px;
+}
+
+/* =========================
+   IMAGENS DENTRO DOS SLIDES
+========================= */
+
+.reajuste{
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Ajusta a imagem inteira dentro da div */
 }
