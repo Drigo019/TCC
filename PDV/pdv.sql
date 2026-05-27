@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 23-Abr-2026 às 13:45
+-- Tempo de geração: 20-Maio-2026 às 14:29
 -- Versão do servidor: 5.7.36
 -- versão do PHP: 7.4.26
 
@@ -20,6 +20,19 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `pdv`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura da tabela `clientes`
+--
+
+DROP TABLE IF EXISTS `clientes`;
+CREATE TABLE IF NOT EXISTS `clientes` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -62,7 +75,15 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   `total` decimal(10,2) DEFAULT NULL,
   `data` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+--
+-- Extraindo dados da tabela `vendas`
+--
+
+INSERT INTO `vendas` (`id`, `total`, `data`) VALUES
+(7, '2.22', '2026-05-20 11:23:54'),
+(6, '2.22', '2026-05-20 11:11:47');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

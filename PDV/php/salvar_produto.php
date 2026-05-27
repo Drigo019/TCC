@@ -10,4 +10,4 @@ $sql = "INSERT INTO produtos (nome, preco, estoque) VALUES ('$nome', '$preco', '
 $conn->query($sql);
 
 echo "Produto cadastrado com sucesso!";
-?>
+?>  

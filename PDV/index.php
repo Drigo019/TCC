@@ -84,6 +84,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       margin-bottom:40px;
       font-size:32px;
       font-size: 20px;
+      font-family: 'Cinzel'
     }
 
     .sidebar a{
@@ -211,6 +212,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       margin-bottom:20px;
       font-weight:bold;
     }
+    
 
     table{
       margin-top:15px;
@@ -226,7 +228,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
 
   <div class="sidebar">
 
-    <h2 class="logo"  class="fonte">Container do Queijo </h2>
+    <h2 class="logo">Container do Queijo </h2>
 
     <a href="pdv.html">
       <i class="bi bi-cart"></i>

@@ -1,0 +1,30 @@
+.btn{
+    transition: all 0.2 ease;
+}
+
+.btn:hover{
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+body{
+    overflow-x: hidden;
+}
+
+.nav-link{
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.nav-link:hover{
+    background: rgba(255,255,255,0.1);
+    padding-left: 10px;
+}
+
+.card{
+    transition: 0.3s;
+}
+
+.card:hover{
+    transform: translateY(-5px);
+}
