@@ -8,7 +8,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
         $senha = password_hash($_POST["senha"], PASSWORD_DEFAULT); 
         $cpf = $_POST["cpf"];
 
-        $sql  = "INSERT INTO usuario (nome, email, cpf, senha) VALUES (?, ?, ?, ?)";
+        $sql  = "INSERT INTO usuarios (nome, email, cpf, senha) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($conexao, $sql);
         mysqli_stmt_bind_param($stmt, "ssss", $nome, $email, $cpf, $senha);
         $result = mysqli_stmt_execute($stmt);
@@ -16,10 +16,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
         $rua  = $_POST["rua"];
         $numero = $_POST["numero"];
         $bairro = $_POST["bairro"]; 
+        $cep = $_POST["cep"]; 
 
-        $sql  = "INSERT INTO endereco_cliente (rua, numero, bairro) VALUES (?, ?, ?)";
+        $sql  = "INSERT INTO enderecosclientes (rua, numero, bairro, cep) VALUES (?, ?, ?, ?)";
         $stmt = mysqli_prepare($conexao, $sql);
-        mysqli_stmt_bind_param($stmt, "sss", $rua, $numero, $bairro);
+        mysqli_stmt_bind_param($stmt, "sssi", $rua, $numero, $bairro, $cep);
         $result = mysqli_stmt_execute($stmt);
 
         if ($result) 

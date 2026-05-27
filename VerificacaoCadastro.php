@@ -25,7 +25,7 @@ $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS);
 
 // Prepara a consulta SQL para buscar a senha do usuário pelo CPF
 // O "?" é um placeholder que será substituído pelo CPF com segurança (evita SQL Injection)
-$stmt = $conexao->prepare("SELECT senha FROM usuario WHERE cpf = ?");
+$stmt = $conexao->prepare("SELECT senha FROM usuarios WHERE cpf = ?");
 
 $cpf = str_replace(['.', '-'], '', $cpf);
 $cpf = preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $cpf);
@@ -58,7 +58,7 @@ $stmt->fetch();
     if (password_verify($senha, $senhaHash)) 
         {
             // Senha correta - redireciona para a tela principal
-            echo "<script>window.location.href='TelaPrincipal.html';</script>";
+            echo "<script>window.location.href='TelaInicial.php';</script>";
         } 
     else 
         {
