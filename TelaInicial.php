@@ -34,7 +34,7 @@ session_start();
             </td>
             <td style="width: 5%;">
                 <img id="cliente" src="Imagens/Cliente.png" style="height: 40px;" align="center">
-                <a id="login" href="TelaLogin.html" align="center">login</a>
+                <a id="login" href="../TCC/Login/Cliente.html" align="center">login</a>
             </td>
         </tr> 
     </table>
@@ -46,9 +46,9 @@ session_start();
     <div id="centro" style="height: auto; min-height: 100px;">
         <div class="slider">
             <div class="slides"> <!--? Onde estarão as imagens -->
-                <img src="../TCC/fotos_queijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
-                <img src="../TCC/fotos_queijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste"        style="width: 900px;">
-                <img src="../TCC/fotos_queijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste"        style="width: 900px;">
+                <img src="../TCC/Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
+                <img src="../TCC/Imagens/FotosQueijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste"        style="width: 900px;">
+                <img src="../TCC/Imagens/FotosQueijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste"        style="width: 900px;">
             </div>
             
             <div class="indicators"> <!--? seletores-->
