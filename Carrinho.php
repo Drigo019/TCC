@@ -61,11 +61,23 @@ session_start();
                                     // Soma no total geral
                                     $total += $subtotal;
 
+                                    if(isset($_GET['remover'])) {
+                                        $idProduto = (int) $_GET['remover'];
+
+                                        if(isset($_SESSION['carrinho'][$idProduto])) {
+                                            unset($_SESSION['carrinho'][$idProduto]);
+                                        }
+                                    }
+
+                                    if(isset($_GET['limpar'])) {
+                                        unset($_SESSION['carrinho']);
+                                    }
+
                                     // Mostra os dados do produto
-                                    echo '<p style="margin-left: 10px; width: 90%;">
+                                    echo '<p style="margin-left: 10px; width: 90%;">'.'
                                         Nome: '.$value['nome'].' <br>
                                         Quantidade: '.$value['quantidade'].'
-                                        <button style="margin-left: 20px;" onclick="apagaProduto()">❌</button> <br>
+                                        <button style="margin-left: 20px;" onclick="apagaProduto('.$key.'), location.reload();">Retirar do carrinho</button> <br>
                                         Preço: R$ '.number_format($subtotal,2,',','.').'
                                         </p>';
 
@@ -73,11 +85,13 @@ session_start();
 
                             // Mostra o valor total do carrinho
                             echo "<h3 style='margin-left: 10px'>Total: R$ ".number_format($total,2,',','.')."</h3>";
+
+                            echo "<button style='margin-left: 40px; margin-bottom: 10px; font-size: 18px; width: 90%;' onclick='limparCarrinho(), location.reload();'> Limpar Carrinho </button>";
                         }
                     else
                         {
                             // Caso não exista nenhum produto
-                            echo "Carrinho vazio.";
+                            echo "<div align='center'>Carrinho vazio.</div>";
                         }    
                     ?>
             </div>
@@ -112,24 +126,28 @@ session_start();
                             // Mostra o valor total do carrinho
                             echo "<h3 style='margin-left: 20px;'>Total: R$ ".number_format($total,2,',','.')."</h3>";
 
-                            
+                            if(isset($_GET['limpar'])) {
+                                    unset($_SESSION['carrinho']);
+                                }
 
                             echo '<button style="margin-left: 40px; margin-bottom: 10px; font-size: 18px; width: 90%;"> comprar </button>';
                         }
                     else
                         {
                             // Caso não exista nenhum produto
-                            echo "Carrinho vazio.";
+                            echo "<div align='center'>Carrinho vazio.</div>";
                         }    
                     ?>
             </div>
         </div>
     </div>
     <script>
-        function apagaProduto()
-            {
-
-            }
-    </script>
+        function apagaProduto(id) {
+            window.location.href = "?remover=" + id;
+        }
+        function limparCarrinho() {
+            window.location.href = "?limpar=1";
+        }
+</script>
 </body>
 </html>
