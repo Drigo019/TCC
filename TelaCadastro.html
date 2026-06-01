@@ -59,7 +59,7 @@
                             CEP:
                         </th>
                         <td>
-                            <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" required>
+                            <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" required maxlength="9" oninput="mascaraCEP(this)">
                         </td>
                     </tr>
                     <tr>
@@ -120,7 +120,6 @@
         }
     input
         {
-            border-radius: 7px;
             border: 1px solid ;
         }
 </style>
@@ -140,6 +139,16 @@
     function vazio() 
         {
             var nome = document.getElementById("nome").value;
+        }
+    function mascaraCEP(input) 
+        {
+            // Remove tudo que não é número
+            let cep = input.value.replace(/\D/g, '');
+            
+            // Aplica a máscara: 00000-000
+            cep = cep.replace(/(\d{5})(\d)/, '$1-$2');
+            
+            input.value = cep;
         }
 </script>
 </html>

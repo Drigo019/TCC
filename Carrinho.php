@@ -8,14 +8,12 @@ session_start();
     <?php
         if(isset($_GET['adicionar']))
             {
-
                 // Converte o valor recebido para inteiro
                 $idProduto = (int) $_GET['adicionar'];
 
                 // Verifica se o produto existe no array
                 if(isset($itens[$idProduto]))
                     {
-
                         // Verifica se o produto já está no carrinho
                         if(isset($_SESSION['carrinho'][$idProduto]))
                             {
@@ -24,7 +22,6 @@ session_start();
                             }
                         else
                             {
-
                                 // Cria um novo produto no carrinho
                                 $_SESSION['carrinho'][$idProduto] = array(
 
@@ -49,7 +46,6 @@ session_start();
                 // Percorre todos os produtos do carrinho
                 foreach($_SESSION['carrinho'] as $key => $value)
                     {
-
                         // Multiplica quantidade pelo preço
                         $subtotal = $value['quantidade'] * $value['preco'];
 
@@ -73,3 +69,16 @@ session_start();
                 echo "Carrinho vazio.";
             }
     ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrinho</title>
+</head>
+<body>
+    <div>
+        
+    </div>
+</body>
+</html>
