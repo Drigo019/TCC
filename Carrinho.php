@@ -64,9 +64,11 @@ session_start();
                                     // Mostra os dados do produto
                                     echo '<p style="margin-left: 10px; width: 90%;">
                                         Nome: '.$value['nome'].' <br>
-                                        Quantidade: '.$value['quantidade'].' <br>
-                                        Preço: R$ '.number_format($subtotal,2,',','.')
-                                        .'</p>';
+                                        Quantidade: '.$value['quantidade'].'
+                                        <button style="margin-left: 20px;" onclick="apagaProduto()">❌</button> <br>
+                                        Preço: R$ '.number_format($subtotal,2,',','.').'
+                                        </p>';
+
                                 }
 
                             // Mostra o valor total do carrinho
@@ -123,5 +125,11 @@ session_start();
             </div>
         </div>
     </div>
+    <script>
+        function apagaProduto()
+            {
+
+            }
+    </script>
 </body>
 </html>
