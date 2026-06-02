@@ -20,7 +20,7 @@ session_start();
                 <img src="Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
             </td>
             <td style="width: 75%;" align="center">
-                <form method="GET">
+                <form accept="pesquisar.php" method="GET">
                     <button type="submit">🔍</button>
                     <input style="width: 50%; " type="text" name="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias">
                 </form>
@@ -98,49 +98,49 @@ session_start();
                 $itens = array(
 
                     // Produto 1
-                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../TCC/Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
 
                     // Produto 2
-                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 20.00],
+                    ['nome' => 'QUijo trufado peça de 500g', 'imagem' => '../TCC/Produtos/QueijoTrufado.jpeg', 'preco' => 30.00],
 
                     // Produto 3
-                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 30.00],
+                    ['nome' => 'Trufado com azeitona', 'imagem' => '../TCC/Produtos/trufadoComAzeitona.jpeg', 'preco' => 30.00],
 
                     // Produto 4
-                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
+                    ['nome' => 'Mussarela fatiada ou pedaço', 'imagem' => '../TCC/Produtos/mussarelafatiada.jpeg', 'preco' => 39.99],
 
                     // Produto 5
-                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
+                    ['nome' => 'Fresco de Monte Belo', 'imagem' => '../TCC/Produtos/FrescoDeMonteBelo.jpeg', 'preco' => 24.90],
 
                      // Produto 6
-                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    ['nome' => 'Majestic', 'imagem' => '../TCC/Produtos/Majestic.jpeg', 'preco' => 37.00],
 
                     // Produto 7
-                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 20.00],
+                    ['nome' => 'Provolone desidratado', 'imagem' => '../TCC/Produtos/provoloneDesidratado.jpeg', 'preco' => 19.90],
 
                     // Produto 8
-                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 30.00],
+                    ['nome' => 'Queijo Holandês lemmender', 'imagem' => '../TCC/Produtos/queijoHolandesLemmender.jpeg', 'preco' => 79.90],
 
                     // Produto 9
-                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
+                    ['nome' => 'Caixa de paçoxa com 100 unidades', 'imagem' => '../TCC/Produtos/caixaDePacoca.jpeg', 'preco' => 00.00],
 
                     // Produto 10
-                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
+                    ['nome' => 'Apresuntado Aurora', 'imagem' => '../TCC/Produtos/apresuntadoAurora.jpeg', 'preco' => 22.00],
 
                      // Produto 11
-                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+                    ['nome' => 'Parmesão', 'imagem' => '../TCC/Produtos/parmesao.jpeg', 'preco' => 76.90],
 
                     // Produto 12
-                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 20.00],
+                    ['nome' => 'Salame vila caipira', 'imagem' => '../TCC/Produtos/SalameVilaCaipira.jpeg', 'preco' => 19.90],
 
                     // Produto 13
-                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 30.00],
+                    ['nome' => 'Provolone artesanal peça de 300g', 'imagem' => '../TCC/Produtos/ProvoloneArtesanal.jpeg', 'preco' => 19.90],
 
                     // Produto 14
-                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
+                    ['nome' => 'Queijo canastra', 'imagem' => '../TCC/Produtos/queijoCanastra.jpeg', 'preco' => 49.90],
 
                     // Produto 15
-                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
+                    ['nome' => 'Doce de leite em pedaços', 'imagem' => '../TCC/Produtos/doceDeLeite.jpeg', 'preco' => 19.90],
                 );
 
                 // foreach percorre todos os produtos do array
@@ -150,7 +150,7 @@ session_start();
                     <div class="produto">
 
                         <!-- Imagem do produto -->
-                        <img src="../TCC/Imagens/Logo.jpeg" style="height: 150px;"><br><br>
+                        <img src="<?php echo $value['imagem']; ?>" style="height: 150px;"><br><br>
 
                         <!-- Nome do produto -->
                         <strong><?php echo $value['nome']; ?></strong><br>
