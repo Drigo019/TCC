@@ -19,13 +19,11 @@ session_start();
             <td style="width: 10%;">
                 <img src="Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
             </td>
-            <td style="width: 2%;">
-                <button style=" background: transparent; border: none; cursor: pointer;" onclick="pesquisa()">
-                    <img id="lupa" src="Imagens/Lupa_pesquisa.png" style="height: 30px;">
-                </button>
-            </td>
-            <td style="width: 75%;">
-                 <input type="text" name="pesquisa" id="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" style="height: 20px; width: 95%;">
+            <td style="width: 75%;" align="center">
+                <form method="GET">
+                    <button type="submit">🔍</button>
+                    <input style="width: 50%; " type="text" name="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias">
+                </form>
             </td>
             <td>
                 <a href="Carrinho.php">
@@ -112,6 +110,36 @@ session_start();
                     ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
 
                     // Produto 5
+                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
+
+                     // Produto 6
+                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+
+                    // Produto 7
+                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 20.00],
+
+                    // Produto 8
+                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 30.00],
+
+                    // Produto 9
+                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
+
+                    // Produto 10
+                    ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
+
+                     // Produto 11
+                    ['nome' => 'Curso 1', 'imagem' => '../imagens/vinhos.png', 'preco' => 10.00],
+
+                    // Produto 12
+                    ['nome' => 'Curso 2', 'imagem' => '../imagens/vinhos.png', 'preco' => 20.00],
+
+                    // Produto 13
+                    ['nome' => 'Curso 3', 'imagem' => '../imagens/vinhos.png', 'preco' => 30.00],
+
+                    // Produto 14
+                    ['nome' => 'Curso 4', 'imagem' => '../imagens/vinhos.png', 'preco' => 40.00],
+
+                    // Produto 15
                     ['nome' => 'Curso 5', 'imagem' => '../imagens/vinhos.png', 'preco' => 50.00],
                 );
 
