@@ -17,6 +17,36 @@
 <body class="bg-light">
 
 <form action="php/salvar_produto.php" method="post" class="container mt-5">
+    
+    <input type="file" name="arquivoInput" accept="image/*"> <br>
+
+    <img id="imagemPreview" alt="Pré-visualização da imagem">
+    <script>
+
+        const urlAPI = '';
+
+        const arquivoInput = document.getElementById('arquivoInput');
+        const imagemPreview = document.getElementById('imagemPreview');
+
+        arquivoInput.addEventListener('change', function(event) {
+            const arquivo = event.target.files[0];
+
+            if (arquivo) {
+                const leitor = new FileReader();
+
+                leitor.onload = function(e) {
+                    // Define o caminho da imagem como o resultado da leitura do arquivo
+                    imagemPreview.src = e.target.result;
+                    // Exibe a tag de imagem na página
+                    imagemPreview.style.display = 'block';
+                }
+
+                // Lê o arquivo como uma URL de Dados (Data URL)
+                leitor.readAsDataURL(arquivo);
+            }
+        });
+    </script>
+
 
     <input type="text"
        name="codigo_barras"
