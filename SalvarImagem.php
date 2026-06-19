@@ -1,21 +1,4 @@
 <?php
-include 'conexao.php';
-
-$nome = $_POST['nome'];
-$preco = $_POST['preco'];
-$estoque = $_POST['estoque'];
-$codigo = $_POST['codigo_barras'];
-
-$sql = "INSERT INTO produtos
-(nome, preco, estoque, codigo_barras)
-VALUES
-('$nome', '$preco', '$estoque', '$codigo')";
-
-$conn->query($sql);
-
-echo "Produto cadastrado com sucesso!";
-?>
-<?php
 $pdo = new PDO('mysql:host=localhost;dbname=containerdoqueijo', 'root', '');
 
 if(isset($_FILES['arquivo'])){
@@ -29,11 +12,11 @@ if(isset($_FILES['arquivo'])){
     //Move a imagem da pasta temporário para a definitiva 
     if(move_uploaded_file($arquivo['tmp_name'], $caminhoSalvar)){
         //Insere o caminho da imagem no banco de dados 
-        $stmt = $pdo->prepare("INSERT INTO imagens (caminho) VALUE (:caminho)");
+        $stmt = $pdo-prepare("INSERT INTO imagens (caminho) VALUE (:caminho)");
         $stmt->bindParam(':caminho', $caminhoSalvar);
         $stmt->execute();
 
-        echo "Imagem enviada e salva com sucesso"; 
+        echo "Imagem enviada e salva com sucesso";
     } else {
         echo"Erro as salvar a imagem";
     }
