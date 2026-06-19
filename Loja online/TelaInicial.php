@@ -17,7 +17,7 @@ session_start();
     <table style="width: 100%;">
         <tr>
             <td style="width: 10%;">
-                <img src="Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
+                <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
             </td>
             <td style="width: 75%;" align="center">
                 <form accept="pesquisar.php" method="GET">
@@ -27,11 +27,11 @@ session_start();
             </td>
             <td>
                 <a href="Carrinho.php">
-                <img id="cliente" src="Imagens/Carrinho2.png" style="height: 40px" align="center">
+                <img id="cliente" src="../Imagens/Carrinho2.png" style="height: 40px" align="center">
                 </a>
             </td>
             <td style="width: 5%;">
-                <img id="cliente" src="Imagens/Cliente.png" style="height: 40px;" align="center">
+                <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px;" align="center">
                 <a id="login" href="../TCC/Login/Cliente.html" align="center">login</a>
             </td>
         </tr> 
@@ -44,9 +44,9 @@ session_start();
     <div id="centro" style="height: auto; min-height: 100px;">
         <div class="slider">
             <div class="slides"> <!--? Onde estarão as imagens -->
-                <img src="../TCC/Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
-                <img src="../TCC/Imagens/FotosQueijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste"        style="width: 900px;">
-                <img src="../TCC/Imagens/FotosQueijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste"        style="width: 900px;">
+                <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
+                <img src="../Imagens/FotosQueijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste"        style="width: 900px;">
+                <img src="../Imagens/FotosQueijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste"        style="width: 900px;">
             </div>
             
             <div class="indicators"> <!--? seletores-->
@@ -61,31 +61,31 @@ session_start();
         <div style="display: flex; justify-content:center; align-items: center; height: 100%; margin: 0;">
             <div class="btn">
                 <button onclick="window.location.href='Categorias/Promocoes.php'">
-                    <img src="Imagens/Promocoes.png" style="height: 30px;"> <br>
+                    <img src="../Imagens/Promocoes.png" style="height: 30px;"> <br>
                     Promoções
                 </button>
             </div>
             <div class="btn">
                 <button onclick="window.location.href='Categorias/Queijos.php'">
-                    <img src="Imagens/Queijos.png" style="height: 30px;"> <br>
+                    <img src="../Imagens/Queijos.png" style="height: 30px;"> <br>
                     Queijos
                 </button>
             </div>
             <div class="btn">
                 <button onclick="window.location.href='Categorias/Defumados.php'">
-                    <img src="Imagens/Defumados.png" style="height: 30px;" > <br>
+                    <img src="../Imagens/Defumados.png" style="height: 30px;" > <br>
                     Defumados
                 </button>
             </div>
             <div class="btn">
                 <button onclick="window.location.href='Categorias/Doces.php'">
-                    <img src="Imagens/Pacoquinha.png" style="height: 30px;" > <br>
+                    <img src="../Imagens/Pacoquinha.png" style="height: 30px;" > <br>
                     Doces
                 </button>
             </div>
             <div class="btn">
                 <button onclick="window.location.href='Categorias/Vinhos.php'">
-                    <img src="Imagens/Vinhos.png" style="height: 30px;" > <br>
+                    <img src="../Imagens/Vinhos.png" style="height: 30px;" > <br>
                     Vinhos
                 </button>
             </div>
@@ -98,49 +98,49 @@ session_start();
                 $itens = array(
 
                     // Produto 1
-                    ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../TCC/Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
+                    ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
 
                     // Produto 2
-                    ['nome' => 'QUijo trufado peça de 500g', 'imagem' => '../TCC/Produtos/QueijoTrufado.jpeg', 'preco' => 30.00],
+                    ['nome' => 'QUijo trufado peça de 500g', 'imagem' => '../Produtos/QueijoTrufado.jpeg', 'preco' => 30.00],
 
                     // Produto 3
-                    ['nome' => 'Trufado com azeitona', 'imagem' => '../TCC/Produtos/trufadoComAzeitona.jpeg', 'preco' => 30.00],
+                    ['nome' => 'Trufado com azeitona', 'imagem' => '../Produtos/trufadoComAzeitona.jpeg', 'preco' => 30.00],
 
                     // Produto 4
-                    ['nome' => 'Mussarela fatiada ou pedaço', 'imagem' => '../TCC/Produtos/mussarelafatiada.jpeg', 'preco' => 39.99],
+                    ['nome' => 'Mussarela fatiada ou pedaço', 'imagem' => '../Produtos/mussarelafatiada.jpeg', 'preco' => 39.99],
 
                     // Produto 5
-                    ['nome' => 'Fresco de Monte Belo', 'imagem' => '../TCC/Produtos/FrescoDeMonteBelo.jpeg', 'preco' => 24.90],
+                    ['nome' => 'Fresco de Monte Belo', 'imagem' => '../Produtos/FrescoDeMonteBelo.jpeg', 'preco' => 24.90],
 
                      // Produto 6
-                    ['nome' => 'Majestic', 'imagem' => '../TCC/Produtos/Majestic.jpeg', 'preco' => 37.00],
+                    ['nome' => 'Majestic', 'imagem' => '../Produtos/Majestic.jpeg', 'preco' => 37.00],
 
                     // Produto 7
-                    ['nome' => 'Provolone desidratado', 'imagem' => '../TCC/Produtos/provoloneDesidratado.jpeg', 'preco' => 19.90],
+                    ['nome' => 'Provolone desidratado', 'imagem' => '../Produtos/provoloneDesidratado.jpeg', 'preco' => 19.90],
 
                     // Produto 8
-                    ['nome' => 'Queijo Holandês lemmender', 'imagem' => '../TCC/Produtos/queijoHolandesLemmender.jpeg', 'preco' => 79.90],
+                    ['nome' => 'Queijo Holandês lemmender', 'imagem' => '../Produtos/queijoHolandesLemmender.jpeg', 'preco' => 79.90],
 
                     // Produto 9
-                    ['nome' => 'Caixa de paçoxa com 100 unidades', 'imagem' => '../TCC/Produtos/caixaDePacoca.jpeg', 'preco' => 00.00],
+                    ['nome' => 'Caixa de paçoxa com 100 unidades', 'imagem' => '../Produtos/caixaDePacoca.jpeg', 'preco' => 00.00],
 
                     // Produto 10
-                    ['nome' => 'Apresuntado Aurora', 'imagem' => '../TCC/Produtos/apresuntadoAurora.jpeg', 'preco' => 22.00],
+                    ['nome' => 'Apresuntado Aurora', 'imagem' => '../Produtos/apresuntadoAurora.jpeg', 'preco' => 22.00],
 
                      // Produto 11
-                    ['nome' => 'Parmesão', 'imagem' => '../TCC/Produtos/parmesao.jpeg', 'preco' => 76.90],
+                    ['nome' => 'Parmesão', 'imagem' => '../Produtos/parmesao.jpeg', 'preco' => 76.90],
 
                     // Produto 12
-                    ['nome' => 'Salame vila caipira', 'imagem' => '../TCC/Produtos/SalameVilaCaipira.jpeg', 'preco' => 19.90],
+                    ['nome' => 'Salame vila caipira', 'imagem' => '../Produtos/SalameVilaCaipira.jpeg', 'preco' => 19.90],
 
                     // Produto 13
-                    ['nome' => 'Provolone artesanal peça de 300g', 'imagem' => '../TCC/Produtos/ProvoloneArtesanal.jpeg', 'preco' => 19.90],
+                    ['nome' => 'Provolone artesanal peça de 300g', 'imagem' => '../Produtos/ProvoloneArtesanal.jpeg', 'preco' => 19.90],
 
                     // Produto 14
-                    ['nome' => 'Queijo canastra', 'imagem' => '../TCC/Produtos/queijoCanastra.jpeg', 'preco' => 49.90],
+                    ['nome' => 'Queijo canastra', 'imagem' => '../Produtos/queijoCanastra.jpeg', 'preco' => 49.90],
 
                     // Produto 15
-                    ['nome' => 'Doce de leite em pedaços', 'imagem' => '../TCC/Produtos/doceDeLeite.jpeg', 'preco' => 19.90],
+                    ['nome' => 'Doce de leite em pedaços', 'imagem' => '../Produtos/doceDeLeite.jpeg', 'preco' => 19.90],
                 );
 
                 // foreach percorre todos os produtos do array
@@ -206,6 +206,7 @@ session_start();
         ?> 
     </div>
     <div>
+    <script src="scriptCarrosel.js"></script>
 </body>
 </html>
 <style>
