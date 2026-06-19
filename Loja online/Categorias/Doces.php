@@ -26,7 +26,7 @@ session_start();
                 </form>
             </td>
             <td>
-                <a href="Carrinho.php">
+                <a href="../Carrinho.php">
                 <img id="cliente" src="../../Imagens/Carrinho2.png" style="height: 40px" align="center">
                 </a>
             </td>
@@ -84,9 +84,9 @@ session_start();
                 </button>
             </div>
             <div class="btn">
-                <button onclick="window.location.href='Vinhos.php'">
-                    <img src="../../Imagens/Vinhos.png" style="height: 30px;" > <br>
-                    Vinhos
+                <button onclick="window.location.href='Bebidas.php'">
+                    <img src="../../Imagens/Bebidas.png" style="height: 30px;" > <br>
+                    Bebidas
                 </button>
             </div>
         </div>
