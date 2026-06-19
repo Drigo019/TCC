@@ -343,7 +343,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
 $sql_ultimas = "
 SELECT *
 FROM vendas
-ORDER BY id DESC
+ORDER BY idVenda DESC
 LIMIT 5
 ";
 
@@ -355,7 +355,7 @@ while($venda = mysqli_fetch_assoc($result_ultimas)){
 
 <tr>
 
-<td>#<?= $venda['id'] ?></td>
+<td>#<?= $venda['idVenda'] ?></td>
 
 <td>Cliente não registrado</td>
 
