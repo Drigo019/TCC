@@ -58,13 +58,13 @@ $stmt->fetch();
     if (password_verify($senha, $senhaHash)) 
         {
             // Senha correta - redireciona para a tela principal
-            echo "<script>window.location.href='../TCC/PDV';</script>";
+            echo "<script>window.location.href='../Container Do Queijo/PDV';</script>";
         } 
     else 
         {
             // Senha incorreta
             echo "<script>alert('Senha incorreta!');</script>";
-            echo "<script>window.location.href='../TCC/Login/Admin.html';</script>";
+            echo "<script>window.location.href='../Container Do Queijo/Login/Admin.html';</script>";
         }
 
 // Fecha a consulta e libera os recursos
