@@ -101,7 +101,7 @@ session_start();
                     ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
 
                     // Produto 2
-                    ['nome' => 'QUijo trufado peça de 500g', 'imagem' => '../Produtos/QueijoTrufado.jpeg', 'preco' => 30.00],
+                    ['nome' => 'Queijo trufado peça de 500g', 'imagem' => '../Produtos/QueijoTrufado.jpeg', 'preco' => 30.00],
 
                     // Produto 3
                     ['nome' => 'Trufado com azeitona', 'imagem' => '../Produtos/trufadoComAzeitona.jpeg', 'preco' => 30.00],

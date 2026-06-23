@@ -43,10 +43,34 @@ session_start();
 
                                             // Preço do produto
                                             'preco' => $itens[$idProduto]['preco']
+
+
                                             );
                                         }
                                 }
                         }
+                    // DIMINUIR QUANTIDADE
+                    if(isset($_GET['diminuir'])) {
+                        $idProduto = (int) $_GET['diminuir'];
+
+                        if(isset($_SESSION['carrinho'][$idProduto])) {
+                            // Diminui 1
+                            $_SESSION['carrinho'][$idProduto]['quantidade']--;
+
+                            // Se chegar a 0, remove o produto do carrinho
+                            if($_SESSION['carrinho'][$idProduto]['quantidade'] <= 0) {
+                                unset($_SESSION['carrinho'][$idProduto]);
+                            }
+                        }
+                    }
+                    // AUMENTAR QUANTIDADE
+                    if(isset($_GET['aumentar'])) {
+                        $idProduto = (int) $_GET['aumentar'];
+
+                        if(isset($_SESSION['carrinho'][$idProduto])) {
+                            $_SESSION['carrinho'][$idProduto]['quantidade']++;
+                        }
+                    }
                     if(isset($_SESSION['carrinho']))
                         {
                             // Variável para guardar total
@@ -76,7 +100,9 @@ session_start();
                                     // Mostra os dados do produto
                                     echo '<p style="margin-left: 10px; width: 90%;">'.'
                                         Nome: '.$value['nome'].' <br>
-                                        Quantidade: '.$value['quantidade'].'
+                                        Quantidade: '.$value['quantidade'].' 
+                                        <button style="margin-left: 20px;" onclick="tirar1('.$key.'), location.reload();">-</button>
+                                        <button style="margin-left: 5px;" onclick="adicionar1('.$key.'), location.reload();">+</button>
                                         <button style="margin-left: 20px;" onclick="apagaProduto('.$key.'), location.reload();">Retirar do carrinho</button> <br>
                                         Preço: R$ '.number_format($subtotal,2,',','.').'
                                         </p>';
@@ -147,6 +173,12 @@ session_start();
         }
         function limparCarrinho() {
             window.location.href = "?limpar=1";
+        }
+        function tirar1(id) {
+            window.location.href = "?diminuir=" + id;
+        }
+        function adicionar1(id) {
+            window.location.href = "?aumentar=" + id;
         }
 </script>
 </body>
