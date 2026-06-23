@@ -64,7 +64,7 @@ $stmt->fetch();
         {
             // Senha incorreta
             echo "<script>alert('Senha incorreta!');</script>";
-            echo "<script>window.location.href='../Container Do Queijo/Login/Admin.html';</script>";
+            echo "<script>C='../Container Do Queijo/Login/Admin.html';</script>";
         }
 
 // Fecha a consulta e libera os recursos
