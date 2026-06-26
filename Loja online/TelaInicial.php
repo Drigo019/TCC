@@ -36,27 +36,6 @@ session_start();
             </td>
         </tr> 
     </table>
-    <div>
-        <h1 align="center" style="color: black;">
-            Promoções 
-        </h1>
-    </div>
-    <div id="centro" style="height: auto; min-height: 100px;">
-        <div class="slider">
-            <div class="slides"> <!--? Onde estarão as imagens -->
-                <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
-                <img src="../Imagens/FotosQueijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste"        style="width: 900px;">
-                <img src="../Imagens/FotosQueijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste"        style="width: 900px;">
-            </div>
-            
-            <div class="indicators"> <!--? seletores-->
-                <span class="dot active" data-index="0"></span>
-                <span class="dot" data-index="1"></span>
-                <span class="dot" data-index="2"></span>
-            </div>
-        </div>
-    </div>
-    <script src="script_carrosel.js"></script>
     <div style="margin: 0;">
         <div style="display: flex; justify-content:center; align-items: center; height: 100%; margin: 0;">
             <div class="btn">
@@ -91,6 +70,27 @@ session_start();
             </div>
         </div>
     </div>
+    <div>
+        <h1 align="center" style="color: black;">
+            Promoções 
+        </h1>
+    </div>
+    <div id="centro" style="height: auto; min-height: 100px;">
+        <div class="slider">
+            <div class="slides"> <!--? Onde estarão as imagens -->
+                <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
+                <img src="../Imagens/FotosQueijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste"        style="width: 900px;">
+                <img src="../Imagens/FotosQueijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste"        style="width: 900px;">
+            </div>
+            
+            <div class="indicators"> <!--? seletores-->
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+        </div>
+    </div>
+    <script src="script_carrosel.js"></script>
     <div>
         <div class="carrinho-container">
             <?php
@@ -211,13 +211,13 @@ session_start();
 </html>
 <style>
     /* Página */
-    body{
-        margin: 0;
-        padding: 0;
-        font-family: Arial, Helvetica, sans-serif;
-        background-color: #c5c5c5;
+    body {
+        background-image: url('../Imagens/Fundo.avif');
+        background-size: cover; /* Faz a imagem cobrir toda a tela */
+        background-position: center; /* Centraliza a imagem */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
     }
-
     .btn
     {
         border: 10px solid transparent;

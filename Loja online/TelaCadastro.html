@@ -100,7 +100,7 @@
 <style>
     table
         {
-            background-color: rgba(255, 255, 255, 0.5); 
+            background-color: rgb(255, 255, 255); 
             border-radius: 15px;
             border-collapse: separate; /* Necessário para funcionar */
             border-spacing: 10px;      /* Espaço horizontal e vertical */
@@ -112,12 +112,19 @@
             border-left: none;
             border-right: none;
         }
-    body
-        {
-            background-image: url("../Imagens/Fundo.jpeg");
-            background-size: cover;
-            background-repeat: no-repeat;
-        }
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+    body {
+        background-image: url('../Imagens/Fundo.avif');
+        background-size: cover; /* Faz a imagem cobrir toda a tela */
+        background-position: center; /* Centraliza a imagem */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
+    }
     input
         {
             border: 1px solid ;
