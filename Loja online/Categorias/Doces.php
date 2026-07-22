@@ -26,7 +26,7 @@ session_start();
                 </form>
             </td>
             <td>
-                <a href="../Carrinho.php">
+                <a href="../carrinho.php">
                 <img id="cliente" src="../../Imagens/Carrinho2.png" style="height: 40px" align="center">
                 </a>
             </td>

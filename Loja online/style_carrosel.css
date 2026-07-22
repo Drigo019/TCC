@@ -5,19 +5,19 @@
 #centro{
 
     /* altura = 100% da tela visível */
-    height: 100dvh;
+   height: 100dvh;
 
     /* espaço interno de 2px */
-    padding: 2px;
+   padding: 2px;
 
     /* ativa Flexbox */
-    display: flex;
+   display: flex;
 
     /* centraliza horizontalmente */
-    justify-content: center;
+   justify-content: center;
 
     /* centraliza verticalmente */
-    align-items: center;
+   align-items: center;
 }
 
 
@@ -28,22 +28,22 @@
 .slider{
 
     /* largura mínima */
-    min-width: 700px;
-
-    /* largura padrão */
-    width: 900px;
-
-    /* altura do slider */
-    height: 500px;
-
-    /* esconde partes da imagem que ultrapassarem */
-    overflow: hidden;
-
-    /* permite posicionamento absoluto dos filhos */
-    position: relative;
-
-    /* centraliza horizontalmente */
-    margin: auto;
+   min-width: 700px;
+   
+   /* largura padrão */
+   width: 900px;
+   
+   /* altura do slider */
+   height: 500px;
+   
+   /* esconde partes da imagem que ultrapassarem */
+   overflow: hidden;
+   
+   /* permite posicionamento absoluto dos filhos */
+   position: relative;
+   
+   /* centraliza horizontalmente */
+   margin: auto;
 }
 
 /* =========================
@@ -53,17 +53,17 @@
 .slides{
 
     /* coloca slides lado a lado */
-    display: flex;
+   display: flex;
 
-    /* 300% porque existem 3 slides
+   /* 300% porque existem 3 slides
        (100% para cada imagem) */
-    width: 300%;
+   width: 300%;
 
     /* ocupa toda altura do slider */
-    height: 100%;
+   height: 100%;
 
     /* anima movimentação horizontal */
-    transition: transform 1s ease-in-out;
+   transition: transform 1s ease-in-out;
 }
 
 
@@ -74,17 +74,17 @@
 .slide{
 
     /* largura mínima */
-    min-width: 400px;
+   min-width: 400px;
 
     /* ocupa 100% da largura disponível */
-    width: 100%;
+   width: 100%;
 
     /* ocupa toda altura */
-    height: 100%;
+   height: 100%;
 
-    /* preenche sem distorcer
+   /* preenche sem distorcer
        cortando excesso se necessário */
-    object-fit: cover;
+   object-fit: cover;
 }
 
 
@@ -95,22 +95,22 @@
 .indicators{
 
     /* posicionamento livre dentro do slider */
-    position: absolute;
+   position: absolute;
 
     /* fica no fundo */
-    bottom: 0px;
+   bottom: 0px;
 
     /* altura da barra */
-    height: 10%;
+   height: 10%;
 
     /* ocupa toda largura */
-    width: 100%;
+   width: 100%;
 
     /* centraliza horizontalmente */
-    text-align: center;
+   text-align: center;
 
     /* centraliza verticalmente o conteúdo */
-    line-height: 40px;
+   line-height: 40px;
 }
 
 
@@ -121,28 +121,28 @@
 .dot{
 
     /* altura da bolinha */
-    height: 12px;
+   height: 12px;
 
     /* largura da bolinha */
-    width: 12px;
+   width: 12px;
 
     /* margem lateral */
-    margin: 0 5px;
+   margin: 0 5px;
 
     /* cor padrão */
-    background-color: #bbb;
+   background-color: #bbb;
 
     /* permite ficar lado a lado */
-    display: inline-block;
+   display: inline-block;
 
     /* transforma em círculo */
-    border-radius: 50%;
+   border-radius: 50%;
 
     /* cursor de clique */
-    cursor: pointer;
+   cursor: pointer;
 
     /* anima troca de cor */
-    transition: background-color 0.6s ease;
+   transition: background-color 0.6s ease;
 }
 
 
@@ -153,14 +153,14 @@
 .dot.active{
 
     /* cor da bolinha ativa */
-    background-color: #333333;
+   background-color: #333333;
 
     /* borda externa sem alterar layout */
-    outline: 2px solid #bbb;
+   outline: 2px solid #bbb;
 
-    /* distância inferior
+   /* distância inferior
        (não funciona sem position) */
-    bottom: 10px;
+   bottom: 10px;
 }
 
 /* =========================
@@ -168,7 +168,7 @@
 ========================= */
 
 .reajuste{
-  width: 100%;
-  height: 100%;
-  object-fit: contain; /* Ajusta a imagem inteira dentro da div */
+   width: 100%;
+   height: 100%;
+   object-fit: contain; /* Ajusta a imagem inteira dentro da div */
 }

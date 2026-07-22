@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST")
         if ($result) 
             {
                 echo "<script>alert('Cadastro feito com sucesso!!');</script>";
-                echo "<script>window.location.href='TelaInicial.php';</script>";
+                echo "<script>window.location.href='inicio.php';</script>";
             }
         else 
             {

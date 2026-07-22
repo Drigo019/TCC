@@ -14,9 +14,9 @@ session_start();
     <div style="margin-top: 100px;">
         <div id="carrinho" style="display: flex; justify-content: space-between;">
             <div style="margin-left: 50px; height: 100%; width: 40%; border-radius: 10px; background-color: white;">
-                 <?php 
-                 echo "<h2 style='margin-left: 10px'>Carrinho:</h2>";
-                     if(isset($_GET['adicionar']))
+                <?php 
+                    echo "<h2 style='margin-left: 10px'>Carrinho:</h2>";
+                    if(isset($_GET['adicionar']))
                         {
                             // Converte o valor recebido para inteiro
                             $idProduto = (int) $_GET['adicionar'];
