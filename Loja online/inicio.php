@@ -122,7 +122,7 @@ session_start();
                     ['nome' => 'Queijo Holandês lemmender', 'imagem' => '../Produtos/queijoHolandesLemmender.jpeg', 'preco' => 79.90],
 
                     // Produto 9
-                    ['nome' => 'Caixa de paçoxa com 100 unidades', 'imagem' => '../Produtos/caixaDePacoca.jpeg', 'preco' => 00.00],
+                    ['nome' => 'Caixa de paçoxa com 100 unidades', 'imagem' => '../Produtos/caixaDePacoca.jpeg', 'preco' => 19.99],
 
                     // Produto 10
                     ['nome' => 'Apresuntado Aurora', 'imagem' => '../Produtos/apresuntadoAurora.jpeg', 'preco' => 22.00],
