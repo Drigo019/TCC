@@ -10,7 +10,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
 </head>
-<body style="background-color:rgb(214, 214, 214);">
+<body>
     <div style="margin-top: 100px;">
         <div id="carrinho" style="display: flex; justify-content: space-between;">
             <div style="margin-left: 50px; height: 100%; width: 40%; border-radius: 10px; background-color: white;">
@@ -181,5 +181,14 @@ session_start();
             window.location.href = "?aumentar=" + id;
         }
 </script>
+<style>
+    body{
+        background-image: url('../Imagens/fundo.avif');
+        background-size: cover; /* Faz a imagem cobrir toda a tela */
+        background-position: center; /* Centraliza a imagem */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
+    }
+</style>
 </body>
 </html>
