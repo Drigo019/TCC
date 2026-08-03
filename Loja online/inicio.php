@@ -13,8 +13,8 @@ session_start();
     <link rel="stylesheet" href="style_carrosel.css">
     <link rel="stylesheet" href="css.css">
 </head>
-<body>  
-    <table style="width: 100%;">
+<body class="body">  
+    <table style="background-color: #f9ffa4;">
         <tr>
             <td style="width: 10%;">
                 <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
@@ -22,7 +22,7 @@ session_start();
             <td style="width: 75%;" align="center">
                 <form accept="pesquisar.php" method="GET">
                     <button type="submit">🔍</button>
-                    <input style="width: 50%; " type="text" name="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias">
+                    <input style="width: 50%; " type="text" name="pesquisa" placeholder="">
                 </form>
             </td>
             <td>
@@ -210,14 +210,7 @@ session_start();
 </body>
 </html>
 <style>
-    /* Página */
-    body {
-        background-image: url('../Imagens/Fundo.avif');
-        background-size: cover; /* Faz a imagem cobrir toda a tela */
-        background-position: center; /* Centraliza a imagem */
-        background-repeat: no-repeat;
-        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
-    }
+    
     .btn
     {
         border: 10px solid transparent;

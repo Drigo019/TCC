@@ -1,6 +1,7 @@
 .body 
     {
-        overflow: hidden; 
+        background-color: rgb(247, 247, 247);
+        margin: 0;
     }
 .input
     {
