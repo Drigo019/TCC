@@ -1,22 +1,27 @@
-.body 
-    {
-        background-color: rgb(247, 247, 247);
-        margin: none;
-    }
-.input
-    {
-        border-radius: 7px;
-        border: 1px solid #ff0000;
-    }
-#cliente
-    {
-        border-right: 20px solid transparent;
-    }
-#login
-    {
-        border-left: 10px solid transparent;
-    }
-#lupa
-    {
-        border-left: 10px solid transparent;
-    }
+/*==================
+        Telas
+==================*/
+.body{
+    padding: 0;
+    margin: 0;
+}
+.categorias{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.categorias div{
+    border: 5px solid transparent;
+}
+.produtos{
+    display: flex;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+.itens{
+    
+}
+/*==================
+        Inicio
+==================*/
+

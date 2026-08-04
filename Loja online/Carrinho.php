@@ -181,14 +181,5 @@ session_start();
             window.location.href = "?aumentar=" + id;
         }
 </script>
-<style>
-    body{
-        background-image: url('../Imagens/fundo.avif');
-        background-size: cover; /* Faz a imagem cobrir toda a tela */
-        background-position: center; /* Centraliza a imagem */
-        background-repeat: no-repeat;
-        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
-    }
-</style>
 </body>
 </html>
