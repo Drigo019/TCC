@@ -14,7 +14,7 @@ session_start();
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="body">
-    <table style="background-color: #f9ffa4;">
+    <table class="table">
         <tr>
             <td style="width: 10%;">
                 <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
@@ -77,7 +77,7 @@ session_start();
             Promoções 
         </h1>
     </div>
-    <div id="centro" style="height: auto; min-height: 100px;">
+    <div id="centro" style="height: auto; min-height: 100px; margin-bottom: 20px;">
         <div class="slider">
             <div class="slides"> <!--? Onde estarão as imagens -->
                 <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
@@ -94,11 +94,11 @@ session_start();
     </div>
     <script src="script_carrosel.js"></script>
     <div>
-        <div class="produtos">
+        <div class="container-produtos">
             <?php
                 // Array contendo todos os produtos
                 $itens = array(
-
+                    
                     // Produto 1
                     ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
 
@@ -207,7 +207,6 @@ session_start();
 
         ?> 
     </div>
-    <div>
     <script src="script_carrosel.js"></script>
 </body>
 </html>
