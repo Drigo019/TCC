@@ -1,25 +1,29 @@
 /*==================
-        Telas
+        Universal
 ==================*/
-.body{
+body{
     padding: 0;
     margin: 0;
     background-color: #f9ffa4;
 }
+
+/*==================
+        Telas
+==================*/
+
 .categorias{
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .categorias div{
-    border: 5px solid transparent;
+    margin: 5px;
 }
 .container-produtos {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 20px;
     width: 100%; /* IMPORTANTE */
-    
 }
 .table{
     background-color: #eefd20;
@@ -51,7 +55,63 @@
 .produto a:hover {
     background: #005ecb;
 }
+
+
 /*==================
-        Inicio
+        Cadastro
+==================*/
+.table_cadastro{
+    border: 2px solid rgb(78, 78, 78);
+    height: 50vh;
+}
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
+==================*/
+
+
+/*==================
+        
 ==================*/
 

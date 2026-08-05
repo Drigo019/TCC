@@ -13,7 +13,7 @@ session_start();
     <link rel="stylesheet" href="style_carrosel.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="body">
+<body>
     <table class="table">
         <tr>
             <td style="width: 10%;">
@@ -21,8 +21,8 @@ session_start();
             </td>
             <td style="width: 75%;" align="center">
                 <form accept="pesquisar.php" method="GET">
-                    <button type="submit">🔍</button>
-                    <input style="width: 50%; " type="text" name="pesquisa" placeholder="">
+                    <button type="submit" style="height: 30px;">🔍</button>
+                    <input style="width: 50%; height: 25px" type="text" name="pesquisa" placeholder="Como posso te fazer feliz hoje?">
                 </form>
             </td>
             <td>
