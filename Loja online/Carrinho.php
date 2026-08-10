@@ -10,7 +10,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carrinho</title>
 </head>
-<body>
+<body style="background-color:rgb(214, 214, 214);">
     <div style="margin-top: 100px;">
         <div id="carrinho" style="display: flex; justify-content: space-between;">
             <div style="margin-left: 50px; height: 100%; width: 40%; border-radius: 10px; background-color: white;">

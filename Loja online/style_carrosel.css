@@ -3,6 +3,7 @@
 ========================= */
 
 #centro{
+
     /* altura = 100% da tela visível */
    height: 100dvh;
 
@@ -25,6 +26,7 @@
 ========================= */
 
 .slider{
+
     /* largura mínima */
    min-width: 700px;
    
@@ -49,6 +51,7 @@
 ========================= */
 
 .slides{
+
     /* coloca slides lado a lado */
    display: flex;
 
@@ -69,6 +72,7 @@
 ========================= */
 
 .slide{
+
     /* largura mínima */
    min-width: 400px;
 
@@ -89,6 +93,7 @@
 ========================= */
 
 .indicators{
+
     /* posicionamento livre dentro do slider */
    position: absolute;
 

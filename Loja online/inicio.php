@@ -11,18 +11,18 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container do Queijo</title>
     <link rel="stylesheet" href="style_carrosel.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css.css">
 </head>
-<body>
-    <table class="table">
+<body>  
+    <table style="width: 100%;">
         <tr>
             <td style="width: 10%;">
                 <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
             </td>
             <td style="width: 75%;" align="center">
                 <form accept="pesquisar.php" method="GET">
-                    <button type="submit" style="height: 30px;">🔍</button>
-                    <input style="width: 50%; height: 25px" type="text" name="pesquisa" placeholder="Como posso te fazer feliz hoje?">
+                    <button type="submit">🔍</button>
+                    <input style="width: 50%; " type="text" name="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias">
                 </form>
             </td>
             <td>
@@ -37,38 +37,36 @@ session_start();
         </tr> 
     </table>
     <div style="margin: 0;">
-        <div>
-            <div class="categorias">
-                <div>
-                    <button onclick="window.location.href='Categorias/promocoes.php'">
-                        <img src="../Imagens/Promocoes.png" style="height: 30px;"> <br>
-                        Promoções
-                    </button>
-                </div>
-                <div class="btn">
-                    <button onclick="window.location.href='Categorias/queijos.php'">
-                        <img src="../Imagens/Queijos.png" style="height: 30px;"> <br>
-                        Queijos
-                    </button>
-                </div>
-                <div class="btn">
-                    <button onclick="window.location.href='Categorias/defumados.php'">
-                        <img src="../Imagens/Defumados.png" style="height: 30px;" > <br>
-                        Defumados
-                    </button>
-                </div>
-                <div class="btn">
-                    <button onclick="window.location.href='Categorias/doces.php'">
-                        <img src="../Imagens/Pacoquinha.png" style="height: 30px;" > <br>
-                        Doces
-                    </button>
-                </div>
-                <div class="btn">
-                    <button onclick="window.location.href='Categorias/bebidas.php'">
-                        <img src="../Imagens/Bebidas.png" style="height: 30px;" > <br>
-                        Bebidas
-                    </button>
-                </div>
+        <div style="display: flex; justify-content:center; align-items: center; height: 100%; margin: 0;">
+            <div class="btn">
+                <button onclick="window.location.href='Categorias/promocoes.php'">
+                    <img src="../Imagens/Promocoes.png" style="height: 30px;"> <br>
+                    Promoções
+                </button>
+            </div>
+            <div class="btn">
+                <button onclick="window.location.href='Categorias/queijos.php'">
+                    <img src="../Imagens/Queijos.png" style="height: 30px;"> <br>
+                    Queijos
+                </button>
+            </div>
+            <div class="btn">
+                <button onclick="window.location.href='Categorias/defumados.php'">
+                    <img src="../Imagens/Defumados.png" style="height: 30px;" > <br>
+                    Defumados
+                </button>
+            </div>
+            <div class="btn">
+                <button onclick="window.location.href='Categorias/doces.php'">
+                    <img src="../Imagens/Pacoquinha.png" style="height: 30px;" > <br>
+                    Doces
+                </button>
+            </div>
+            <div class="btn">
+                <button onclick="window.location.href='Categorias/bebidas.php'">
+                    <img src="../Imagens/Bebidas.png" style="height: 30px;" > <br>
+                    Bebidas
+                </button>
             </div>
         </div>
     </div>
@@ -77,7 +75,7 @@ session_start();
             Promoções 
         </h1>
     </div>
-    <div id="centro" style="height: auto; min-height: 100px; margin-bottom: 20px;">
+    <div id="centro" style="height: auto; min-height: 100px;">
         <div class="slider">
             <div class="slides"> <!--? Onde estarão as imagens -->
                 <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
@@ -94,11 +92,11 @@ session_start();
     </div>
     <script src="script_carrosel.js"></script>
     <div>
-        <div class="container-produtos">
+        <div class="carrinho-container">
             <?php
                 // Array contendo todos os produtos
                 $itens = array(
-                    
+
                     // Produto 1
                     ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
 
@@ -207,6 +205,90 @@ session_start();
 
         ?> 
     </div>
+    <div>
     <script src="script_carrosel.js"></script>
 </body>
 </html>
+<style>
+    /* Página */
+    body {
+        background-image: url('../Imagens/Fundo.avif');
+        background-size: cover; /* Faz a imagem cobrir toda a tela */
+        background-position: center; /* Centraliza a imagem */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
+    }
+    .btn
+    {
+        border: 10px solid transparent;
+    }
+
+    /* Topo */
+    .topo{
+        width: 100%;
+        background-color: white;
+        padding: 10px;
+        box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+    }
+
+    /* Botões das categorias */
+    .menu{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    /* Produtos */
+    .carrinho-container{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* Card */
+    .produto{
+        width: 220px;
+        background-color: white;
+        border-radius: 10px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Imagem do produto */
+    .produto img{
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    /* Botão adicionar */
+    .produto a{
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 15px;
+        background-color: #0d6efd;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+    }
+
+    .produto a:hover{
+        background-color: #084298;
+    }
+
+    /* Carrinho */
+    .carrinho{
+        width: 90%;
+        max-width: 800px;
+        margin: 30px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+    }
+</style>

@@ -5,11 +5,12 @@ $nome = $_POST['nome'];
 $preco = $_POST['preco'];
 $estoque = $_POST['estoque'];
 $codigo = $_POST['codigo_barras'];
+$armazenamento = $_POST['armazenamento'];
 
 $sql = "INSERT INTO produtos
-(nome, preco, estoque, codigoDeBarras)
+(nome, preco, estoque, codigo_barras, armazenamento, imagem)
 VALUES
-('$nome', '$preco', '$estoque', '$codigo')";
+('$nome','$preco','$estoque','$codigo','$armazenamento','$imagem')";
 
 $conn->query($sql);
 

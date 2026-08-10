@@ -4,9 +4,9 @@ include 'conexao.php';
 /* TOTAL VENDIDO HOJE */
 
 $sql_vendas = "
-SELECT SUM(total) AS total_hoje
+SELECT SUM(valor) AS total_hoje
 FROM vendas
-WHERE DATE(data) = CURDATE()
+WHERE data = CURDATE()
 ";
 
 $result_vendas = mysqli_query($conn, $sql_vendas);
@@ -343,7 +343,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
 $sql_ultimas = "
 SELECT *
 FROM vendas
-ORDER BY idVenda DESC
+ORDER BY idVendas DESC
 LIMIT 5
 ";
 
@@ -355,12 +355,12 @@ while($venda = mysqli_fetch_assoc($result_ultimas)){
 
 <tr>
 
-<td>#<?= $venda['idVenda'] ?></td>
+<td>#<?= $venda['idVendas'] ?></td>
 
 <td>Cliente não registrado</td>
 
 <td>
-    R$ <?= number_format($venda['total'], 2, ',', '.') ?>
+R$ <?= number_format($venda['valor'], 2, ',', '.') ?> 
 </td>
 
 <td>

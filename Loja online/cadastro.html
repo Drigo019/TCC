@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css.css">
 </head>
-<body class="body" background="../Imagens/Fundo.avif">
+<body class="body">
     <form action="cadastro_cliente.php" method="post">
         <div style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-            <table class="table_cadastro">
+            <table>
                     <tr> 
                         <td align="center" colspan="2">
                             <h1>
@@ -88,7 +88,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" align="center">
-                            <button type="submit" onclick="vazio()" id="table_cadastro_btn"> 
+                            <button type="submit" onclick="vazio()"> 
                                 Cadastrar
                             </button>
                         </td>
@@ -97,6 +97,39 @@
         </div>
     </form>
 </body>
+<style>
+    table
+        {
+            background-color: rgb(255, 255, 255); 
+            border-radius: 15px;
+            border-collapse: separate; /* Necessário para funcionar */
+            border-spacing: 10px;      /* Espaço horizontal e vertical */
+        }
+    tr, td, th
+        {
+            border-bottom: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+    html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+    body {
+        background-image: url('../Imagens/Fundo.avif');
+        background-size: cover; /* Faz a imagem cobrir toda a tela */
+        background-position: center; /* Centraliza a imagem */
+        background-repeat: no-repeat;
+        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
+    }
+    input
+        {
+            border: 1px solid ;
+        }
+</style>
 <script>
     function mascaraCPF(input) 
         {
