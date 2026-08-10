@@ -11,9 +11,9 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Container do Queijo</title>
     <link rel="stylesheet" href="style_carrosel.css">
-    <link rel="stylesheet" href="css.css">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>  
+<body background="../Imagens/fundo.jpg">  
     <table style="width: 100%;">
         <tr>
             <td style="width: 10%;">
