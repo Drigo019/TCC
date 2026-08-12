@@ -13,7 +13,7 @@ session_start();
     <link rel="stylesheet" href="../style_carrosel.css">
     <link rel="stylesheet" href="../css.css">
 </head>
-<body>  
+<body class="fundo">  
     <table style="width: 100%;">
         <tr>
             <td style="width: 10%;">

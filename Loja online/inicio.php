@@ -13,8 +13,8 @@ session_start();
     <link rel="stylesheet" href="style_carrosel.css">
     <link rel="stylesheet" href="style.css">
 </head>
-<body background="../Imagens/fundo.jpg">  
-    <table style="width: 100%;">
+<body class="fundo">  
+    <table class="topo">
         <tr>
             <td style="width: 10%;">
                 <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
@@ -71,9 +71,10 @@ session_start();
         </div>
     </div>
     <div>
-        <h1 align="center" style="color: black;">
+        <h1 align="center" style="color: white; border-bottom:white solid;">
             Promoções 
         </h1>
+        <div style="border: 1px white"></div>
     </div>
     <div id="centro" style="height: auto; min-height: 100px;">
         <div class="slider">
@@ -212,7 +213,7 @@ session_start();
 <style>
     /* Página */
     body {
-        background-image: url('../Imagens/Fundo.avif');
+        background-image: url('../Imagens/Fundo.jpeg');
         background-size: cover; /* Faz a imagem cobrir toda a tela */
         background-position: center; /* Centraliza a imagem */
         background-repeat: no-repeat;
@@ -226,9 +227,8 @@ session_start();
     /* Topo */
     .topo{
         width: 100%;
-        background-color: white;
+        background-color: #bdbdbdf6;
         padding: 10px;
-        box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
     }
 
     /* Botões das categorias */
