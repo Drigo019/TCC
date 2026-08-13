@@ -5,24 +5,23 @@ include 'conexao.php';
 $codigo = $_GET['codigo'];
 
 $sql = "SELECT * FROM produtos
-        WHERE codigo_barras = '$codigo'";
+        WHERE codigoDeBarras = '$codigo'
+        LIMIT 1";
 
 $resultado = $conn->query($sql);
 
-if($resultado->num_rows > 0){
+if ($resultado->num_rows > 0) {
 
     $produto = $resultado->fetch_assoc();
 
-    echo json_encode([
-        "nome" => $produto['nome'],
-        "preco" => $produto['preco']
-    ]);
+    echo json_encode($produto);
 
-}else{
+} else {
 
     echo json_encode([
-        "erro" => true
+        "erro" => "Produto não encontrado"
     ]);
 
 }
+
 ?>

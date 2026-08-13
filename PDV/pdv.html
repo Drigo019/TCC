@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,69 +30,49 @@
                         PDV
                     </h2>
 
-                    <!-- Inputs -->
+                    <!-- Busca do produto -->
                     <div class="row g-3">
 
                         <div class="col-md-8">
-                            <input type="text"
-                                   id="codigo"
-                                   class="form-control form-control-lg"
-                                   placeholder="Leia o código de barras"
-                                   autofocus>
+
+                            <input
+                                type="text"
+                                id="codigo"
+                                class="form-control"
+                                placeholder="Digite ou leia o código de barras"
+                                autofocus
+                            >
+
                         </div>
-                        
+
                         <div class="col-md-4">
-                            <button onclick="buscarProduto()"
-                                    class="btn btn-success w-100 btn-lg">
+
+                            <button
+                                type="button"
+                                class="btn btn-success w-100"
+                                onclick="buscarProduto()"
+                            >
                                 <i class="bi bi-upc-scan"></i>
                                 Buscar
                             </button>
-                        </div>
 
-                        <script>
-
-                            const precoInput = document.getElementById("preco");
-                            
-                            precoInput.addEventListener("input", function(e){
-                            
-                                let valor = e.target.value;
-                            
-                                // remove tudo que não for número
-                                valor = valor.replace(/\D/g, "");
-                            
-                                // transforma em centavos
-                                valor = (parseInt(valor) / 100).toFixed(2) + "";
-                            
-                                // troca ponto por vírgula
-                                valor = valor.replace(".", ",");
-                            
-                                // adiciona no input
-                                e.target.value = valor;
-                            
-                            });
-                            
-                            </script>
-
-                        <div class="col-md-4">
-                            <button onclick="adicionar()"
-                                    class="btn btn-success w-100">
-                                <i class="bi bi-plus-circle"></i>
-                                Adicionar
-                            </button>
                         </div>
 
                     </div>
 
-                    <!-- Lista -->
+
+                    <!-- Lista de produtos -->
                     <div class="table-responsive mt-4">
 
                         <table class="table table-hover align-middle">
 
                             <thead class="table-success">
+
                                 <tr>
                                     <th>Produto</th>
                                     <th>Preço</th>
                                 </tr>
+
                             </thead>
 
                             <tbody id="lista">
@@ -101,10 +82,14 @@
 
                     </div>
 
+
                     <!-- Total -->
                     <div class="text-end mt-4">
 
-                        <h3>Total: R$ <span id="total">0.00</span></h3>
+                        <h3>
+                            Total: R$
+                            <span id="total">0.00</span>
+                        </h3>
 
                     </div>
 
@@ -117,69 +102,137 @@
 
 </div>
 
+
 <script>
 
-    let total = 0;
-    
-    function buscarProduto(){
-    
-        let codigo = document.getElementById("codigo").value;
-    
-        fetch("php/buscar_produto.php?codigo=" + codigo)
-    
-        .then(response => response.json())
-    
-        .then(produto => {
-    
-            if(produto.erro){
-                alert("Produto não encontrado!");
-                return;
-            }
-    
-            adicionarProduto(
-                produto.nome,
-                parseFloat(produto.preco)
-            );
-    
-            document.getElementById("codigo").value = "";
-    
-        });
-    
+let total = 0;
+
+
+/* ==========================================
+   BUSCAR PRODUTO PELO CÓDIGO DE BARRAS
+   ========================================== */
+
+function buscarProduto() {
+
+    let campo = document.getElementById("codigo");
+
+    let codigo = campo.value.trim();
+
+
+    // Não permite busca vazia
+    if (codigo === "") {
+
+        alert("Digite ou leia o código de barras!");
+
+        campo.focus();
+
+        return;
     }
-    
-    function adicionarProduto(nome, preco){
-    
-        let linha = `
-            <tr>
-                <td>${nome}</td>
-                <td>R$ ${preco.toFixed(2)}</td>
-            </tr>
-        `;
-    
-        document.getElementById("lista").innerHTML += linha;
-    
-        total += preco;
-    
-        document.getElementById("total").textContent =
-            total.toFixed(2);
-    
-    }
-    
-    // leitor normalmente aperta ENTER sozinho
-    document.getElementById("codigo")
-    .addEventListener("keypress", function(event){
-    
-        if(event.key === "Enter"){
-    
-            event.preventDefault();
-    
-            buscarProduto();
-    
+
+
+    fetch(
+        "php/buscar_produto.php?codigo=" +
+        encodeURIComponent(codigo)
+    )
+
+    .then(response => response.json())
+
+    .then(produto => {
+
+        if (produto.erro) {
+
+            alert("Produto não encontrado!");
+
+            campo.select();
+
+            return;
         }
-    
+
+
+        // Adiciona o produto na lista
+        adicionarProduto(
+            produto.nome,
+            parseFloat(produto.preco)
+        );
+
+
+        // Limpa o campo
+        campo.value = "";
+
+
+        // Devolve o foco para o campo
+        campo.focus();
+
+    })
+
+    .catch(error => {
+
+        console.error(error);
+
+        alert("Erro ao buscar o produto.");
+
     });
-    
-    </script>
+
+}
+
+
+/* ==========================================
+   ADICIONAR PRODUTO NA LISTA
+   ========================================== */
+
+function adicionarProduto(nome, preco) {
+
+    let linha = `
+        <tr>
+
+            <td>
+                ${nome}
+            </td>
+
+            <td>
+                R$ ${preco.toFixed(2)}
+            </td>
+
+        </tr>
+    `;
+
+
+    document.getElementById("lista").innerHTML += linha;
+
+
+    // Soma o preço
+    total += preco;
+
+
+    // Atualiza o total
+    document.getElementById("total").textContent =
+        total.toFixed(2);
+
+}
+
+
+/* ==========================================
+   ENTER
+   ========================================== */
+
+// A pistola normalmente envia ENTER
+// depois de ler o código.
+
+document
+    .getElementById("codigo")
+    .addEventListener("keypress", function(event) {
+
+        if (event.key === "Enter") {
+
+            event.preventDefault();
+
+            buscarProduto();
+
+        }
+
+    });
+
+</script>
 
 </body>
 </html>
