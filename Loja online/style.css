@@ -18,6 +18,13 @@ html, body {
 {
     border: 10px solid transparent;
 }
+.btn button{
+    font-size: 17px;
+}
+.titulo_categoria{
+    font-size: 40px;
+    color: white;
+}
 /* Produtos */
 .carrinho-container{
     display: flex;
@@ -52,4 +59,9 @@ html, body {
 }
 .produto a:hover{
     background-color: #084298;
+}
+.barra_pesquisa{
+    height: 7vh;
+    width: 50vw;
+    font-size: 16px;
 }

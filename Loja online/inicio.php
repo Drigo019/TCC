@@ -21,10 +21,9 @@ session_start();
                     <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
                 </button>
             </td>
-            <td style="width: 75%;" align="center">
+            <td style="width: 75%;" align="center"  style="border: 5px solid black;">
                 <form accept="pesquisar.php" method="GET">
-                    <button type="submit">🔍</button>
-                    <input style="width: 50%; " type="text" name="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias">
+                    <input type="text" class="barra_pesquisa" name="pesquisa" placeholder="🔍  Queijos, Doces, Defumados e Iguarias">
                 </form>
             </td>
             <td>
@@ -33,8 +32,10 @@ session_start();
                 </a>
             </td>
             <td style="width: 5%;">
-                <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px;" align="center">
-                <a id="login" href="../Loja online/Login/cliente.html" align="center">login</a>
+                <button>
+                    <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px;" align="center">
+                    <a id="login" href="../Loja online/Login/cliente.html" align="center">login</a>
+                </button>
             </td>
         </tr> 
     </table>
@@ -73,7 +74,7 @@ session_start();
         </div>
     </div>
     <div>
-        <h1 align="center" style="color: white; ">
+        <h1 align="center" class="titulo_categoria">
             <u>Promoções</u>
         
         </h1>
