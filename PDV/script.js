@@ -65,3 +65,71 @@ inputImagem.addEventListener("change", function () {
     }
 });
 
+function abrirZoom() {
+
+    const imagem = document.getElementById("previewImagem");
+    const imagemZoom = document.getElementById("imagemZoom");
+    const modal = document.getElementById("zoomModal");
+
+    imagemZoom.src = imagem.src;
+
+    // Remove qualquer estado anterior
+    modal.classList.remove("fechando");
+
+    // Mostra o modal
+    modal.classList.add("ativo");
+}
+
+
+function fecharZoom() {
+
+    const modal = document.getElementById("zoomModal");
+
+    // Começa a animação de fechamento
+    modal.classList.remove("ativo");
+    modal.classList.add("fechando");
+
+    // Espera a animação terminar
+    setTimeout(() => {
+
+        modal.classList.remove("fechando");
+
+    }, 200);
+}
+function mudarCategoria(categoria) {
+
+    const body = document.body;
+
+    // Remove a categoria anterior
+    body.classList.remove(
+        "categoria-frio",
+        "categoria-defumado",
+        "categoria-doce",
+        "categoria-bebida",
+        "categoria-queijo"
+    );
+
+    // Aplica a nova categoria
+    switch (categoria) {
+
+        case "Frio":
+            body.classList.add("categoria-frio");
+            break;
+
+        case "Defumado":
+            body.classList.add("categoria-defumado");
+            break;
+
+        case "Doce":
+            body.classList.add("categoria-doce");
+            break;
+
+        case "Bebida":
+            body.classList.add("categoria-bebida");
+            break;
+
+        case "Queijo":
+            body.classList.add("categoria-queijo");
+            break;
+    }
+}

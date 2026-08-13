@@ -12,26 +12,141 @@
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
             <link rel="stylesheet" href="css/estilo.css">
-    <style>
-            /* Cor padrão */
-    #formProduto{
-        transition: .4s;
-        padding:25px;
-        border-radius:15px;
-    }
+            <style>
 
-    /* Refrigerado */
-    .tema-azul{
-        background:#dae0ff;
-        border:3px solid #1c4de0;
-    }
-
-    /* Não Refrigerado */
-    .tema-amarelo{
-        background:#fff8db;
-        border:3px solid #ffc107;
-    }
-    </style>
+                /* =========================
+                   FORMULÁRIO
+                ========================= */
+                
+                #formProduto {
+                    transition: .4s;
+                    padding: 25px;
+                    border-radius: 15px;
+                }
+                
+                
+                /* =========================
+                   ARMAZENAMENTO
+                ========================= */
+                
+                /* Refrigerado */
+                .tema-azul {
+                    background: #dae0ff;
+                    border: 3px solid #1c4de0;
+                }
+                
+                /* Não Refrigerado */
+                .tema-amarelo {
+                    background: #fff8db;
+                    border: 3px solid #ffc107;
+                }
+                
+                
+                /* =========================
+                   CORES DAS CATEGORIAS
+                ========================= */
+                
+                body {
+                    transition: background-color 0.5s ease;
+                }
+                
+                /* Frio */
+                body.categoria-frio {
+                    background-color: #eaf3ff !important;
+                }
+                
+                /* Defumado */
+                body.categoria-defumado {
+                    background-color: #f4e8df !important;
+                }
+                
+                /* Doce */
+                body.categoria-doce {
+                    background-color: #fff0f5 !important;
+                }
+                
+                /* Bebida */
+                body.categoria-bebida {
+                    background-color: #f3eeff !important;
+                }
+                
+                /* Queijo */
+                body.categoria-queijo {
+                    background-color: #fff9df !important;
+                }
+                
+                
+                /* =========================
+                   ZOOM DA IMAGEM
+                ========================= */
+                
+                .zoom-modal {
+                    display: flex;
+                    position: fixed;
+                    z-index: 9999;
+                    inset: 0;
+                
+                    background: rgba(0, 0, 0, 0.85);
+                
+                    justify-content: center;
+                    align-items: center;
+                
+                    opacity: 0;
+                    visibility: hidden;
+                
+                    transition:
+                        opacity 0.2s ease,
+                        visibility 0.2s ease;
+                }
+                
+                .zoom-modal img {
+                    max-width: 85%;
+                    max-height: 85%;
+                
+                    object-fit: contain;
+                    border-radius: 12px;
+                
+                    transform: scale(0.7);
+                    opacity: 0;
+                
+                    transition:
+                        transform 0.2s ease,
+                        opacity 0.2s ease;
+                
+                    cursor: zoom-out;
+                }
+                
+                
+                /* =========================
+                   ABRINDO O ZOOM
+                ========================= */
+                
+                .zoom-modal.ativo {
+                    opacity: 1;
+                    visibility: visible;
+                }
+                
+                .zoom-modal.ativo img {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                
+                
+                /* =========================
+                   FECHANDO O ZOOM
+                ========================= */
+                
+                .zoom-modal.fechando {
+                    opacity: 0;
+                    visibility: visible;
+                }
+                
+                .zoom-modal.fechando img {
+                    transform: scale(0.7);
+                    opacity: 0;
+                }
+                
+                </style>
         </head>
 
         <body class="bg-light">
@@ -52,17 +167,19 @@
     <br><br>
 
     <img id="previewImagem"
-        src=""
-        alt="Pré-visualização"
-        style="
-            display:none;
-            width:140px;
-            height:140px;
-            object-fit:cover;
-            border-radius:12px;
-            border:2px solid #0d6efd;
-            box-shadow:0 3px 8px rgba(0,0,0,.2);
-        ">
+    src=""
+    alt="Pré-visualização"
+    onclick="abrirZoom()"
+    style="
+        display:none;
+        width:140px;
+        height:140px;
+        object-fit:cover;
+        border-radius:12px;
+        border:2px solid #0d6efd;
+        box-shadow:0 3px 8px rgba(0,0,0,.2);
+        cursor:zoom-in;
+    ">
 
     <br><br>
 
@@ -94,6 +211,30 @@
             </select>
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">
+                <i class="bi bi-bookmarks-fill"></i> Tipo de Categoria
+            </label>
+
+            <select class="form-select"
+        id="categoria"
+        name="categoria"
+        required
+        onchange="mudarCategoria(this.value)">
+        <option value="" selected disabled>Selecione...</option>
+
+        <option value="Frio">🔵 Frio</option>
+        
+        <option value="Defumado">🟤 Defumado</option>
+        
+        <option value="Doce">🔴 Doce</option>
+        
+        <option value="Bebida">🟣 Bebida</option>
+        
+        <option value="Queijo">🟡 Queijo</option>
+            </select>
+        </div>  
+
         <button type="submit" class="btn btn-success btnSalvar">
             Salvar Produto
         </button>
@@ -102,6 +243,15 @@
             
 
         </form> 
+
+        <div id="zoomModal" class="zoom-modal">
+
+            <img id="imagemZoom"
+                 src=""
+                 alt="Imagem ampliada"
+                 onclick="fecharZoom()">
+        
+        </div>
 
         <script src="script.js"></script>    
 
