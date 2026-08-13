@@ -17,7 +17,9 @@ session_start();
     <table class="topo">
         <tr>
             <td style="width: 10%;">
-                <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
+                <button>
+                    <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
+                </button>
             </td>
             <td style="width: 75%;" align="center">
                 <form accept="pesquisar.php" method="GET">
@@ -211,85 +213,3 @@ session_start();
     <script src="script_carrosel.js"></script>
 </body>
 </html>
-<style>
-    /* Página */
-    body {
-        background-image: url('../Imagens/Fundo.jpeg');
-        background-size: cover; /* Faz a imagem cobrir toda a tela */
-        background-position: center; /* Centraliza a imagem */
-        background-repeat: no-repeat;
-        background-attachment: fixed; /* Mantém a imagem estática ao rolar a página */
-    }
-    .btn
-    {
-        border: 10px solid transparent;
-    }
-
-    /* Topo */
-    .topo{
-        width: 100%;
-        background-color: #bdbdbdf6;
-        padding: 10px;
-    }
-
-    /* Botões das categorias */
-    .menu{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 15px;
-        margin: 20px 0;
-    }
-
-    /* Produtos */
-    .carrinho-container{
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 20px;
-        padding: 20px;
-    }
-
-    /* Card */
-    .produto{
-        width: 220px;
-        background-color: white;
-        border-radius: 10px;
-        padding: 15px;
-        text-align: center;
-        box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-    }
-
-    /* Imagem do produto */
-    .produto img{
-        object-fit: cover;
-        border-radius: 10px;
-    }
-
-    /* Botão adicionar */
-    .produto a{
-        display: inline-block;
-        margin-top: 10px;
-        padding: 10px 15px;
-        background-color: #0d6efd;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-    }
-
-    .produto a:hover{
-        background-color: #084298;
-    }
-
-    /* Carrinho */
-    .carrinho{
-        width: 90%;
-        max-width: 800px;
-        margin: 30px auto;
-        background-color: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
-    }
-</style>
