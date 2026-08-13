@@ -71,8 +71,9 @@ session_start();
         </div>
     </div>
     <div>
-        <h1 align="center" style="color: white; border-bottom:white solid;">
-            Promoções 
+        <h1 align="center" style="color: white; ">
+            <u>Promoções</u>
+        
         </h1>
         <div style="border: 1px white"></div>
     </div>
