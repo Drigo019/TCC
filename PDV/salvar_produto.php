@@ -1,42 +1,50 @@
 <?php
+
 include 'conexao.php';
 
+// Recebe os dados do formulário
 $nome = $_POST['nome'];
-$preco = $_POST['preco'];
+$valor = $_POST['preco'];
 $estoque = $_POST['estoque'];
 $codigo = $_POST['codigo_barras'];
 $armazenamento = $_POST['armazenamento'];
+$categoria = $_POST['categoria'];
 
-$sql = "INSERT INTO produtos
-(nome, preco, estoque, codigo_barras, armazenamento, imagem)
-VALUES
-('$nome','$preco','$estoque','$codigo','$armazenamento','$imagem')";
+// Verifica se uma imagem foi enviada
+if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) {
 
-$conn->query($sql);
-
-echo "Produto cadastrado com sucesso! <br>"; 
-?>
-<?php
-$pdo = new PDO('mysql:host=localhost;dbname=containerdoqueijo', 'root', '');
-
-if(isset($_FILES['arquivo'])){
     $arquivo = $_FILES['arquivo'];
 
-    //Caminho onde a imagem será salva no servidor
+    // Pasta onde a imagem será salva
     $pastaUpload = 'imagens/';
-    $nomeDoArquivo = uniqid() . "_" . $arquivo['name'];
-    $caminhoSalvar = $pastaUpload . $nomeDoArquivo;
 
-    //Move a imagem da pasta temporário para a definitiva 
-    if(move_uploaded_file($arquivo['tmp_name'], $caminhoSalvar)){
-        //Insere o caminho da imagem no banco de dados 
-        $stmt = $pdo->prepare("INSERT INTO imagens (caminho) VALUE (:caminho)");
-        $stmt->bindParam(':caminho', $caminhoSalvar);
-        $stmt->execute();
+    // Cria um nome único
+    $nomeDoArquivo = uniqid() . "_" . basename($arquivo['name']);
 
-        echo "Imagem enviada e salva com sucesso"; 
+    // Caminho da imagem
+    $imagem = $pastaUpload . $nomeDoArquivo;
+
+    // Move a imagem
+    if (move_uploaded_file($arquivo['tmp_name'], $imagem)) {
+
+        // Cadastra o produto
+        $sql = "INSERT INTO produtos
+        (nome, codigoDeBarras, valor, estoque, imagem, categoria, armazenamento)
+        VALUES
+        ('$nome', '$codigo', '$valor', '$estoque', '$imagem', '$categoria', '$armazenamento')";
+
+        if ($conn->query($sql)) {
+            echo "Produto cadastrado com sucesso!";
+        } else {
+            echo "Erro ao cadastrar produto: " . $conn->error;
+        }
+
     } else {
-        echo"Erro as salvar a imagem";
+        echo "Erro ao salvar a imagem.";
     }
+
+} else {
+    echo "Nenhuma imagem foi enviada.";
 }
+
 ?>

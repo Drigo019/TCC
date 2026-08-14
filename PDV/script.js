@@ -133,3 +133,42 @@ function mudarCategoria(categoria) {
             break;
     }
 }
+function buscarProduto() {
+
+    const codigo = document.getElementById("codigo").value.trim();
+
+    if (codigo === "") {
+        alert("Digite um código de barras.");
+        return;
+    }
+
+    fetch("buscar_produto.php?codigo=" + encodeURIComponent(codigo))
+        .then(response => response.json())
+        .then(produto => {
+
+            if (produto.erro) {
+                alert(produto.erro);
+                return;
+            }
+
+            // Aqui você adiciona o produto à venda
+            adicionarProduto(produto);
+
+            // Limpa o campo para o próximo produto
+            document.getElementById("codigo").value = "";
+            document.getElementById("codigo").focus();
+
+        })
+        .catch(erro => {
+            console.error(erro);
+            alert("Erro ao buscar o produto.");
+        });
+}
+document.getElementById("codigo").addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+        event.preventDefault();
+        buscarProduto();
+    }
+
+});
