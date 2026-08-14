@@ -76,6 +76,11 @@ session_start();
                 </button>
             </div>
         </div>
+        <div>
+            <h1 align="center" class="titulo_categoria">
+                <u>Doces</u>
+            </h1>
+        </div>
     </div>
     <div>
         <div class="carrinho-container">
