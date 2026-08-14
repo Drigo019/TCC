@@ -17,8 +17,10 @@ session_start();
     <table class="topo">
         <tr>
             <td style="width: 10%;">
-                <button>
+                <button class="btn_topo">
                     <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
+                    <br>
+                    <label>Voltar</label>
                 </button>
             </td>
             <td style="width: 75%;" align="center"  style="border: 5px solid black;">
@@ -28,13 +30,13 @@ session_start();
             </td>
             <td>
                 <a href="../Loja online/carrinho.php">
-                <img id="cliente" src="../Imagens/Carrinho2.png" style="height: 40px" align="center">
+                    <img id="cliente" src="../Imagens/Carrinho2.png" style="height: 40px" align="center">
                 </a>
             </td>
             <td style="width: 5%;">
-                <button>
+                <button class="btn_topo">
                     <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px;" align="center">
-                    <a id="login" href="../Loja online/Login/cliente.html" align="center">login</a>
+                    <label id="login" href="../Loja online/Login/cliente.html" align="center">login</label>
                 </button>
             </td>
         </tr> 
