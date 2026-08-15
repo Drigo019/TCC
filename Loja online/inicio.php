@@ -101,10 +101,7 @@ if (isset($_GET['limpar'])) {
     <tr>
         <td style="width: 10%;">
             <button class="btn_topo">
-                <img
-                    src="../Imagens/Logo.jpeg"
-                    style="height: 75px; border-radius: 100px;"
-                >
+                <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
                 <br>
                 <label>Voltar</label>
             </button>
@@ -203,7 +200,7 @@ if (isset($_GET['limpar'])) {
                     <div class="produto">
                         <!-- IMAGEM -->
                         <img src="<?php echo $value['imagem']; ?>" style="height: 150px;">
-                        <br><br>
+                        <br>
                         <!-- NOME -->
                         <strong>
                             <?php echo $value['nome']; ?>
@@ -212,14 +209,8 @@ if (isset($_GET['limpar'])) {
                         <!-- PREÇO -->
                         R$
                         <?php
-                        echo number_format(
-                            $value['preco'],
-                            2,
-                            ',',
-                            '.'
-                        );
-                        ?>
-                        <br><br>
+                        echo number_format($value['preco'], 2, ',', '.');?>
+                        <br>
                         <!-- ADICIONAR -->
                         <a href="?adicionar=<?php echo $key; ?>">
                             Adicionar ao Carrinho
@@ -232,97 +223,59 @@ if (isset($_GET['limpar'])) {
     <!-- =================================================
         CARRINHO
     ================================================== -->
-    <div
-        align="right"
-        class="carrinho_carrinho"
-    >
+    <div align="right" class="local_carrinho">
         <div>
-            <div id="carrinho">
+            <div class="carrinho">
                 <!-- =====================================
                     CARRINHO
                 ====================================== -->
                 <div>
-                    <h1 align="center">
+                    <h2 align="center">
                         Carrinho:
-                    </h1>
+                    </h2>
                     <?php
                     if (!empty($_SESSION['carrinho'])) {
                         $total = 0;
-                        foreach (
-                            $_SESSION['carrinho']
-                            as $key => $value
-                        ) {
-                            $subtotal =
-                                $value['quantidade']
-                                *
-                                $value['preco'];
+                        foreach ($_SESSION['carrinho']as $key => $value) {
+                            $subtotal = $value['quantidade'] * $value['preco'];
                             $total += $subtotal;
                     ?>
-                            <div
-                                style="
-                                    padding: 10px;
-                                    margin: 10px;
-                                    border-bottom: 1px solid #ccc;
-                                "
-                            >
+                            <div style=" padding: 10px; margin: 10px; border-bottom: 1px solid #ccc;" align="center">
                                 <strong>
                                     <?php echo $value['nome']; ?>
                                 </strong>
-                                <br><br>
-                                Quantidade:
-                                <button
-                                    type="button"
-                                    onclick="tirar1(<?php echo $key; ?>)"
-                                >
+                                <br>
+                                    Quantidade:
+                                <button type="button" onclick="tirar1(<?php echo $key; ?>)">
                                     -
                                 </button>
                                 <strong>
                                     <?php echo $value['quantidade']; ?>
                                 </strong>
-                                <button
-                                    type="button"
-                                    onclick="adicionar1(<?php echo $key; ?>)"
-                                >
+                                <button type="button" onclick="adicionar1(<?php echo $key; ?>)">
                                     +
                                 </button>
-                                <br><br>
+                                <br>
                                 Preço:
                                 R$
                                 <?php
-                                echo number_format(
-                                    $subtotal,
-                                    2,
-                                    ',',
-                                    '.'
-                                );
-                                ?>
-                                <br><br>
-                                <button
-                                    type="button"
-                                    onclick="apagaProduto(<?php echo $key; ?>)"
-                                >
-                                    Retirar do carrinho
-                                </button>
+                                echo number_format( $subtotal, 2, ',', '.');?>
+                                <br>
+                                <div>
+                                    <div align="center" >
+                                        <button type="button" onclick="apagaProduto(<?php echo $key; ?>)">
+                                            Retirar do carrinho
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                     <?php
                         }
                     ?>
-                        <!-- TOTAL -->
-                        <h3 align="center">
-                            Total:
-                            R$
-                            <?php
-                            echo number_format(
-                                $total,
-                                2,
-                                ',',
-                                '.'
-                            );
-                            ?>
-                        </h3>
+                        </h4>
                         <!-- LIMPAR -->
                         <div align="center">
-                            <button type="button" onclick="limparCarrinho()">
+                            <button type="button" class="btn_carrinho" onclick="limparCarrinho()">
                                 Limpar Carrinho
                             </button>
                         </div>
@@ -339,12 +292,12 @@ if (isset($_GET['limpar'])) {
                 <!-- =====================================
                     RESUMO DA COMPRA
                 ====================================== -->
-                <div>
-                    <h1 align="center">
+                <div style="width: 28vw">
+                    <h2 align="center">
                         Resumo da Compra
-                    </h1>
-                    <div align="center">
-                        -------------------------------------------------------------------
+                    </h2>
+                    <div align="center" style=" border: 1px solid; width: 100%; ">
+                        
                     </div>
                     <?php
                     if (!empty($_SESSION['carrinho'])) {
@@ -353,34 +306,23 @@ if (isset($_GET['limpar'])) {
                             $_SESSION['carrinho']
                             as $value
                         ) {
-                            $subtotal =
-                                $value['quantidade']
-                                *
-                                $value['preco'];
+                            $subtotal = $value['quantidade'] * $value['preco'];
                             $totalResumo += $subtotal;
                         }
                     ?>
-                        <p>
-                            <strong>Endereço:</strong>
-                        </p>
-                        <p>
-                            <strong>Taxa de entrega:</strong>
-                        </p>
-                        <h3>
-                            Total:
-                            R$
-                            <?php
-                            echo number_format(
-                                $totalResumo,
-                                2,
-                                ',',
-                                '.'
-                            );
-                            ?>
-                        </h3>
-                        <button type="button">
-                            Comprar
-                        </button>
+                    <div>
+                        <div align="center">
+                            <h4>
+                                Total:
+                                R$
+                                <?php
+                                echo number_format($totalResumo, 2, ',', '.');?>
+                            </h4>
+                            <button type="button" class="btn_carrinho">
+                                Comprar
+                            </button>
+                        </div>
+                    </div>
                     <?php
                     } else {
                         echo '

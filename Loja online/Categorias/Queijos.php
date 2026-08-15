@@ -1,11 +1,91 @@
-
 <?php
-// Inicia a sessão do PHP.
-// A sessão permite guardar dados do usuário enquanto ele navega no site.
 session_start();
+// =====================================================
+// PRODUTOS
+// =====================================================
+$itens = array(
+    ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../../produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
+    ['nome' => 'Queijo trufado peça de 500g', 'imagem' => '../../produtos/QueijoTrufado.jpeg', 'preco' => 30.00],
+    ['nome' => 'Trufado com azeitona', 'imagem' => '../../produtos/trufadoComAzeitona.jpeg', 'preco' => 30.00],
+    ['nome' => 'Mussarela fatiada ou pedaço', 'imagem' => '../../produtos/mussarelafatiada.jpeg', 'preco' => 39.99],
+    ['nome' => 'Fresco de Monte Belo', 'imagem' => '../../produtos/FrescoDeMonteBelo.jpeg', 'preco' => 24.90],
+    ['nome' => 'Majestic', 'imagem' => '../../produtos/Majestic.jpeg', 'preco' => 37.00],
+    ['nome' => 'Provolone desidratado', 'imagem' => '../../produtos/provoloneDesidratado.jpeg', 'preco' => 19.90],
+    ['nome' => 'Queijo Holandês lemmender', 'imagem' => '../../produtos/queijoHolandesLemmender.jpeg', 'preco' => 79.90],
+    ['nome' => 'Caixa de paçoxa com 100 unidades', 'imagem' => '../../produtos/caixaDePacoca.jpeg', 'preco' => 19.99],
+    ['nome' => 'Apresuntado Aurora', 'imagem' => '../../produtos/apresuntadoAurora.jpeg', 'preco' => 22.00],
+    ['nome' => 'Parmesão', 'imagem' => '../../produtos/parmesao.jpeg', 'preco' => 76.90],
+    ['nome' => 'Salame vila caipira', 'imagem' => '../../produtos/SalameVilaCaipira.jpeg', 'preco' => 19.90],
+    ['nome' => 'Provolone artesanal peça de 300g', 'imagem' => '../../produtos/ProvoloneArtesanal.jpeg', 'preco' => 19.90],
+    ['nome' => 'Queijo canastra', 'imagem' => '../../produtos/queijoCanastra.jpeg', 'preco' => 49.90],
+    ['nome' => 'Doce de leite em pedaços', 'imagem' => '../../produtos/doceDeLeite.jpeg', 'preco' => 19.90]
+);
+// =====================================================
+// ADICIONAR PRODUTO
+// =====================================================
+if (isset($_GET['adicionar'])) {
+    $idProduto = (int) $_GET['adicionar'];
+    if (isset($itens[$idProduto])) {
+        if (isset($_SESSION['carrinho'][$idProduto])) {
+            $_SESSION['carrinho'][$idProduto]['quantidade']++;
+        } else {
+            $_SESSION['carrinho'][$idProduto] = array(
+                'quantidade' => 1,
+                'nome' => $itens[$idProduto]['nome'],
+                'preco' => $itens[$idProduto]['preco']
+            );
+        }
+    }
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    exit;
+}
+// =====================================================
+// AUMENTAR QUANTIDADE
+// =====================================================
+if (isset($_GET['aumentar'])) {
+    $idProduto = (int) $_GET['aumentar'];
+    if (isset($_SESSION['carrinho'][$idProduto])) {
+        $_SESSION['carrinho'][$idProduto]['quantidade']++;
+    }
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    exit;
+}
+// =====================================================
+// DIMINUIR QUANTIDADE
+// =====================================================
+if (isset($_GET['diminuir'])) {
+    $idProduto = (int) $_GET['diminuir'];
+    if (isset($_SESSION['carrinho'][$idProduto])) {
+        $_SESSION['carrinho'][$idProduto]['quantidade']--;
+        if ($_SESSION['carrinho'][$idProduto]['quantidade'] <= 0) {
+            unset($_SESSION['carrinho'][$idProduto]);
+        }
+    }
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    exit;
+}
+// =====================================================
+// REMOVER PRODUTO
+// =====================================================
+if (isset($_GET['remover'])) {
+    $idProduto = (int) $_GET['remover'];
+    if (isset($_SESSION['carrinho'][$idProduto])) {
+        unset($_SESSION['carrinho'][$idProduto]);
+    }
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    exit;
+}
+// =====================================================
+// LIMPAR CARRINHO
+// =====================================================
+if (isset($_GET['limpar'])) {
+    unset($_SESSION['carrinho']);
+    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    exit;
+}
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,158 +93,282 @@ session_start();
     <link rel="stylesheet" href="../style_carrosel.css">
     <link rel="stylesheet" href="../style.css">
 </head>
-<body class="fundo">  
-    <table class="topo">
-        <tr>
-            <td style="width: 10%;">
-                <button class="btn_topo">
-                    <img src="../../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
-                    <br>
-                    <label>Voltar</label>
-                </button>
-            </td>
-            <td style="width: 75%;" align="center">
-                <form accept="pesquisar.php" method="GET">
-                    <button type="submit">🔍</button>
-                    <input style="width: 50%; " type="text" name="pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias">
-                </form>
-            </td>
-            <td>
-                <a href="../carrinho.php">
-                <img id="cliente" src="../../Imagens/Carrinho2.png" style="height: 40px" align="center">
-                </a>
-            </td>
-            <td style="width: 5%;">
-                <button class="btn_topo">
-                    <img id="cliente" src="../../Imagens/Cliente.png" style="height: 40px;" align="center">
-                    <label id="login" href="../Login/cliente.html" align="center">login</label>
-                </button>
-            </td>
-        </tr> 
-    </table>
-    <div class="produtos_categorias_carrinho">
-        <div class="produtos_categorias">
-            <div>
-                <div style="margin: 0;">
-                    <div style="display: flex; justify-content:center; align-items: center; height: 100%; margin: 0;">
-                        <div class="btn">
-                            <button onclick="window.location.href='promocoes.php'">
-                                <img src="../../Imagens/Promocoes.png" style="height: 30px;"> <br>
-                                Promoções
-                            </button>
-                        </div>
-                        <div class="btn">
-                            <button onclick="window.location.href='queijos.php'">
-                                <img src="../../Imagens/Queijos.png" style="height: 30px;"> <br>
-                                Queijos
-                            </button>
-                        </div>
-                        <div class="btn">
-                            <button onclick="window.location.href='defumados.php'">
-                                <img src="../../Imagens/Defumados.png" style="height: 30px;" > <br>
-                                Defumados
-                            </button>
-                        </div>
-                        <div class="btn">
-                            <button onclick="window.location.href='doces.php'">
-                                <img src="../../Imagens/Pacoquinha.png" style="height: 30px;" > <br>
-                                Doces
-                            </button>
-                        </div>
-                        <div class="btn">
-                            <button onclick="window.location.href='bebidas.php'">
-                                <img src="../../Imagens/Bebidas.png" style="height: 30px;" > <br>
-                                Bebidas
-                            </button>
-                        </div>
-                    </div>
-                    <div>
-                        <h1 align="center" class="titulo_categoria">
-                            <u>Queijos</u>
-                        </h1>
-                    </div>
+<body class="fundo">
+<!-- =====================================================
+    TOPO
+===================================================== -->
+<table class="topo">
+    <tr>
+        <td style="width: 10%;">
+            <button class="btn_topo">
+                <img src="../../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
+                <br>
+                <label>Voltar</label>
+            </button>
+        </td>
+        <td style="width: 75%;" align="center">
+            <form action="pesquisar.php" method="GET">
+                <input type="text" class="barra_pesquisa" name="pesquisa" placeholder="🔍  Queijos, Doces, Defumados e Iguarias">
+            </form>
+        </td>
+        <td style="width: 5%;">
+            <button class="btn_topo">
+                <img id="cliente" src="../../Imagens/Cliente.png" style="height: 40px;" align="center">
+                <label>login</label>
+            </button>
+        </td>
+    </tr>
+</table>
+<!-- =====================================================
+    ÁREA PRINCIPAL
+===================================================== -->
+<div class="produtos_categorias_carrinho">
+    <!-- =================================================
+        PRODUTOS
+    ================================================== -->
+    <div class="produtos_categorias">
+        <!-- CATEGORIAS -->
+        <div style="margin: 0;">
+            <div
+                style=" display: flex; justify-content: center; align-items: center; height: 100%; margin: 0;">
+                <div class="btn">
+                    <button onclick="window.location.href='promocoes.php'">
+                        <img src="../../Imagens/Promocoes.png" style="height: 30px;">
+                        <br>
+                        Promoções
+                    </button>
                 </div>
-            </div>
-
-            <div>
-                <div class="carrinho-container">
-                    <?php
-                        // Array contendo todos os produtos
-                        $itens = array(
-
-                            // Produto 1
-                            ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../../Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00]
-                        );
-
-                        // foreach percorre todos os produtos do array
-                        foreach($itens as $key => $value){
-                    ?>
-                            <!-- Caixa do produto -->
-                            <div class="produto">
-
-                                <!-- Imagem do produto -->
-                                <img src="<?php echo $value['imagem']; ?>" style="height: 150px;"><br><br>
-
-                                <!-- Nome do produto -->
-                                <strong><?php echo $value['nome']; ?></strong><br>
-
-                                <!-- Mostra o preço formatado -->
-                                R$ <?php echo number_format($value['preco'],2,',','.'); ?><br><br>
-
-                                <!-- Link para adicionar produto -->
-                                <!-- O valor do produto vai pela URL -->
-                                <a href="?adicionar=<?php echo $key; ?>">
-                                    Adicionar ao Carrinho
-                                </a>
-                            </div>
-                            <?php 
-                        } 
-                            ?>
+                <div class="btn">
+                    <button onclick="window.location.href='queijos.php'">
+                        <img src="../../Imagens/Queijos.png" style="height: 30px;">
+                        <br>
+                        Queijos
+                    </button>
+                </div>
+                <div class="btn">
+                    <button onclick="window.location.href='defumados.php'">
+                        <img src="../../Imagens/Defumados.png" style="height: 30px;">
+                        <br>
+                        Defumados
+                    </button>
+                </div>
+                <div class="btn">
+                    <button onclick="window.location.href='doces.php'">
+                        <img src="../../Imagens/Pacoquinha.png" style="height: 30px;">
+                        <br>
+                        Doces
+                    </button>
+                </div>
+                <div class="btn">
+                    <button onclick="window.location.href='bebidas.php'">
+                        <img src="../../Imagens/Bebidas.png" style="height: 30px;">
+                        <br>
+                        Bebidas
+                    </button>
                 </div>
             </div>
         </div>
-        <div align="right" class="carrinho_carrinho">
-            oi
+        <!-- TÍTULO -->
+        <div>
+            <h1 align="center" class="titulo_categoria">
+                <u>Queijos</u>
+            </h1>
         </div>
-
-        <?php
-            // Verifica se existe "adicionar" na URL
-            if(isset($_GET['adicionar'])){
-                // Converte o valor recebido para inteiro
-                $idProduto = (int) $_GET['adicionar'];
-
-                // Verifica se o produto existe no array
-                if(isset($itens[$idProduto])){
-                    // Verifica se o produto já está no carrinho
-                    if(isset($_SESSION['carrinho'][$idProduto])){
-                        // Soma +1 na quantidade
-                        $_SESSION['carrinho'][$idProduto]['quantidade']++;
-                    }else{
-                        // Cria um novo produto no carrinho
-                        $_SESSION['carrinho'][$idProduto] = array(
-                            // Quantidade inicial
-                            'quantidade' => 1,
-
-                            // Nome do produto
-                            'nome' => $itens[$idProduto]['nome'],
-
-                            // Preço do produto
-                            'preco' => $itens[$idProduto]['preco']
-                        );
-                    }
-
-        // Exibe mensagem na tela
-        echo '<script>alert("Produto adicionado ao carrinho!");</script>';
-
-                }else{
-                    // Caso tentem adicionar um produto inexistente
-                    die("Você não pode adicionar um produto que não existe.");
-                }
-            }
-
-        ?> 
+        <!-- =================================================
+            CARROSSEL
+        ================================================== -->
+        <div id="centro" style="height: auto; min-height: 100px;">
+            <div class="slider">
+                <div class="slides">
+                    <img src="../../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
+                    <img src="../../Imagens/FotosQueijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste" style="width: 900px;">
+                    <img src="../../Imagens/FotosQueijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste" style="width: 900px;">
+                </div>
+                <div class="indicators">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                </div>
+            </div>
+        </div>
+        <!-- =================================================
+            PRODUTOS
+        ================================================== -->
+        <div>
+            <div class="carrinho-container">
+                <?php foreach ($itens as $key => $value) { ?>
+                    <div class="produto">
+                        <!-- IMAGEM -->
+                        <img src="<?php echo $value['imagem']; ?>" style="height: 150px;">
+                        <br><br>
+                        <!-- NOME -->
+                        <strong>
+                            <?php echo $value['nome']; ?>
+                        </strong>
+                        <br>
+                        <!-- PREÇO -->
+                        R$
+                        <?php
+                        echo number_format($value['preco'], 2, ',', '.');?>
+                        <br><br>
+                        <!-- ADICIONAR -->
+                        <a href="?adicionar=<?php echo $key; ?>">
+                            Adicionar ao Carrinho
+                        </a>
+                    </div>
+                <?php } ?>
+            </div>
+        </div>
     </div>
-    <div>
-    <script src="../script_carrosel.js"></script>
+    <!-- =================================================
+        CARRINHO
+    ================================================== -->
+    <div
+        align="right"
+        class="carrinho_carrinho"
+    >
+        <div>
+            <div id="carrinho">
+                <!-- =====================================
+                    CARRINHO
+                ====================================== -->
+                <div>
+                    <h1 align="center">
+                        Carrinho:
+                    </h1>
+                    <?php
+                    if (!empty($_SESSION['carrinho'])) {
+                        $total = 0;
+                        foreach ($_SESSION['carrinho']as $key => $value) {
+                            $subtotal = $value['quantidade'] * $value['preco'];
+                            $total += $subtotal;
+                    ?>
+                            <div
+                                style=" padding: 10px; margin: 10px; border-bottom: 1px solid #ccc;">
+                                <strong>
+                                    <?php echo $value['nome']; ?>
+                                </strong>
+                                <br><br>
+                                    Quantidade:
+                                <button type="button" onclick="tirar1(<?php echo $key; ?>)">
+                                    -
+                                </button>
+                                <strong>
+                                    <?php echo $value['quantidade']; ?>
+                                </strong>
+                                <button type="button" onclick="adicionar1(<?php echo $key; ?>)">
+                                    +
+                                </button>
+                                <br><br>
+                                Preço:
+                                R$
+                                <?php
+                                echo number_format( $subtotal, 2, ',', '.');?>
+                                <br><br>
+                                <button type="button" onclick="apagaProduto(<?php echo $key; ?>)">
+                                    Retirar do carrinho
+                                </button>
+                            </div>
+                    <?php
+                        }
+                    ?>
+                        <!-- TOTAL -->
+                        <h3 align="center">
+                            Total:
+                            R$
+                            <?php
+                            echo number_format($total, 2, ',', '.');?>
+                        </h3>
+                        <!-- LIMPAR -->
+                        <div align="center">
+                            <button type="button" onclick="limparCarrinho()">
+                                Limpar Carrinho
+                            </button>
+                        </div>
+                    <?php
+                    } else {
+                        echo '
+                        <div align="center">
+                            Carrinho vazio.
+                        </div>
+                        ';
+                    }
+                    ?>
+                </div>
+                <!-- =====================================
+                    RESUMO DA COMPRA
+                ====================================== -->
+                <div>
+                    <h1 align="center">
+                        Resumo da Compra
+                    </h1>
+                    <div align="center">
+                        -------------------------------------------------------------------
+                    </div>
+                    <?php
+                    if (!empty($_SESSION['carrinho'])) {
+                        $totalResumo = 0;
+                        foreach (
+                            $_SESSION['carrinho']
+                            as $value
+                        ) {
+                            $subtotal = $value['quantidade'] * $value['preco'];
+                            $totalResumo += $subtotal;
+                        }
+                    ?>
+                        <p>
+                            <strong>Endereço:</strong>
+                        </p>
+                        <p>
+                            <strong>Taxa de entrega:</strong>
+                        </p>
+                        <h3>
+                            Total:
+                            R$
+                            <?php
+                            echo number_format($totalResumo, 2, ',', '.');?>
+                        </h3>
+                        <button type="button">
+                            Comprar
+                        </button>
+                    <?php
+                    } else {
+                        echo '
+                        <div align="center">
+                            Carrinho vazio.
+                        </div>
+                        ';
+                    }
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- =====================================================
+    JAVASCRIPT DO CARROSSEL
+===================================================== -->
+<script src="script_carrosel.js"></script>
+<!-- =====================================================
+    JAVASCRIPT DO CARRINHO
+===================================================== -->
+<script>
+    function apagaProduto(id)
+    {
+        window.location.href = "?remover=" + id;
+    }
+    function limparCarrinho()
+    {
+        window.location.href = "?limpar=1";
+    }
+    function tirar1(id)
+    {
+        window.location.href = "?diminuir=" + id;
+    }
+    function adicionar1(id)
+    {
+        window.location.href = "?aumentar=" + id;
+    }
+</script>
 </body>
-</html>
+</htm
