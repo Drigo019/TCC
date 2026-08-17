@@ -13,13 +13,15 @@ html, body {
     }
 .topo{
     width: 100%;
-    background-color: #d8d8d8;
+    background-color: rgb(216, 216, 216);
     padding: 10px;
 }
 .btn
 {
     margin: 10px;
-
+}
+.btn_topo{
+    background-color: white;
 }
 .btn button{
     font-size: 17px;

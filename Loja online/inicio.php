@@ -111,6 +111,13 @@ if (isset($_GET['limpar'])) {
                 <input type="text" class="barra_pesquisa" name="pesquisa" placeholder="🔍  Queijos, Doces, Defumados e Iguarias">
             </form>
         </td>
+        <td>
+            <button class="btn_topo" onclick="alterar_div()">
+                <img id="carrinho" src="../Imagens/Carrinho2.png" style="height: 40; width: 40px;">
+                <br>
+                <label>Carrinho</label>
+            </button>
+        </td>
         <td style="width: 5%;">
             <button class="btn_topo">
                 <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px;" align="center">
