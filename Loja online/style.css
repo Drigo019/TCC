@@ -81,31 +81,63 @@ html, body {
 .btn_topo label{
     font-size: 16px;
 }
+/* =====================================================
+ÁREA PRINCIPAL
+===================================================== */
 .produtos_categorias_carrinho {
     display: flex;
     width: 100%;
     height: calc(100vh - 95px);
+    overflow: hidden;
 }
+
+
+/* =====================================================
+    PRODUTOS
+===================================================== */
 .produtos_categorias {
-    width: 70%;
+    width: 100%;
     height: calc(100vh - 95px);
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
+    transition: width 0.4s ease-in-out;
+}
+/* Quando o carrinho estiver aberto */
+.produtos_categorias_carrinho.carrinho_aberto
+.produtos_categorias {
+    width: 70%;
 }
 
 
-/*==================
-    Carrinho de compras
-==================*/
-.local_carrinho{
-    display: flex; 
-    
-    width: 30%; 
-    border: 2px white solid;
+/* =====================================================
+    CARRINHO
+===================================================== */
+.local_carrinho {
+    width: 0;
+    height: calc(100vh - 95px);
+    border: 0;
     background-color: rgba(255, 255, 255, 0.966);
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
+    box-sizing: border-box;
+    /* Começa fora da tela */
+    transform: translateX(100%);
+    transition:
+        width 0.4s ease-in-out,
+        transform 0.4s ease-in-out,
+        border 0.4s ease-in-out;
+}
+
+
+/* =====================================================
+    CARRINHO ABERTO
+===================================================== */
+.produtos_categorias_carrinho.carrinho_aberto
+.local_carrinho {
+    width: 30%;
+    border: 2px white solid;
+    transform: translateX(0);
 }
 .btn_carrinho{
     height: 20px;
@@ -116,4 +148,9 @@ html, body {
 }
 .btn_carrinho:hover{
     transform: scale(1.1);
+}
+#btn_carrinho {
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
 }
