@@ -102,7 +102,7 @@ if (isset($_GET['limpar'])) {
     <table class="topo">
         <tr>
             <td style="width: 10%;">
-                <button class="btn_topo">
+                <button class="btn_topo" onclick="window.location.href='inicio.php'">
                     <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
                     <br>
                     <label>Voltar</label>
@@ -121,7 +121,7 @@ if (isset($_GET['limpar'])) {
                 </button>
             </td>
             <td style="width: 5%;">
-                <button class="btn_topo">
+                <button class="btn_topo" onclick="window.location.href='login/Cliente.html'"> 
                     <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px;" align="center">
                     <label>login</label>
                 </button>
