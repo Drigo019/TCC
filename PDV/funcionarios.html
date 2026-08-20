@@ -5,7 +5,7 @@
   <title>Funcionários</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/estilo.css">
+  <link rel="stylesheet" href="estilo.css">
 
 
 </head>
@@ -14,7 +14,7 @@
 
 <div class="container mt-5">
 
-  <h2 class="mb-4">Cadastro de Funcionário</h2>
+  <h2 class="mb-4">Cadastro de Funcionários</h2>
 
   <form action="salvar_funcionario.php" method="POST">
 
@@ -22,15 +22,19 @@
       <label>Nome</label>
       <input type="text" name="nome" class="form-control" required>
     </div>
-
+  
     <div class="mb-3">
       <label>Cargo</label>
-      <input type="text" name="cargo" class="form-control" required>
+      <select id="cargo" name="cargo" class="form-select" required>
+        <option value="funcionario">Funcionário</option>
+        <option value="chefe">Chefe</option>
+      </select>
     </div>
-
+  
     <button type="submit" class="btn btn-success">Salvar</button>
-
+  
   </form>
+  
 
 </div>
 <script src="js/script.js"></script>

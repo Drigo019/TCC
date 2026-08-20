@@ -2,13 +2,45 @@
 
 include 'conexao.php';
 
-$codigo = $_GET['codigo'];
+header('Content-Type: application/json; charset=utf-8');
 
-$sql = "SELECT * FROM produtos
-        WHERE codigoDeBarras = '$codigo'
-        LIMIT 1";
+$codigo = $_GET['codigo'] ?? '';
 
-$resultado = $conn->query($sql);
+$codigo = trim($codigo);
+
+if ($codigo === '') {
+
+    echo json_encode([
+        "erro" => true,
+        "mensagem" => "Código não informado"
+    ]);
+
+    exit;
+
+}
+
+$sql = "SELECT *
+        FROM produtos
+        WHERE codigoDeBarras = ?";
+
+$stmt = $conn->prepare($sql);
+
+if (!$stmt) {
+
+    echo json_encode([
+        "erro" => true,
+        "mensagem" => "Erro no banco: " . $conn->error
+    ]);
+
+    exit;
+
+}
+
+$stmt->bind_param("s", $codigo);
+
+$stmt->execute();
+
+$resultado = $stmt->get_result();
 
 if ($resultado->num_rows > 0) {
 
@@ -19,9 +51,13 @@ if ($resultado->num_rows > 0) {
 } else {
 
     echo json_encode([
-        "erro" => "Produto não encontrado"
+        "erro" => true,
+        "mensagem" => "Produto não encontrado"
     ]);
 
 }
+
+$stmt->close();
+$conn->close();
 
 ?>
