@@ -11,6 +11,9 @@ html, body {
     overflow-y: hidden;
     overflow-x: hidden;
     }
+button{
+    cursor: pointer;
+}
 .topo{
     width: 100%;
     background-color: rgb(216, 216, 216);
@@ -22,6 +25,11 @@ html, body {
 }
 .btn_topo{
     background-color: white;
+    background: rgba(255, 255, 255, 0);
+    border: 0;
+}
+.btn_topo label{
+    font-size: 16px;
 }
 .btn button{
     font-size: 17px;
@@ -73,13 +81,6 @@ html, body {
     font-size: 16px;
     border-radius: 10px;
     border: 0; 
-}
-.btn_topo{
-    background: rgba(255, 255, 255, 0);
-    border: 0;
-}
-.btn_topo label{
-    font-size: 16px;
 }
 /* =====================================================
 ÁREA PRINCIPAL

@@ -102,7 +102,7 @@ if (isset($_GET['limpar'])) {
     <table class="topo">
         <tr>
             <td style="width: 10%;">
-                <button class="btn_topo" onclick="window.location.href='../inicio.php'">
+                <button type="button" class="btn_topo" onclick="window.location.href='../inicio.php'">
                     <img src="../../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
                     <br>
                     <label>Voltar</label>
@@ -114,14 +114,14 @@ if (isset($_GET['limpar'])) {
                 </form>
             </td>
             <td>
-                <button class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
+                <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
                     <img id="icon_carrinho" src="../../Imagens/Carrinho2.png" style="height: 40; width: 40px;">
                     <br>
                     <label>Carrinho</label>
                 </button>
             </td>
             <td style="width: 5%;">
-                <button class="btn_topo" onclick="window.location.href='../login/Cliente.html'"> 
+                <button type="button" class="btn_topo" onclick="window.location.href='../login/Cliente.html'"> 
                     <img id="cliente" src="../../Imagens/Cliente.png" style="height: 40px;" align="center">
                     <label>login</label>
                 </button>
@@ -141,35 +141,35 @@ if (isset($_GET['limpar'])) {
                 <div
                     style=" display: flex; justify-content: center; align-items: center; height: 100%; margin: 0;">
                     <div class="btn">
-                        <button onclick="window.location.href='promocoes.php'">
+                        <button type="button" onclick="window.location.href='promocoes.php'">
                             <img src="../../Imagens/Promocoes.png" style="height: 30px;">
                             <br>
                             Promoções
                         </button>
                     </div>
                     <div class="btn">
-                        <button onclick="window.location.href='queijos.php'">
+                        <button type="button" onclick="window.location.href='queijos.php'">
                             <img src="../../Imagens/Queijos.png" style="height: 30px;">
                             <br>
                             Queijos
                         </button>
                     </div>
                     <div class="btn">
-                        <button onclick="window.location.href='defumados.php'">
+                        <button type="button" onclick="window.location.href='defumados.php'">
                             <img src="../../Imagens/Defumados.png" style="height: 30px;">
                             <br>
                             Defumados
                         </button>
                     </div>
                     <div class="btn">
-                        <button onclick="window.location.href='doces.php'">
+                        <button type="button" onclick="window.location.href='doces.php'">
                             <img src="../../Imagens/Pacoquinha.png" style="height: 30px;">
                             <br>
                             Doces
                         </button>
                     </div>
                     <div class="btn">
-                        <button onclick="window.location.href='bebidas.php'">
+                        <button type="button" onclick="window.location.href='bebidas.php'">
                             <img src="../../Imagens/Bebidas.png" style="height: 30px;">
                             <br>
                             Bebidas
@@ -238,13 +238,13 @@ if (isset($_GET['limpar'])) {
                                     </strong>
                                     <br>
                                     Quantidade:
-                                    <button type="button" onclick="tirar1(<?php echo $key; ?>)">
+                                    <button type="button"  onclick="tirar1(<?php echo $key; ?>)">
                                         -
                                     </button>
                                     <strong>
                                         <?php echo $value['quantidade']; ?>
                                     </strong>
-                                    <button type="button" onclick="adicionar1(<?php echo $key; ?>)">
+                                    <button type="button"  onclick="adicionar1(<?php echo $key; ?>)">
                                         +
                                     </button>
                                     <br>
@@ -255,7 +255,7 @@ if (isset($_GET['limpar'])) {
                                     <br>
                                     <div>
                                         <div align="center">
-                                            <button type="button" onclick="apagaProduto(<?php echo $key; ?>)">
+                                            <button type="button"  onclick="apagaProduto(<?php echo $key; ?>)">
                                                 Retirar do carrinho
                                             </button>
                                         </div>
@@ -267,7 +267,7 @@ if (isset($_GET['limpar'])) {
                             </h4>
                             <!-- LIMPAR -->
                             <div align="center">
-                                <button type="button" class="btn_carrinho" onclick="limparCarrinho()">
+                                <button type="button"  class="btn_carrinho" onclick="limparCarrinho()">
                                     Limpar Carrinho
                                 </button>
                             </div>
@@ -282,11 +282,11 @@ if (isset($_GET['limpar'])) {
                         ?>
                     </div>
                     <!-- =====================================
-                    RESUMO DA COMPRA
+                    Fim da compra
                 ====================================== -->
                     <div style="width: 28vw">
                         <h2 align="center">
-                            Resumo da Compra
+                            Fim da compra
                         </h2>
                         <div align="center" style=" border: 1px solid; width: 100%; ">
 
@@ -310,7 +310,7 @@ if (isset($_GET['limpar'])) {
                                         <?php
                                         echo number_format($totalResumo, 2, ',', '.'); ?>
                                     </h4>
-                                    <button type="button" class="btn_carrinho">
+                                    <button type="button"  class="btn_carrinho">
                                         Comprar
                                     </button>
                                 </div>
