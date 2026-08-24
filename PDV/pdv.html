@@ -154,10 +154,8 @@ function buscarProduto() {
 
 
         // Adiciona o produto na lista
-        adicionarProduto(
-            produto.nome,
-            parseFloat(produto.preco)
-        );
+        // Adiciona o produto na lista
+adicionarProduto(produto);
 
 
         // Limpa o campo
@@ -186,6 +184,8 @@ function buscarProduto() {
 
    function adicionarProduto(produto) {
 
+let preco = parseFloat(produto.valor);
+
 let linha = `
     <tr>
         <td>${produto.idProdutos}</td>
@@ -193,7 +193,7 @@ let linha = `
         <td>${produto.categoria}</td>
         <td>${produto.Armazenamento}</td>
         <td>${produto.codigoDeBarras}</td>
-        <td>R$ ${parseFloat(produto.valor).toFixed(2)}</td>
+        <td>R$ ${preco.toFixed(2)}</td>
         <td>${produto.validade ?? "-"}</td>
         <td>${produto.estoque}</td>
     </tr>
@@ -201,7 +201,7 @@ let linha = `
 
 document.getElementById("lista").innerHTML += linha;
 
-total += parseFloat(produto.valor);
+total += preco;
 
 document.getElementById("total").textContent =
     total.toFixed(2);

@@ -135,10 +135,12 @@ function mudarCategoria(categoria) {
 }
 function buscarProduto() {
 
-    const codigo = document.getElementById("codigo").value.trim();
+    const campo = document.getElementById("codigo");
+    const codigo = campo.value.trim();
 
     if (codigo === "") {
         alert("Digite um código de barras.");
+        campo.focus();
         return;
     }
 
@@ -147,28 +149,39 @@ function buscarProduto() {
         .then(produto => {
 
             if (produto.erro) {
-                alert(produto.erro);
+
+                alert("Produto não encontrado!");
+
+                campo.select();
+
                 return;
             }
 
-            // Aqui você adiciona o produto à venda
             adicionarProduto(produto);
 
-            // Limpa o campo para o próximo produto
-            document.getElementById("codigo").value = "";
-            document.getElementById("codigo").focus();
+            campo.value = "";
+
+            campo.focus();
 
         })
         .catch(erro => {
+
             console.error(erro);
+
             alert("Erro ao buscar o produto.");
+
         });
 }
+
+
 document.getElementById("codigo").addEventListener("keydown", function(event) {
 
     if (event.key === "Enter") {
+
         event.preventDefault();
+
         buscarProduto();
+
     }
 
 });
