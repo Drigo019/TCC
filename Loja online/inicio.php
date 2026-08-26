@@ -109,10 +109,37 @@ if (isset($_GET['limpar'])) {
                 </button>
             </td>
             <td style="width: 75%;" align="center">
-                <form action="pesquisar.php" method="GET">
-                    <input type="text" class="barra_pesquisa" name="pesquisa" placeholder="🔍  Queijos, Doces, Defumados e Iguarias">
-                </form>
-            </td>
+    <div class="row g-3">
+
+        <div class="col-md-8">
+
+            <input
+                type="text"
+                id="pesquisa"
+                name="pesquisa"
+                class="form-control barra_pesquisa"
+                placeholder="🔍  Queijos, Doces, Defumados e Iguaria"
+                autofocus
+            >
+
+        </div>
+
+        <div class="col-md-4">
+
+            <button
+                type="button"
+                class="btn btn-success w-100"
+                onclick="buscarProduto()"
+            >
+                <i class="bi bi-search"></i>
+                Buscar
+            </button>
+
+        </div>
+
+    </div>
+</td>
+
             <td>
                 <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
                     <img id="icon_carrinho" src="../Imagens/Carrinho2.png" style="height: 40; width: 40px;">
