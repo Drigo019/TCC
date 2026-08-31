@@ -3,23 +3,34 @@ session_start();
 // =====================================================
 // PRODUTOS
 // =====================================================
-$itens = array(
-    ['nome' => 'Geleia de mocotó artesanal', 'imagem' => '../Produtos/geleiaDeMocoto.jpeg', 'preco' => 20.00],
-    ['nome' => 'Queijo trufado peça de 500g', 'imagem' => '../Produtos/QueijoTrufado.jpeg', 'preco' => 30.00],
-    ['nome' => 'Trufado com azeitona', 'imagem' => '../Produtos/trufadoComAzeitona.jpeg', 'preco' => 30.00],
-    ['nome' => 'Mussarela fatiada ou pedaço', 'imagem' => '../Produtos/mussarelafatiada.jpeg', 'preco' => 39.99],
-    ['nome' => 'Fresco de Monte Belo', 'imagem' => '../Produtos/FrescoDeMonteBelo.jpeg', 'preco' => 24.90],
-    ['nome' => 'Majestic', 'imagem' => '../Produtos/Majestic.jpeg', 'preco' => 37.00],
-    ['nome' => 'Provolone desidratado', 'imagem' => '../Produtos/provoloneDesidratado.jpeg', 'preco' => 19.90],
-    ['nome' => 'Queijo Holandês lemmender', 'imagem' => '../Produtos/queijoHolandesLemmender.jpeg', 'preco' => 79.90],
-    ['nome' => 'Caixa de paçoxa com 100 unidades', 'imagem' => '../Produtos/caixaDePacoca.jpeg', 'preco' => 19.99],
-    ['nome' => 'Apresuntado Aurora', 'imagem' => '../Produtos/apresuntadoAurora.jpeg', 'preco' => 22.00],
-    ['nome' => 'Parmesão', 'imagem' => '../Produtos/parmesao.jpeg', 'preco' => 76.90],
-    ['nome' => 'Salame vila caipira', 'imagem' => '../Produtos/SalameVilaCaipira.jpeg', 'preco' => 19.90],
-    ['nome' => 'Provolone artesanal peça de 300g', 'imagem' => '../Produtos/ProvoloneArtesanal.jpeg', 'preco' => 19.90],
-    ['nome' => 'Queijo canastra', 'imagem' => '../Produtos/queijoCanastra.jpeg', 'preco' => 49.90],
-    ['nome' => 'Doce de leite em pedaços', 'imagem' => '../Produtos/doceDeLeite.jpeg', 'preco' => 19.90]
-);
+$conn = new mysqli("localhost", "root", "", "containerdoqueijo");
+
+if ($conn->connect_error) {
+    die("Erro na conexão com o banco: " . $conn->connect_error);
+}
+
+$conn->set_charset("utf8mb4");
+
+// =====================================================
+// BUSCAR PRODUTOS DO BANCO
+// =====================================================
+
+$sql = "SELECT idProduto, nome, valor, imagem
+        FROM produtos
+        ORDER BY nome ASC";
+
+$resultado = $conn->query($sql);
+
+$itens = [];
+
+while ($produto = $resultado->fetch_assoc()) {
+
+    $itens[$produto['idProduto']] = [
+        'nome' => $produto['nome'],
+        'preco' => $produto['valor'],
+        'imagem' => $produto['imagem']
+    ];
+}
 // =====================================================
 // ADICIONAR PRODUTO
 // =====================================================
@@ -32,7 +43,7 @@ if (isset($_GET['adicionar'])) {
             $_SESSION['carrinho'][$idProduto] = array(
                 'quantidade' => 1,
                 'nome' => $itens[$idProduto]['nome'],
-                'preco' => $itens[$idProduto]['preco']
+                'valor' => $itens[$idProduto]['valor']
             );
         }
     }
@@ -235,17 +246,20 @@ if (isset($_GET['limpar'])) {
                     <?php foreach ($itens as $key => $value) { ?>
                         <div class="produto">
                             <!-- IMAGEM -->
-                            <img src="<?php echo $value['imagem']; ?>" style="height: 150px;">
+                            <img
+                                src="../Produtos/<?php echo htmlspecialchars($value['imagem']); ?>"
+                                style="height: 150px;"
+                                alt="<?php echo htmlspecialchars($value['nome']); ?>"
+                            >
                             <br>
                             <!-- NOME -->
                             <strong>
-                                <?php echo $value['nome']; ?>
+                                <?php echo htmlspecialchars($value['nome']); ?>
                             </strong>
                             <br>
                             <!-- PREÇO -->
                             R$
-                            <?php
-                            echo number_format($value['preco'], 2, ',', '.'); ?>
+                            <?php echo number_format($value['preco'],2,',','.');?>
                             <br>
                             <!-- ADICIONAR -->
                             <a href="?adicionar=<?php echo $key; ?>">
@@ -273,7 +287,7 @@ if (isset($_GET['limpar'])) {
                         if (!empty($_SESSION['carrinho'])) {
                             $total = 0;
                             foreach ($_SESSION['carrinho'] as $key => $value) {
-                                $subtotal = $value['quantidade'] * $value['preco'];
+                                $subtotal = $value['quantidade'] * $value['valor'];
                                 $total += $subtotal;
                         ?>
                                 <div style=" padding: 10px; margin: 10px; border-bottom: 1px solid #ccc;" align="center">
@@ -342,7 +356,7 @@ if (isset($_GET['limpar'])) {
                                 $_SESSION['carrinho']
                                 as $value
                             ) {
-                                $subtotal = $value['quantidade'] * $value['preco'];
+                                $subtotal = $value['quantidade'] * $value['valor'];
                                 $totalResumo += $subtotal;
                             }
                         ?>
