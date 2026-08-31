@@ -248,7 +248,7 @@ if (isset($_GET['limpar'])) {
                             <!-- IMAGEM -->
                             <img
                                 src="../Produtos/<?php echo htmlspecialchars($value['imagem']); ?>"
-                                style="height: 150px;"
+                                style="height: 220px; width: 220px; object-fit: contain;"
                                 alt="<?php echo htmlspecialchars($value['nome']); ?>"
                             >
                             <br>

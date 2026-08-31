@@ -16,7 +16,7 @@ if (isset($_FILES['arquivo']) && $_FILES['arquivo']['error'] === UPLOAD_ERR_OK) 
     $arquivo = $_FILES['arquivo'];
 
     // Pasta onde a imagem será salva
-    $pastaUpload = 'imagens/';
+    $pastaUpload = '../imagens/';
 
     // Cria um nome único
     $nomeDoArquivo = uniqid() . "_" . basename($arquivo['name']);
