@@ -8,29 +8,50 @@
     <title>PDV</title>
 
     <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
 
     <!-- Ícones -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+        rel="stylesheet"
+    >
 </head>
 
+
 <body class="bg-light">
+
 
 <div class="container py-5">
 
     <div class="row justify-content-center">
-        <div class="col-md-8">
+
+        <div class="col-md-10">
 
             <div class="card shadow border-0 rounded-4">
 
                 <div class="card-body p-4">
 
+
+                    <!-- ======================================
+                         TÍTULO
+                    ======================================= -->
+
                     <h2 class="text-center mb-4">
+
                         <i class="bi bi-cart-fill text-success"></i>
+
                         PDV
+
                     </h2>
 
-                    <!-- Busca do produto -->
+
+                    <!-- ======================================
+                         BUSCA DO PRODUTO
+                    ======================================= -->
+
                     <div class="row g-3">
 
                         <div class="col-md-8">
@@ -45,6 +66,7 @@
 
                         </div>
 
+
                         <div class="col-md-4">
 
                             <button
@@ -52,8 +74,11 @@
                                 class="btn btn-success w-100"
                                 onclick="buscarProduto()"
                             >
+
                                 <i class="bi bi-upc-scan"></i>
+
                                 Buscar
+
                             </button>
 
                         </div>
@@ -61,26 +86,43 @@
                     </div>
 
 
-                    <!-- Lista de produtos -->
+                    <!-- ======================================
+                         LISTA DE PRODUTOS
+                    ======================================= -->
+
                     <div class="table-responsive mt-4">
 
                         <table class="table table-hover align-middle">
 
                             <thead class="table-success">
+
                                 <tr>
+
                                     <th>ID</th>
+
                                     <th>Produto</th>
+
                                     <th>Categoria</th>
+
                                     <th>Armazenamento</th>
+
                                     <th>Código de Barras</th>
+
                                     <th>Preço</th>
+
                                     <th>Validade</th>
+
                                     <th>Estoque</th>
+
+                                    <th>Quantidade</th>
+
                                 </tr>
+
                             </thead>
 
+
                             <tbody id="lista">
-                                
+
                             </tbody>
 
                         </table>
@@ -88,46 +130,388 @@
                     </div>
 
 
-                    <!-- Total -->
+                    <!-- ======================================
+                         TOTAL
+                    ======================================= -->
+
                     <div class="text-end mt-4">
 
                         <h3>
+
                             Total: R$
-                            <span id="total">0.00</span>
+
+                            <span id="total">
+                                0.00
+                            </span>
+
                         </h3>
 
                     </div>
+                    <!-- ======================================
+     FINALIZAR COMPRA
+======================================= -->
+
+<div class="text-end mt-3">
+
+    <button
+        type="button"
+        class="btn btn-primary btn-lg"
+        onclick="abrirPagamento()"
+    >
+        <i class="bi bi-cart-check"></i>
+        Finalizar Compra
+    </button>
+
+</div>
 
                 </div>
 
             </div>
 
         </div>
+
     </div>
 
 </div>
 
 
+<!-- ======================================
+     MODAL DE PAGAMENTO
+======================================= -->
+
+<div
+    class="modal fade"
+    id="modalPagamento"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
+    <div class="modal-dialog modal-dialog-centered">
+
+        <div class="modal-content rounded-4">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+
+                    <i class="bi bi-credit-card"></i>
+
+                    Finalizar Compra
+
+                </h5>
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+            </div>
+
+
+            <div class="modal-body text-center">
+
+
+                <!-- TOTAL -->
+
+                <h4 class="mb-4">
+
+                    Total:
+
+                    <strong>
+                        R$
+                        <span id="totalPagamento">
+                            0.00
+                        </span>
+                    </strong>
+
+                </h4>
+
+
+                <!-- =================================
+                     ESCOLHA DO PAGAMENTO
+                ================================== -->
+
+                <div
+                    id="opcoesPagamento"
+                >
+
+                    <h6 class="mb-3">
+                        Escolha a forma de pagamento:
+                    </h6>
+
+
+                    <div class="row g-3">
+
+                        <!-- PIX -->
+
+                        <div class="col-6">
+
+                            <button
+                                type="button"
+                                class="btn btn-success w-100 py-3"
+                                onclick="selecionarPix()"
+                            >
+
+                                <i
+                                    class="bi bi-qr-code"
+                                    style="font-size: 25px;"
+                                ></i>
+
+                                <br>
+
+                                PIX
+
+                            </button>
+
+                        </div>
+
+
+                        <!-- CARTÃO -->
+
+                        <div class="col-6">
+
+                            <button
+                                type="button"
+                                class="btn btn-primary w-100 py-3"
+                                onclick="selecionarCartao()"
+                            >
+
+                                <i
+                                    class="bi bi-credit-card"
+                                    style="font-size: 25px;"
+                                ></i>
+
+                                <br>
+
+                                Cartão
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================
+                     PIX
+                ================================== -->
+
+                <div
+                    id="pagamentoPix"
+                    style="display: none;"
+                >
+
+                    <h5 class="text-success">
+                        Pagamento via PIX
+                    </h5>
+
+                    <p>
+                        Total a pagar:
+                    </p>
+
+                    <h3>
+                        R$
+                        <span id="valorPix">
+                            0.00
+                        </span>
+                    </h3>
+
+
+                    <!-- QR CODE -->
+
+                    <div
+                        class="border rounded p-4 my-3"
+                    >
+
+                        <i
+                            class="bi bi-qr-code"
+                            style="font-size: 100px;"
+                        ></i>
+
+                    </div>
+
+
+                    <p class="text-muted">
+                        QR Code será gerado aqui.
+                    </p>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-success"
+                        onclick="confirmarPagamento('pix')"
+                    >
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Confirmar pagamento
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onclick="voltarPagamento()"
+                    >
+
+                        Voltar
+
+                    </button>
+
+                </div>
+
+
+                <!-- =================================
+                     CARTÃO
+                ================================== -->
+
+                <div
+                    id="pagamentoCartao"
+                    style="display: none;"
+                >
+
+                    <h5 class="text-primary">
+                        Pagamento via Cartão
+                    </h5>
+
+
+                    <p>
+                        Total a pagar:
+                    </p>
+
+                    <h3 class="mb-4">
+
+                        R$
+
+                        <span id="valorCartao">
+                            0.00
+                        </span>
+
+                    </h3>
+
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary w-100 py-3"
+                                onclick="selecionarTipoCartao('debito')"
+                            >
+
+                                <i class="bi bi-credit-card"></i>
+
+                                <br>
+
+                                Débito
+
+                            </button>
+
+                        </div>
+
+
+                        <div class="col-6">
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary w-100 py-3"
+                                onclick="selecionarTipoCartao('credito')"
+                            >
+
+                                <i class="bi bi-credit-card-2-front"></i>
+
+                                <br>
+
+                                Crédito
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="tipoCartaoSelecionado"
+                        class="mt-3"
+                    ></div>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-primary mt-3"
+                        id="confirmarCartao"
+                        style="display: none;"
+                        onclick="confirmarPagamento('cartao')"
+                    >
+
+                        <i class="bi bi-check-circle"></i>
+
+                        Confirmar pagamento
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary mt-3"
+                        onclick="voltarPagamento()"
+                    >
+
+                        Voltar
+
+                    </button>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
 <script>
+
+
+/* =========================================================
+   TOTAL DA VENDA
+========================================================= */
 
 let total = 0;
 
 
-/* ==========================================
+
+/* =========================================================
    BUSCAR PRODUTO PELO CÓDIGO DE BARRAS
-   ========================================== */
+========================================================= */
 
 function buscarProduto() {
 
-    let campo = document.getElementById("codigo");
+    let campo =
+        document.getElementById("codigo");
 
-    let codigo = campo.value.trim();
+    let codigo =
+        campo.value.trim();
 
 
     // Não permite busca vazia
     if (codigo === "") {
 
-        alert("Digite ou leia o código de barras!");
+        alert(
+            "Digite ou leia o código de barras!"
+        );
 
         campo.focus();
 
@@ -136,17 +520,35 @@ function buscarProduto() {
 
 
     fetch(
-    "buscar_produto.php?codigo=" +
-    encodeURIComponent(codigo)
-)
+        "buscar_produto.php?codigo=" +
+        encodeURIComponent(codigo)
+    )
 
-    .then(response => response.json())
+    .then(response => {
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Erro na resposta do servidor."
+            );
+        }
+
+        return response.json();
+
+    })
 
     .then(produto => {
 
+
+        /* =============================================
+           PRODUTO NÃO ENCONTRADO
+        ============================================= */
+
         if (produto.erro) {
 
-            alert("Produto não encontrado!");
+            alert(
+                "Produto não encontrado!"
+            );
 
             campo.select();
 
@@ -154,15 +556,24 @@ function buscarProduto() {
         }
 
 
-        // Adiciona o produto na lista
-adicionarProduto(produto);
+        /* =============================================
+           ADICIONA O PRODUTO
+        ============================================= */
+
+        adicionarProduto(produto);
 
 
-        // Limpa o campo
+        /* =============================================
+           LIMPA O CAMPO
+        ============================================= */
+
         campo.value = "";
 
 
-        // Devolve o foco para o campo
+        /* =============================================
+           DEVOLVE O FOCO PARA O CAMPO
+        ============================================= */
+
         campo.focus();
 
     })
@@ -171,65 +582,704 @@ adicionarProduto(produto);
 
         console.error(error);
 
-        alert("Erro ao buscar o produto.");
+        alert(
+            "Erro ao buscar o produto."
+        );
 
     });
 
 }
 
 
-/* ==========================================
-   ADICIONAR PRODUTO NA LISTA
-   ========================================== */
 
-   function adicionarProduto(produto) {
+/* =========================================================
+   ADICIONAR PRODUTO
+========================================================= */
 
-let preco = parseFloat(produto.valor);
+function adicionarProduto(produto) {
 
-let linha = `
-    <tr>
-        <td>${produto.idProdutos}</td>
-        <td>${produto.nome}</td>
-        <td>${produto.Categoria}</td>
-        <td>${produto.Armazenamento}</td>
-        <td>${produto.codigoDeBarras}</td>
-        <td>R$ ${preco.toFixed(2)}</td>
-        <td>${produto.validade ?? "-"}</td>
-        <td>${produto.estoque}</td>
-    </tr>
+
+    let preco =
+        parseFloat(produto.valor);
+
+
+    let lista =
+        document.getElementById("lista");
+
+
+    /*
+     * Procuramos uma linha que já tenha
+     * o mesmo código de barras.
+     */
+
+    let linhaExistente =
+        lista.querySelector(
+            `tr[data-codigo="${produto.codigoDeBarras}"]`
+        );
+
+
+    /* =====================================================
+       PRODUTO JÁ EXISTE
+    ===================================================== */
+
+    if (linhaExistente) {
+
+
+        let quantidadeElement =
+            linhaExistente.querySelector(
+                ".quantidade"
+            );
+
+
+        let quantidade =
+            parseInt(
+                quantidadeElement.textContent
+            );
+
+
+        let estoque =
+            parseInt(
+                linhaExistente.dataset.estoque
+            );
+
+
+        /*
+         * Verifica se ainda existe estoque.
+         */
+
+        if (
+            quantidade >= estoque
+        ) {
+
+            alert(
+                "Não há mais unidades desse produto em estoque."
+            );
+
+            return;
+        }
+
+
+        /*
+         * Aumenta a quantidade.
+         */
+
+        quantidade++;
+
+
+        quantidadeElement.textContent =
+            quantidade;
+
+
+        /*
+         * Atualiza o total.
+         */
+
+        atualizarTotal();
+
+
+        return;
+    }
+
+
+
+    /* =====================================================
+       PRODUTO NOVO
+    ===================================================== */
+
+    let estoque =
+        parseInt(produto.estoque);
+
+
+    /*
+     * Se o produto estiver sem estoque,
+     * não adiciona.
+     */
+
+    if (
+        estoque <= 0
+    ) {
+
+        alert(
+            "Este produto está sem estoque."
+        );
+
+        return;
+    }
+
+
+    /*
+     * Cria a nova linha.
+     */
+
+    let linha =
+        document.createElement("tr");
+
+
+    /*
+     * Guarda informações importantes
+     * na própria linha.
+     */
+
+    linha.dataset.codigo =
+        produto.codigoDeBarras;
+
+    linha.dataset.preco =
+        preco;
+
+    linha.dataset.estoque =
+        estoque;
+
+
+        linha.innerHTML = `
+
+<td>
+    ${produto.idProduto}
+</td>
+
+<td>
+    ${produto.nome}
+</td>
+
+<td>
+    ${produto.Categoria}
+</td>
+
+<td>
+    ${produto.Armazenamento}
+</td>
+
+<td>
+    ${produto.codigoDeBarras}
+</td>
+
+<td>
+    R$ ${preco.toFixed(2)}
+</td>
+
+<td>
+    ${produto.validade ?? "-"}
+</td>
+
+<td class="estoque-atual">
+    ${estoque-1}
+</td>
+
+<td>
+
+    <div class="d-flex align-items-center gap-2">
+
+        <button
+            type="button"
+            class="btn btn-danger btn-sm"
+            onclick="diminuirQuantidade(this)"
+        >
+            <i class="bi bi-dash"></i>
+        </button>
+
+        <strong class="quantidade">
+            1
+        </strong>
+
+        <button
+            type="button"
+            class="btn btn-success btn-sm"
+            onclick="aumentarQuantidade(this)"
+        >
+            <i class="bi bi-plus"></i>
+        </button>
+
+    </div>
+
+</td>
+
 `;
 
-document.getElementById("lista").innerHTML += linha;
 
-total += preco;
+    /*
+     * Coloca a linha na tabela.
+     */
 
-document.getElementById("total").textContent =
-    total.toFixed(2);
+    lista.appendChild(
+        linha
+    );
+
+
+    /*
+     * Atualiza o total.
+     */
+
+    atualizarTotal();
+
 }
 
 
-/* ==========================================
-   ENTER
-   ========================================== */
 
-// A pistola normalmente envia ENTER
-// depois de ler o código.
+/* =========================================================
+   AUMENTAR QUANTIDADE
+========================================================= */
+
+function aumentarQuantidade(botao) {
+
+let linha =
+    botao.closest("tr");
+
+let quantidadeElement =
+    linha.querySelector(".quantidade");
+
+let estoqueElement =
+    linha.querySelector(".estoque-atual");
+
+let quantidade =
+    parseInt(
+        quantidadeElement.textContent
+    );
+
+let estoqueOriginal =
+    parseInt(
+        linha.dataset.estoque
+    );
+
+
+// Verifica se ainda existe estoque
+if (quantidade >= estoqueOriginal) {
+
+    alert(
+        "Não há mais unidades desse produto em estoque."
+    );
+
+    return;
+}
+
+
+// Aumenta a quantidade
+quantidade++;
+
+
+quantidadeElement.textContent =
+    quantidade;
+
+
+// Diminui o estoque mostrado na tela
+estoqueElement.textContent =
+    estoqueOriginal - quantidade;
+
+
+// Atualiza o total
+atualizarTotal();
+
+}
+
+
+
+/* =========================================================
+   DIMINUIR QUANTIDADE
+========================================================= */
+
+function diminuirQuantidade(botao) {
+
+let linha =
+    botao.closest("tr");
+
+let quantidadeElement =
+    linha.querySelector(".quantidade");
+
+let estoqueElement =
+    linha.querySelector(".estoque-atual");
+
+let quantidade =
+    parseInt(
+        quantidadeElement.textContent
+    );
+
+let estoqueOriginal =
+    parseInt(
+        linha.dataset.estoque
+    );
+
+
+// Diminui a quantidade
+quantidade--;
+
+
+// Se chegar a zero, remove o produto
+if (quantidade <= 0) {
+
+    linha.remove();
+
+} else {
+
+    quantidadeElement.textContent =
+        quantidade;
+
+
+    // Devolve a unidade ao estoque visual
+    estoqueElement.textContent =
+        estoqueOriginal - quantidade;
+
+}
+
+
+atualizarTotal();
+
+}
+
+
+
+/* =========================================================
+   ATUALIZAR TOTAL
+========================================================= */
+
+function atualizarTotal() {
+
+
+    total = 0;
+
+
+    /*
+     * Pega todas as linhas da tabela.
+     */
+
+    let linhas =
+        document.querySelectorAll(
+            "#lista tr"
+        );
+
+
+    /*
+     * Percorre cada produto.
+     */
+
+    linhas.forEach(linha => {
+
+
+        let preco =
+            parseFloat(
+                linha.dataset.preco
+            );
+
+
+        let quantidade =
+            parseInt(
+                linha.querySelector(
+                    ".quantidade"
+                ).textContent
+            );
+
+
+        /*
+         * Preço × quantidade
+         */
+
+        total +=
+            preco * quantidade;
+
+    });
+
+
+    /*
+     * Mostra o total.
+
+     */
+
+    document.getElementById(
+        "total"
+    ).textContent =
+        total.toFixed(2);
+
+}
+
+
+
+
+
+/* =========================================================
+   ENTER
+========================================================= */
+
+/*
+ * A pistola normalmente envia ENTER
+ * depois de ler o código.
+ */
 
 document
     .getElementById("codigo")
-    .addEventListener("keypress", function(event) {
+    .addEventListener(
+        "keypress",
+        function(event) {
 
-        if (event.key === "Enter") {
+            if (
+                event.key === "Enter"
+            ) {
 
-            event.preventDefault();
+                event.preventDefault();
 
-            buscarProduto();
+                buscarProduto();
+
+            }
 
         }
+    );
 
-    });
+
+/* =========================================================
+   MODAL DE PAGAMENTO
+========================================================= */
+
+function abrirPagamento() {
+
+/*
+ * Não permite finalizar uma venda vazia.
+ */
+
+let produtos =
+    document.querySelectorAll(
+        "#lista tr"
+    );
+
+
+if (produtos.length === 0) {
+
+    alert(
+        "Adicione pelo menos um produto antes de finalizar a compra."
+    );
+
+    return;
+}
+
+
+/*
+ * Mostra o total no modal.
+ */
+
+document.getElementById(
+    "totalPagamento"
+).textContent =
+    total.toFixed(2);
+
+
+document.getElementById(
+    "valorPix"
+).textContent =
+    total.toFixed(2);
+
+
+document.getElementById(
+    "valorCartao"
+).textContent =
+    total.toFixed(2);
+
+
+/*
+ * Mostra as opções principais.
+ */
+
+document.getElementById(
+    "opcoesPagamento"
+).style.display = "block";
+
+
+document.getElementById(
+    "pagamentoPix"
+).style.display = "none";
+
+
+document.getElementById(
+    "pagamentoCartao"
+).style.display = "none";
+
+
+/*
+ * Abre o modal.
+ */
+
+let modal =
+    new bootstrap.Modal(
+        document.getElementById(
+            "modalPagamento"
+        )
+    );
+
+
+modal.show();
+
+}
+
+
+
+/* =========================================================
+SELECIONAR PIX
+========================================================= */
+
+function selecionarPix() {
+
+document.getElementById(
+    "opcoesPagamento"
+).style.display = "none";
+
+
+document.getElementById(
+    "pagamentoPix"
+).style.display = "block";
+
+}
+
+
+
+/* =========================================================
+SELECIONAR CARTÃO
+========================================================= */
+
+function selecionarCartao() {
+
+document.getElementById(
+    "opcoesPagamento"
+).style.display = "none";
+
+
+document.getElementById(
+    "pagamentoCartao"
+).style.display = "block";
+
+
+document.getElementById(
+    "tipoCartaoSelecionado"
+).innerHTML = "";
+
+
+document.getElementById(
+    "confirmarCartao"
+).style.display = "none";
+
+}
+
+
+
+/* =========================================================
+TIPO DE CARTÃO
+========================================================= */
+
+function selecionarTipoCartao(tipo) {
+
+let nome =
+    tipo === "debito"
+        ? "Débito"
+        : "Crédito";
+
+
+document.getElementById(
+    "tipoCartaoSelecionado"
+).innerHTML = `
+
+    <div class="alert alert-primary">
+
+        Pagamento selecionado:
+
+        <strong>
+            ${nome}
+        </strong>
+
+    </div>
+
+`;
+
+
+document.getElementById(
+    "confirmarCartao"
+).style.display = "inline-block";
+
+}
+
+
+
+/* =========================================================
+VOLTAR
+========================================================= */
+
+function voltarPagamento() {
+
+document.getElementById(
+    "pagamentoPix"
+).style.display = "none";
+
+
+document.getElementById(
+    "pagamentoCartao"
+).style.display = "none";
+
+
+document.getElementById(
+    "opcoesPagamento"
+).style.display = "block";
+
+}
+
+
+
+/* =========================================================
+CONFIRMAR PAGAMENTO
+========================================================= */
+
+function confirmarPagamento(
+formaPagamento
+) {
+
+let mensagem = "";
+
+
+if (
+    formaPagamento === "pix"
+) {
+
+    mensagem =
+        "Pagamento via PIX confirmado!";
+
+} else {
+
+    mensagem =
+        "Pagamento via cartão confirmado!";
+
+}
+
+
+alert(
+    mensagem
+);
+
+
+/*
+ * Por enquanto apenas fecha o modal.
+ *
+ * Depois vamos colocar aqui:
+ *
+ * 1. Registrar a venda no MySQL
+ * 2. Baixar o estoque
+ * 3. Registrar forma de pagamento
+ * 4. Limpar o carrinho
+ */
+
+let modalElement =
+    document.getElementById(
+        "modalPagamento"
+    );
+
+
+let modal =
+    bootstrap.Modal.getInstance(
+        modalElement
+    );
+
+
+if (modal) {
+
+    modal.hide();
+
+}
+
+}
 
 </script>
 
+
 </body>
+
 </html>
