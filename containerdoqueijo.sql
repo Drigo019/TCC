@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 20/08/2026 às 14:03
+-- Tempo de geração: 02/09/2026 às 16:15
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -107,11 +107,21 @@ CREATE TABLE `fornecedores` (
 CREATE TABLE `funcionarios` (
   `idFuncionario` int(11) NOT NULL,
   `nome` varchar(255) DEFAULT NULL,
-  `nimero` int(11) DEFAULT NULL,
+  `cargo` enum('chefe','funcionario') NOT NULL,
+  `numero` int(11) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `senha` varchar(255) DEFAULT NULL,
   `idEnderecoFuncionario` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `funcionarios`
+--
+
+INSERT INTO `funcionarios` (`idFuncionario`, `nome`, `cargo`, `numero`, `email`, `senha`, `idEnderecoFuncionario`) VALUES
+(1, 'Rodrigo Jesus de Carvalho', 'funcionario', NULL, NULL, NULL, NULL),
+(2, 'Rodrigo Jesus de Carvalho', 'funcionario', NULL, NULL, NULL, NULL),
+(3, '1', 'chefe', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -120,7 +130,7 @@ CREATE TABLE `funcionarios` (
 --
 
 CREATE TABLE `produtos` (
-  `idProdutos` int(11) NOT NULL,
+  `idProduto` int(11) NOT NULL,
   `nome` varchar(255) DEFAULT NULL,
   `codigoDeBarras` int(11) DEFAULT NULL,
   `valor` float(10,2) DEFAULT NULL,
@@ -128,7 +138,7 @@ CREATE TABLE `produtos` (
   `estoque` int(11) DEFAULT NULL,
   `Armazenamento` enum('Refrigerado','Normal') NOT NULL,
   `Categoria` enum('Frio','Defumado','Doce','Bebida','Queijo') NOT NULL,
-  `imagem` blob DEFAULT NULL,
+  `imagem` varchar(255) DEFAULT NULL,
   `idFornecedor` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -136,8 +146,12 @@ CREATE TABLE `produtos` (
 -- Despejando dados para a tabela `produtos`
 --
 
-INSERT INTO `produtos` (`idProdutos`, `nome`, `codigoDeBarras`, `valor`, `validade`, `estoque`, `Armazenamento`, `Categoria`, `imagem`, `idFornecedor`) VALUES
-(1, '1', 1, 1.00, NULL, 1, 'Refrigerado', 'Frio', 0x696d6167656e732f366138353838306231306262625f436170747572612064652074656c6120323032362d30382d3134203134353132382e706e67, NULL);
+INSERT INTO `produtos` (`idProduto`, `nome`, `codigoDeBarras`, `valor`, `validade`, `estoque`, `Armazenamento`, `Categoria`, `imagem`, `idFornecedor`) VALUES
+(4, 'Rodrigo                    ', 12345, 11.00, NULL, 1, 'Refrigerado', 'Queijo', 'imagens/6a95954b01698_Captura de tela 2026-08-14 145128.png', NULL),
+(3, 'Queijo Fresco', 1234, 25.00, NULL, 5, 'Refrigerado', 'Queijo', 'imagens/6a959483799e1_Captura de tela 2026-08-31 114515.png', NULL),
+(5, 'mariany cristina guerra', 123456, 1.00, NULL, 1, 'Refrigerado', 'Queijo', 'imagens/6a9597fe3e2c0_Captura de tela 2026-08-15 102514.png', NULL),
+(6, '1', 1, 1.00, NULL, 1, 'Refrigerado', 'Bebida', '../imagens/6a95d8c562d7e_Captura de tela 2026-08-23 235251.png', NULL),
+(7, '1', 1, 1.00, NULL, 1, 'Refrigerado', 'Bebida', '../imagens/6a95d9a2043b7_provoloneArtesanal.jpeg', NULL);
 
 -- --------------------------------------------------------
 
@@ -241,7 +255,7 @@ ALTER TABLE `funcionarios`
 -- Índices de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  ADD PRIMARY KEY (`idProdutos`),
+  ADD PRIMARY KEY (`idProduto`),
   ADD KEY `idFornecedor` (`idFornecedor`);
 
 --
@@ -294,13 +308,13 @@ ALTER TABLE `fornecedores`
 -- AUTO_INCREMENT de tabela `funcionarios`
 --
 ALTER TABLE `funcionarios`
-  MODIFY `idFuncionario` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idFuncionario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `idProdutos` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `idProduto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
