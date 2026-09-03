@@ -27,7 +27,7 @@ while ($produto = $resultado->fetch_assoc()) {
 
     $itens[$produto['idProduto']] = [
         'nome' => $produto['nome'],
-        'preco' => $produto['valor'],
+        'valor' => $produto['valor'],
         'imagem' => $produto['imagem']
     ];
 }
@@ -112,44 +112,54 @@ if (isset($_GET['limpar'])) {
 ===================================================== -->
     <table class="topo">
         <tr>
-            <td style="width: 10%;">
-                <button type="button" class="btn_topo" onclick="window.location.href='inicio.php'">
-                    <img src="../Imagens/Logo.jpeg" style="height: 75px; border-radius: 100px;">
-                    <br>
-                    <label>Voltar</label>
-                </button>
-            </td>
+            <div class="topo_div">
+                <td style="width: 10%;">
+                    <button type="button" class="btn_topo" onclick="window.location.href='inicio.php'">
+                        <img src="../Imagens/Logo.jpeg" style="height: 100px; border-radius: 100px; margin-left: 50px; box-shadow: 0px 2px 8px rgba(255, 255, 255, 0.88);">
+                    </button>
+                </td>
+            </div>
             <td style="width: 75%;" align="center">
-    <div class="row g-3">
-
-        <div class="col-md-8">
-
-            <input
-                type="text"
-                id="pesquisa"
-                name="pesquisa"
-                class="form-control barra_pesquisa"
-                placeholder="🔍  Queijos, Doces, Defumados e Iguaria"
-                autofocus
-            >
-
-        </div>
-
-        <div class="col-md-4">
-
-            <button
-                type="button"
-                class="btn btn-success w-100"
-                onclick="buscarProduto()"
-            >
-                <i class="bi bi-search"></i>
-                Buscar
-            </button>
-
-        </div>
-
-    </div>
-</td>
+                <div style="margin: 0;">
+                <div style=" display: flex; justify-content: center; align-items: center; height: 100%; margin: 0;">
+                    <div class="btn">
+                        <button type="button" onclick="window.location.href='Categorias/promocoes.php'">
+                            <img src="../Imagens/Promocoes.png" style="height: 20px;">
+                            <br>
+                            Promoções
+                        </button>
+                    </div>
+                    <div class="btn">
+                        <button type="button" onclick="window.location.href='Categorias/queijos.php'">
+                            <img src="../Imagens/Queijos.png" style="height: 20px;">
+                            <br>
+                            Queijos
+                        </button>
+                    </div>
+                    <div class="btn">
+                        <button type="button" onclick="window.location.href='Categorias/defumados.php'">
+                            <img src="../Imagens/Defumados.png" style="height: 20px;">
+                            <br>
+                            Defumados
+                        </button>
+                    </div>
+                    <div class="btn">
+                        <button type="button" onclick="window.location.href='Categorias/doces.php'">
+                            <img src="../Imagens/Pacoquinha.png" style="height: 20px;">
+                            <br>
+                            Doces
+                        </button>
+                    </div>
+                    <div class="btn">
+                        <button type="button" onclick="window.location.href='Categorias/bebidas.php'">
+                            <img src="../Imagens/Bebidas.png" style="height: 20px;">
+                            <br>
+                            Bebidas
+                        </button>
+                    </div>
+                </div>
+            </div>
+            </td>
 
             <td>
                 <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
@@ -175,46 +185,7 @@ if (isset($_GET['limpar'])) {
     ================================================== -->
         <div class="produtos_categorias">
             <!-- CATEGORIAS -->
-            <div style="margin: 0;">
-                <div
-                    style=" display: flex; justify-content: center; align-items: center; height: 100%; margin: 0;">
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/promocoes.php'">
-                            <img src="../Imagens/Promocoes.png" style="height: 30px;">
-                            <br>
-                            Promoções
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/queijos.php'">
-                            <img src="../Imagens/Queijos.png" style="height: 30px;">
-                            <br>
-                            Queijos
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/defumados.php'">
-                            <img src="../Imagens/Defumados.png" style="height: 30px;">
-                            <br>
-                            Defumados
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/doces.php'">
-                            <img src="../Imagens/Pacoquinha.png" style="height: 30px;">
-                            <br>
-                            Doces
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/bebidas.php'">
-                            <img src="../Imagens/Bebidas.png" style="height: 30px;">
-                            <br>
-                            Bebidas
-                        </button>
-                    </div>
-                </div>
-            </div>
+            
             <!-- TÍTULO -->
             <div>
                 <h1 align="center" class="titulo_categoria">
@@ -225,11 +196,11 @@ if (isset($_GET['limpar'])) {
             CARROSSEL
         ================================================== -->
             <div id="centro" style="height: auto; min-height: 100px;">
-                <div class="slider">
+                <div class="slider" style="border-radius: 100px;">
                     <div class="slides">
                         <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
-                        <img src="../Imagens/FotosQueijos/queijo2.jpeg" alt="imagem 2" class="slide reajuste" style="width: 900px;">
-                        <img src="../Imagens/FotosQueijos/queijo3.jpeg" alt="imagem 3" class="slide reajuste" style="width: 900px;">
+                        <img src="../Imagens/carrosel.jpeg" alt="imagem 2" class="slide reajuste" style="width: 900px;">
+                        <img src="../Imagens/carrosel2.jpeg" alt="imagem 3" class="slide reajuste" style="width: 900px;">
                     </div>
                     <div class="indicators">
                         <span class="dot active" data-index="0"></span>
@@ -259,7 +230,7 @@ if (isset($_GET['limpar'])) {
                             <br>
                             <!-- PREÇO -->
                             R$
-                            <?php echo number_format($value['preco'],2,',','.');?>
+                            <?php echo number_format($value['valor'],2,',','.');?>
                             <br>
                             <!-- ADICIONAR -->
                             <a href="?adicionar=<?php echo $key; ?>">

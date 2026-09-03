@@ -16,7 +16,7 @@ button{
 }
 .topo{
     width: 100%;
-    background-color: rgb(216, 216, 216);
+    background-color: rgba(216, 216, 216, 0.315);
     padding: 10px;
 }
 .btn
@@ -27,6 +27,7 @@ button{
     background-color: white;
     background: rgba(255, 255, 255, 0);
     border: 0;
+    
 }
 .btn_topo label{
     font-size: 16px;
@@ -35,6 +36,8 @@ button{
     font-size: 17px;
     border-radius: 10px;
     box-shadow: 0px 2px 8px rgba(255, 255, 255, 0.589);
+    width: 70px;
+    height: 30px;
 }
 .titulo_categoria{
     font-size: 40px;
