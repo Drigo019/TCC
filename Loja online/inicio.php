@@ -110,7 +110,7 @@ if (isset($_GET['limpar'])) {
     <!-- =====================================================
     TOPO
 ===================================================== -->
-    <table class="topo">
+    <table class="topo" id="topo">
         <tr>
             <div class="topo_div">
                 <td style="width: 10%;">
@@ -121,56 +121,54 @@ if (isset($_GET['limpar'])) {
             </div>
             <td style="width: 75%;" align="center">
                 <div style="margin: 0;">
-                <div style=" display: flex; justify-content: center; align-items: center; height: 100%; margin: 0;">
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/promocoes.php'">
-                            <img src="../Imagens/Promocoes.png" style="height: 20px;">
-                            <br>
-                            Promoções
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/queijos.php'">
-                            <img src="../Imagens/Queijos.png" style="height: 20px;">
-                            <br>
-                            Queijos
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/defumados.php'">
-                            <img src="../Imagens/Defumados.png" style="height: 20px;">
-                            <br>
-                            Defumados
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/doces.php'">
-                            <img src="../Imagens/Pacoquinha.png" style="height: 20px;">
-                            <br>
-                            Doces
-                        </button>
-                    </div>
-                    <div class="btn">
-                        <button type="button" onclick="window.location.href='Categorias/bebidas.php'">
-                            <img src="../Imagens/Bebidas.png" style="height: 20px;">
-                            <br>
-                            Bebidas
-                        </button>
+                    <div style=" display: flex; justify-content: center; align-items: center; height: 100%; margin: 0;">
+                        <div class="btn">
+                            <button type="button" onclick="window.location.href='Categorias/promocoes.php'">
+                                <img src="../Imagens/Promocoes.png" style="height: 20px;">
+                                <label>Promoções</label>
+                            </button>
+                        </div>
+                        <div class="btn">
+                            <button type="button" onclick="window.location.href='Categorias/queijos.php'">
+                                <img src="../Imagens/Queijos.png" style="height: 20px;">
+                                <br>
+                                <label>Queijos</label>
+                            </button>
+                        </div>
+                        <div class="btn">
+                            <button type="button" onclick="window.location.href='Categorias/defumados.php'">
+                                <img src="../Imagens/Defumados.png" style="height: 20px;">
+                                <br>
+                                <label>Defumados</label>
+                            </button>
+                        </div>
+                        <div class="btn">
+                            <button type="button" onclick="window.location.href='Categorias/doces.php'">
+                                <img src="../Imagens/Pacoquinha.png" style="height: 20px;">
+                                <br>
+                                <label>Doces</label>
+                            </button>
+                        </div>
+                        <div class="btn">
+                            <button type="button" onclick="window.location.href='Categorias/bebidas.php'">
+                                <img src="../Imagens/Bebidas.png" style="height: 20px;">
+                                <br>
+                                <label>Bebidas</label>
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
             </td>
-
             <td>
-                <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
-                    <img id="icon_carrinho" src="../Imagens/Carrinho2.png" style="height: 40; width: 40px;">
+                <button type="button" class="btn_topo" onclick="alterar_div()" style="margin-bottom: 20px;">
+                    <img id="icon_carrinho" src="../Imagens/Carrinho.png" style="height: 40; width: 40px;">
                     <br>
                     <label>Carrinho</label>
                 </button>
             </td>
             <td style="width: 5%;">
-                <button type="button" class="btn_topo" onclick="window.location.href='login/Cliente.html'"> 
-                    <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px;" align="center">
+                <button type="button" class="btn_topo" onclick="window.location.href='login/Cliente.html'" style="margin-bottom: 20px;"> 
+                    <img id="cliente" src="../Imagens/Cliente.png" style="height: 40px; width: 40px;" align="center">
                     <label>login</label>
                 </button>
             </td>
@@ -196,18 +194,21 @@ if (isset($_GET['limpar'])) {
             CARROSSEL
         ================================================== -->
             <div id="centro" style="height: auto; min-height: 100px;">
-                <div class="slider" style="border-radius: 100px;">
-                    <div class="slides">
-                        <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste" style="width: 900px;">
-                        <img src="../Imagens/carrosel.jpeg" alt="imagem 2" class="slide reajuste" style="width: 900px;">
-                        <img src="../Imagens/carrosel2.jpeg" alt="imagem 3" class="slide reajuste" style="width: 900px;">
-                    </div>
-                    <div class="indicators">
-                        <span class="dot active" data-index="0"></span>
-                        <span class="dot" data-index="1"></span>
-                        <span class="dot" data-index="2"></span>
-                    </div>
-                </div>
+                <div id="centro">
+    <div class="slider" style="border-radius: 100px;">
+        <div class="slides">
+            <img src="../Imagens/FotosQueijos/queijo1.jpeg" alt="imagem 1" class="slide active accordion reajuste">
+            <img src="../Imagens/carrosel.jpeg" alt="imagem 2" class="slide reajuste">
+            <img src="../Imagens/carrosel2.jpeg" alt="imagem 3" class="slide reajuste">
+        </div>
+
+        <div class="indicators">
+            <span class="dot active" data-index="0"></span>
+            <span class="dot" data-index="1"></span>
+            <span class="dot" data-index="2"></span>
+        </div>
+    </div>
+</div>
             </div>
             <!-- =================================================
             PRODUTOS

@@ -14,20 +14,27 @@ html, body {
 button{
     cursor: pointer;
 }
+label{
+    color: rgba(255, 251, 0, 0.829);
+}
 .topo{
     width: 100%;
-    background-color: rgba(216, 216, 216, 0.315);
     padding: 10px;
 }
-.btn
-{
-    margin: 10px;
+.btn{
+    margin: 20px;
+}
+.btn label{
+    display: flex;
+    flex-direction: column; /* Alinha o ícone em cima e o texto embaixo */
+    align-items: center;    /* Centraliza o texto perfeitamente na horizontal com o botão */
+    gap: 8px;               /* Espaçamento vertical entre o botão e o texto */
+    cursor: pointer;
 }
 .btn_topo{
     background-color: white;
     background: rgba(255, 255, 255, 0);
     border: 0;
-    
 }
 .btn_topo label{
     font-size: 16px;
@@ -41,7 +48,7 @@ button{
 }
 .titulo_categoria{
     font-size: 40px;
-    color: white;
+    color: rgba(255, 251, 0, 0.829);
 }
 /* Produtos */
 .carrinho-container{
