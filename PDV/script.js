@@ -102,34 +102,34 @@ function mudarCategoria(categoria) {
 
     // Remove a categoria anterior
     body.classList.remove(
-        "categoria-frio",
-        "categoria-defumado",
-        "categoria-doce",
-        "categoria-bebida",
-        "categoria-queijo"
+        "categoria-frios",
+        "categoria-defumados",
+        "categoria-doces",
+        "categoria-bebidas",
+        "categoria-queijos"
     );
 
     // Aplica a nova categoria
     switch (categoria) {
 
-        case "Frio":
-            body.classList.add("categoria-frio");
+        case "frio":
+            body.classList.add("categoria-frios");
             break;
 
-        case "Defumado":
-            body.classList.add("categoria-defumado");
+        case "defumadoss":
+            body.classList.add("categoria-defumados");
             break;
 
-        case "Doce":
-            body.classList.add("categoria-doce");
+        case "doces":
+            body.classList.add("categoria-doces");
             break;
 
-        case "Bebida":
-            body.classList.add("categoria-bebida");
+        case "bebidas":
+            body.classList.add("categoria-bebidas");
             break;
 
-        case "Queijo":
-            body.classList.add("categoria-queijo");
+        case "queijos":
+            body.classList.add("categoria-queijos");
             break;
     }
 }
