@@ -1,8 +1,7 @@
 <?php
 session_start();
-// =====================================================
-// PRODUTOS
-// =====================================================
+
+// CONEXÃO COM O BANCO
 $conn = new mysqli("localhost", "root", "", "containerdoqueijo");
 
 if ($conn->connect_error) {
@@ -11,87 +10,132 @@ if ($conn->connect_error) {
 
 $conn->set_charset("utf8mb4");
 
-// =====================================================
+// PEGAR CATEGORIA DA URL
+$categoria = $_GET['categoria'] ?? '';
+
 // BUSCAR PRODUTOS DO BANCO
-// =====================================================
+if ($categoria !== '') {
 
-$sql = "SELECT idProduto, nome, valor, imagem
-        FROM produtos
-        ORDER BY nome ASC";
-
-$resultado = $conn->query($sql);
-
+    // Busca somente os produtos da categoria selecionada
+    $sql = "SELECT idProduto, nome, valor, imagem, categoria
+            FROM produtos
+            WHERE categoria = ?
+            ORDER BY nome ASC";
+    $stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        die("Erro ao preparar consulta: " . $conn->error);
+    }
+    $stmt->bind_param("s", $categoria);
+    if (!$stmt->execute()) {
+        die("Erro ao executar consulta: " . $stmt->error);
+    }
+    $resultado = $stmt->get_result();
+} else {
+    // Se nenhuma categoria foi selecionada,
+    // mostra todos os produtos
+    $sql = "SELECT idProduto, nome, valor, imagem, categoria
+            FROM produtos
+            ORDER BY nome ASC";
+    $resultado = $conn->query($sql);
+    if (!$resultado) {
+        die("Erro na consulta: " . $conn->error);
+    }
+}
+// MONTAR ARRAY DE PRODUTOS
 $itens = [];
-
 while ($produto = $resultado->fetch_assoc()) {
 
     $itens[$produto['idProduto']] = [
         'nome' => $produto['nome'],
-        'preco' => $produto['valor'],
-        'imagem' => $produto['imagem']
+        'valor' => $produto['valor'],
+        'imagem' => $produto['imagem'],
+        'categoria' => $produto['categoria']
     ];
 }
-// =====================================================
-// ADICIONAR PRODUTO
-// =====================================================
+
+// ADICIONAR PRODUTO AO CARRINHO
 if (isset($_GET['adicionar'])) {
     $idProduto = (int) $_GET['adicionar'];
-    if (isset($itens[$idProduto])) {
+    // Busca o produto novamente caso ele não esteja
+    // na categoria atualmente selecionada
+    $sqlProduto = "SELECT idProduto, nome, valor, imagem, categoria
+                   FROM produtos
+                   WHERE idProduto = ?";
+    $stmtProduto = $conn->prepare($sqlProduto);
+    $stmtProduto->bind_param("i", $idProduto);
+    $stmtProduto->execute();
+    $resultadoProduto = $stmtProduto->get_result();
+    if ($produto = $resultadoProduto->fetch_assoc()) {
         if (isset($_SESSION['carrinho'][$idProduto])) {
             $_SESSION['carrinho'][$idProduto]['quantidade']++;
         } else {
-            $_SESSION['carrinho'][$idProduto] = array(
+            $_SESSION['carrinho'][$idProduto] = [
                 'quantidade' => 1,
-                'nome' => $itens[$idProduto]['nome'],
-                'valor' => $itens[$idProduto]['valor']
-            );
+                'nome' => $produto['nome'],
+                'valor' => $produto['valor']
+            ];
         }
     }
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    // Volta para a página mantendo a categoria
+    $urlVoltar = "inicio.php";
+    if ($categoria !== '') {
+        $urlVoltar .= "?categoria=" . urlencode($categoria);
+    }
+    header("Location: " . $urlVoltar);
     exit;
 }
-// =====================================================
+
 // AUMENTAR QUANTIDADE
-// =====================================================
 if (isset($_GET['aumentar'])) {
+
     $idProduto = (int) $_GET['aumentar'];
     if (isset($_SESSION['carrinho'][$idProduto])) {
         $_SESSION['carrinho'][$idProduto]['quantidade']++;
     }
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    $urlVoltar = "inicio.php";
+    if ($categoria !== '') {
+        $urlVoltar .= "?categoria=" . urlencode($categoria);
+    }
+    header("Location: " . $urlVoltar);
     exit;
 }
-// =====================================================
+
 // DIMINUIR QUANTIDADE
-// =====================================================
 if (isset($_GET['diminuir'])) {
     $idProduto = (int) $_GET['diminuir'];
     if (isset($_SESSION['carrinho'][$idProduto])) {
-        $_SESSION['carrinho'][$idProduto]['quantidade']--;
-        if ($_SESSION['carrinho'][$idProduto]['quantidade'] <= 0) {
             unset($_SESSION['carrinho'][$idProduto]);
         }
     }
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    $urlVoltar = "inicio.php";
+    if ($categoria !== '') {
+        $urlVoltar .= "?categoria=" . urlencode($categoria);
+    }
+    header("Location: " . $urlVoltar);
     exit;
-}
-// =====================================================
+
 // REMOVER PRODUTO
-// =====================================================
 if (isset($_GET['remover'])) {
     $idProduto = (int) $_GET['remover'];
     if (isset($_SESSION['carrinho'][$idProduto])) {
         unset($_SESSION['carrinho'][$idProduto]);
     }
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    $urlVoltar = "inicio.php";
+    if ($categoria !== '') {
+        $urlVoltar .= "?categoria=" . urlencode($categoria);
+    }
+    header("Location: " . $urlVoltar);
     exit;
 }
-// =====================================================
+
 // LIMPAR CARRINHO
-// =====================================================
 if (isset($_GET['limpar'])) {
     unset($_SESSION['carrinho']);
-    header("Location: " . strtok($_SERVER["REQUEST_URI"], '?'));
+    $urlVoltar = "inicio.php";
+    if ($categoria !== '') {
+        $urlVoltar .= "?categoria=" . urlencode($categoria);
+    }
+    header("Location: " . $urlVoltar);
     exit;
 }
 ?>
@@ -138,11 +182,11 @@ if (isset($_GET['limpar'])) {
         </tr>
     </table>
     <ul id="lista-categorias">
-        <li><a href="./categorias/promocoes.php">Promoções</a></li>
-        <li><a href="./categorias/queijos.php">Queijos</a></li>
-        <li><a href="./categorias/defumados.php">Defumados</a></li>
-        <li><a href="./categorias/doces.php">Doces</a></li>
-        <li><a href="./categorias/bebidas.php">Bebidas</a></li>
+        <li><button>Promoções</button></li>
+        <li><button>Queijos</button></li>
+        <li><button>Defumados</button></li>
+        <li><button>Doces</button></li>
+        <li><button>Bebidas</button></li>
     </ul>
     <!-- =====================================================
     ÁREA PRINCIPAL
