@@ -78,6 +78,11 @@ button {
     border-radius: 20px;
 }
 
+#lista-categorias button{
+    background-color: yellow;
+    border: none;
+    border-radius: 5px;
+}
 
 /* Produtos */
 .carrinho-container {

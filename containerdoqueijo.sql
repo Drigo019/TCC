@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 02/09/2026 às 16:15
+-- Tempo de geração: 13/09/2026 às 22:03
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -121,7 +121,8 @@ CREATE TABLE `funcionarios` (
 INSERT INTO `funcionarios` (`idFuncionario`, `nome`, `cargo`, `numero`, `email`, `senha`, `idEnderecoFuncionario`) VALUES
 (1, 'Rodrigo Jesus de Carvalho', 'funcionario', NULL, NULL, NULL, NULL),
 (2, 'Rodrigo Jesus de Carvalho', 'funcionario', NULL, NULL, NULL, NULL),
-(3, '1', 'chefe', NULL, NULL, NULL, NULL);
+(3, '1', 'chefe', NULL, NULL, NULL, NULL),
+(4, 'Rodrigo', 'funcionario', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -137,21 +138,10 @@ CREATE TABLE `produtos` (
   `validade` date DEFAULT NULL,
   `estoque` int(11) DEFAULT NULL,
   `Armazenamento` enum('Refrigerado','Normal') NOT NULL,
-  `Categoria` enum('Frio','Defumado','Doce','Bebida','Queijo') NOT NULL,
+  `categoria` enum('frios','defumados','doces','bebidas','queijos') NOT NULL,
   `imagem` varchar(255) DEFAULT NULL,
   `idFornecedor` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Despejando dados para a tabela `produtos`
---
-
-INSERT INTO `produtos` (`idProduto`, `nome`, `codigoDeBarras`, `valor`, `validade`, `estoque`, `Armazenamento`, `Categoria`, `imagem`, `idFornecedor`) VALUES
-(4, 'Rodrigo                    ', 12345, 11.00, NULL, 1, 'Refrigerado', 'Queijo', 'imagens/6a95954b01698_Captura de tela 2026-08-14 145128.png', NULL),
-(3, 'Queijo Fresco', 1234, 25.00, NULL, 5, 'Refrigerado', 'Queijo', 'imagens/6a959483799e1_Captura de tela 2026-08-31 114515.png', NULL),
-(5, 'mariany cristina guerra', 123456, 1.00, NULL, 1, 'Refrigerado', 'Queijo', 'imagens/6a9597fe3e2c0_Captura de tela 2026-08-15 102514.png', NULL),
-(6, '1', 1, 1.00, NULL, 1, 'Refrigerado', 'Bebida', '../imagens/6a95d8c562d7e_Captura de tela 2026-08-23 235251.png', NULL),
-(7, '1', 1, 1.00, NULL, 1, 'Refrigerado', 'Bebida', '../imagens/6a95d9a2043b7_provoloneArtesanal.jpeg', NULL);
 
 -- --------------------------------------------------------
 
@@ -162,6 +152,7 @@ INSERT INTO `produtos` (`idProduto`, `nome`, `codigoDeBarras`, `valor`, `validad
 CREATE TABLE `usuarios` (
   `idUsuario` int(11) NOT NULL,
   `nome` varchar(255) DEFAULT NULL,
+  `foto` varchar(255) NOT NULL,
   `cpf` char(14) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
   `senha` varchar(255) DEFAULT NULL,
@@ -173,10 +164,10 @@ CREATE TABLE `usuarios` (
 -- Despejando dados para a tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuario`, `nome`, `cpf`, `email`, `senha`, `idFornecedor`, `idFuncionario`) VALUES
-(1, 'Rodrigo', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$VgiEz..hrP9eJGhHrVdbQ..bjYK/F7tuBR9ndy4F6/NOapSiP8eWy', NULL, NULL),
-(2, 'Rodrigo', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$wV95HDGlgL720gsUxGYrPOK8.jY/4g99ceCewYq1OBTkfUDD2gSz.', NULL, NULL),
-(3, 'fellipy', '540.689.518-45', 'fellipysilva986@gmail.com', '$2y$10$HBGpE83aucpb39yvNykqCu5IEHVKn3japM8Q9ycZ9J84dQ.2v6J7i', NULL, NULL);
+INSERT INTO `usuarios` (`idUsuario`, `nome`, `foto`, `cpf`, `email`, `senha`, `idFornecedor`, `idFuncionario`) VALUES
+(1, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$VgiEz..hrP9eJGhHrVdbQ..bjYK/F7tuBR9ndy4F6/NOapSiP8eWy', NULL, NULL),
+(2, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$wV95HDGlgL720gsUxGYrPOK8.jY/4g99ceCewYq1OBTkfUDD2gSz.', NULL, NULL),
+(3, 'fellipy', '', '540.689.518-45', 'fellipysilva986@gmail.com', '$2y$10$HBGpE83aucpb39yvNykqCu5IEHVKn3japM8Q9ycZ9J84dQ.2v6J7i', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -308,13 +299,13 @@ ALTER TABLE `fornecedores`
 -- AUTO_INCREMENT de tabela `funcionarios`
 --
 ALTER TABLE `funcionarios`
-  MODIFY `idFuncionario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idFuncionario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `idProduto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `idProduto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
