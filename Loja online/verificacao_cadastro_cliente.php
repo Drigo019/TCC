@@ -58,13 +58,13 @@ $stmt->fetch();
     if (password_verify($senha, $senhaHash)) 
         {
             // Senha correta - redireciona para a tela principal
-            echo "<script>window.location.href='TelaInicial.php';</script>";
+            echo "<script>window.location.href='inicio.php';</script>";
         } 
     else 
         {
             // Senha incorreta
             echo "<script>alert('Senha incorreta!');</script>";
-            echo "<script>window.location.href='../Container Do Queijo/Login/Cliente.html';</script>";
+            echo "<script>window.location.href='inicio.php';</script>";
         }
 
 // Fecha a consulta e libera os recursos

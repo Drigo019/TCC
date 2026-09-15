@@ -181,14 +181,166 @@ while ($produto = $resultado->fetch_assoc()) {
             </button>
         </td>
         <td style="width:5%;">
-            <button type="button" class="btn_topo" onclick="window.location.href='login/Cliente.html'">
+            <button type="button" class="btn-abrir" onclick="abrirPopuplogin() ">
                 <img id="cliente" src="../Imagens/Cliente.png" style="height:40px;">
                 <label>Login</label>
             </button>
         </td>
     </tr>
 </table>
+<!-- =====================================================
+    Janela do Popup Login
+===================================================== -->
+<div id="modalFundoLogin" class="modal-fundo">
+    <div class="modal">
+        <button type="button"class="btn-fechar"onclick="fecharPopuplogin()">
+            ×
+        </button>
+        <form action="verificacao_cadastro_cliente.php" method="post">
+            <div>
+                <table align="center">
+                    <tr>
+                        <td align="center" colspan="2">
+                            <h1>
+                                Entre na sua conta
+                            </h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            CPF:
+                        </th>
+                        <td>
+                            <input type="text" id="cpf" name="cpf" maxlength="14" oninput="mascaraCPF(this)"  placeholder="000.000.000-00" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Senha:
+                        </th>
 
+                        <td>
+                            <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="2">
+                            <button type="submit" value="Entrar">
+                                Entrar
+                            </button> 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" colspan="2">
+                            <button type="button" class="btn-abrir" onclick="abrirPopupcadastro() ">
+                                <label>Não possuo uma conta</label>
+                            </button>
+                        </td>
+                    </tr>
+                </table> 
+            </div>
+        </form>
+    </div>
+</div>
+<!-- =====================================================
+    Janela do Popup Login
+===================================================== -->
+<div id="modalFundoCadastro" class="modal-fundo" align="center">
+    <div class="modal">
+        <button type="button"class="btn-fechar"onclick="fecharPopupcadastro()">
+            ×
+        </button>
+        <form action="cadastro_cliente.php" method="post">
+            <div>
+                <table>
+                        <tr> 
+                            <td align="center" colspan="2">
+                                <h1>
+                                    Crie sua conta
+                                </h1>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>Nome:</label>
+                            </th>
+                            <td>
+                                <input type="text" name="nome" placeholder="Digite seu Nome:" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>E-mail:</label>
+                            </th>
+                            <td>
+                                <input type="email" name="email" placeholder="Digite seu E-mail" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>CPF:</label>
+                            </th>
+                            <td>
+                                <input type="text" id="cpf" name="cpf" maxlength="14" oninput="mascaraCPF(this)"  placeholder="000.000.000-00" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>Senha:</label>
+                            </th>
+                            <td>
+                                <input type="password" name="senha" placeholder="Digite sua senha" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan="2">
+                                ENDEREÇO
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>
+                                CEP:
+                            </th>
+                            <td>
+                                <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" required maxlength="9" oninput="mascaraCEP(this)">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>Rua:</label>
+                            </th>
+                            <td>
+                                <input type="text" name="rua" placeholder="Digite sua Rua" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>Número:</label>
+                            </th>
+                            <td>
+                                <input type="number" name="numero" placeholder="Digite o número" required>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                <label>Bairro:</label>
+                            </th>
+                                <td>
+                                    <input type="text" name="bairro" placeholder="Digite seu Bairro" required>
+                                </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <button type="submit" onclick="vazio()"> 
+                                    Cadastrar
+                                </button>
+                            </td>
+                        </tr>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>
 <!-- =====================================================
     CATEGORIAS
 ===================================================== -->
@@ -505,4 +657,37 @@ function adicionar1(id) {
     }
     window.location.href = url;
 }
+
+// =====================================================
+// Popup login
+// =====================================================
+function abrirPopuplogin() {
+        document.getElementById("modalFundoLogin").style.display = "flex";
+    }
+function fecharPopuplogin() {
+    document.getElementById("modalFundoLogin").style.display = "none";
+}
+// Fechar clicando no fundo escuro
+document.getElementById("modalFundoLogin").addEventListener("click", function(event) {
+    if (event.target === this) {
+        fecharPopup();
+    }
+});
+
+// =====================================================
+// Popup cadastro
+// =====================================================
+function abrirPopupcadastro() {
+        document.getElementById("modalFundoCadastro").style.display = "flex";
+    }
+function fecharPopupcadastro() {
+    document.getElementById("modalFundoCadastro").style.display = "none";
+}
+// Fechar clicando no fundo escuro
+document.getElementById("modalFundoCadastro").addEventListener("click", function(event) {
+    if (event.target === this) {
+        fecharPopup();
+    }
+});
+
 </script>
