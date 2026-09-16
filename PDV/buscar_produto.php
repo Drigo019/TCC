@@ -4,9 +4,19 @@ include 'conexao.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
+
+/* ============================================
+   RECEBER CÓDIGO
+============================================ */
+
 $codigo = $_GET['codigo'] ?? '';
 
 $codigo = trim($codigo);
+
+
+/* ============================================
+   VERIFICAR CÓDIGO
+============================================ */
 
 if ($codigo === '') {
 
@@ -16,48 +26,89 @@ if ($codigo === '') {
     ]);
 
     exit;
-
 }
 
-$sql = "SELECT *
-        FROM produtos
-        WHERE codigoDeBarras = ?";
 
-$stmt = $conn->prepare($sql);
+/* ============================================
+   GARANTIR QUE É NUMÉRICO
+============================================ */
 
-if (!$stmt) {
+if (!ctype_digit($codigo)) {
 
     echo json_encode([
         "erro" => true,
-        "mensagem" => "Erro no banco: " . $conn->error
+        "mensagem" => "Código inválido"
     ]);
 
     exit;
-
 }
 
-$stmt->bind_param("s", $codigo);
 
-$stmt->execute();
+$codigo = intval($codigo);
 
-$resultado = $stmt->get_result();
 
-if ($resultado->num_rows > 0) {
+/* ============================================
+   CONSULTAR BANCO
+============================================ */
 
-    $produto = $resultado->fetch_assoc();
+$sql = "
+    SELECT *
+    FROM produtos
+    WHERE codigoDeBarras = $codigo
+";
 
-    echo json_encode($produto);
 
-} else {
+$resultado = mysqli_query($conn, $sql);
+
+
+if (!$resultado) {
+
+    echo json_encode([
+        "erro" => true,
+        "mensagem" =>
+            "Erro no banco: " .
+            mysqli_error($conn)
+    ]);
+
+    exit;
+}
+
+
+/* ============================================
+   VERIFICAR RESULTADO
+============================================ */
+
+if (mysqli_num_rows($resultado) === 0) {
 
     echo json_encode([
         "erro" => true,
         "mensagem" => "Produto não encontrado"
     ]);
 
+    exit;
 }
 
-$stmt->close();
-$conn->close();
+
+/* ============================================
+   PEGAR PRODUTO
+============================================ */
+
+$produto =
+    mysqli_fetch_assoc($resultado);
+
+
+/* ============================================
+   RETORNAR JSON
+============================================ */
+
+echo json_encode(
+    $produto,
+    JSON_UNESCAPED_UNICODE
+);
+
+
+mysqli_free_result($resultado);
+
+mysqli_close($conn);
 
 ?>
