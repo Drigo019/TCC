@@ -85,7 +85,7 @@ button {
 }
 
 /* Produtos */
-.carrinho-container {
+.carrinho_container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;

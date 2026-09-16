@@ -181,7 +181,6 @@ while ($produto = $resultado->fetch_assoc()) {
             </button>
         </td>
         <td style="width:5%;">
-            <button type="button" class="btn-abrir" onclick="abrirPopuplogin() ">
                 <img id="cliente" src="../Imagens/Cliente.png" style="height:40px;">
                 <label>Login</label>
             </button>
@@ -218,7 +217,6 @@ while ($produto = $resultado->fetch_assoc()) {
                         <th>
                             Senha:
                         </th>
-
                         <td>
                             <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
                         </td>
@@ -406,12 +404,12 @@ while ($produto = $resultado->fetch_assoc()) {
      PRODUTOS
 ================================================= -->
         <div>
-            <div class="carrinho-container">
+            <div class="carrinho_container">
                 <?php if (!empty($itens)): ?>
                     <?php foreach ($itens as $key => $value): ?>
-                        <div class="produto">
+                        <div class="produto" data-nome="<?php echo htmlspecialchars(strtolower($value['nome'])); ?>">
                             <!-- IMAGEM -->
-                            <img src="../Produtos/<?php echo htmlspecialchars($value['imagem']); ?>" style=" height:220px; width:220px; object-fit:contain; " alt="<?php echo htmlspecialchars($value['nome']); ?>">
+                            <img src="../Produtos/<?php echo htmlspecialchars($value['imagem']); ?>" style="border-radius 10px; border: 10px solid; height:220px; width:220px;  object-fit:contain; " alt="<?php echo htmlspecialchars($value['nome']); ?>">
                             <br>
                             <!-- NOME -->
                             <strong>
@@ -690,4 +688,28 @@ document.getElementById("modalFundoCadastro").addEventListener("click", function
     }
 });
 
+// =====================================================
+// PESQUISA DE PRODUTOS
+// =====================================================
+const barraPesquisa = document.getElementById("pesquisa");
+
+barraPesquisa.addEventListener("input", function () {
+    const texto = this.value
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    const produtos = document.querySelectorAll(".produto");
+    produtos.forEach(function(produto) {
+        const nome = produto
+            .getAttribute("data-nome")
+            .toLowerCase()
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "");
+        if (nome.includes(texto)) {
+            produto.style.display = "";
+        } else {
+            produto.style.display = "none";
+        }
+    });
+});
 </script>

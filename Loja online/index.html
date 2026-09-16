@@ -5,12 +5,56 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+</head>
+<body>
+  <div class="sidebar" style="width: 100%;">
+    <div style="display: flex; justify-content:center; align-items: center; height: 100%;">
+      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
+        <h1>CSSs</h1>
+        <button onclick="window.location.href='style_carrosel.css'">
+          Estilos do carrosel
+        </button>
+        <button onclick="window.location.href='style.css'">
+          Estilos
+        </button>
+      </div>
 
-  <style>
+      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
+        <h1>PHPs</h1>
+        <button onclick="window.location.href='conexao.php'">
+          Conexão
+        </button>
+        <button onclick="window.location.href='inicio.php'">
+          Tela inicial
+        </button>
+        <button onclick="window.location.href='verificacao_cadastro_admin.php'">
+          Verificação de cadastro de admin
+        </button>
+        <button onclick="window.location.href='verificacao_cadastro_cliente.php'">
+          Verificação de cadastro de cliente
+        </button> 
+        <button onclick="window.location.href='salvar_imagem.php'">
+          Salvar imagens
+        </button>
+      </div>
+
+      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
+        <h1>HTMLs</h1>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+<style>
     body {
       margin: 0;
     }
 
+    button{
+      height: 30px;
+      width: 250px;
+      margin: 5px;
+    }
     .sidebar {
       width: 220px;
       height: 100vh;
@@ -37,45 +81,4 @@
       margin-left: 220px;
       padding: 20px;
     }
-  </style>
-</head>
-
-<body>
-  <div class="sidebar" style="width: 100%;">
-    <div style="display: flex; justify-content:center; align-items: center; height: 100%;">
-      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
-        <h1>CSSs</h1>
-        <a href="style_carrosel.css">Carrossel</a>
-        <a href="style.css">Estilos</a>
-      </div>
-
-      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
-        <h1>PHPs</h1>
-        <a href="cadastro_cliente.php">Cadastro Cliente</a>
-        <a href="conexao.php">Conexão</a>
-        <a href="inicio.php">Tela Inicial</a>
-        <a href="verificacao_cadastro_admin.php">Verificação de cadaqstro admin</a>
-        <a href="verificacao_cadastro_cliente.php">Verificação de cadastro cliente</a>
-      </div>
-
-      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
-        <h1>HTMLs</h1>
-        <a href="cadastro.html">Tela Cadastro</a>
-        <a href="Login/admin.html">Login Admin</a>
-        <a href="Login/cliente.html">Login Cliente</a>
-      </div>
-
-      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
-        <h1> Bancos de Dados</h1>
-        <a href="../containerdoqueijo.sql">Container do Queijo</a>
-      </div>
-
-      <div style="margin: 20px; display: flex; flex-direction: column; align-items: center;">
-        <h1> Pastas</h1>
-        <a href="../PDV/">PDV</a>
-      </div>
-    </div>
-  </div>
-</body>
-
-</html>
+</style>
