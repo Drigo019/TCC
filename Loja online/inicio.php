@@ -181,6 +181,7 @@ while ($produto = $resultado->fetch_assoc()) {
             </button>
         </td>
         <td style="width:5%;">
+            <button type="button" class="btn_topo" onclick="abrirPopuplogin() ">
                 <img id="cliente" src="../Imagens/Cliente.png" style="height:40px;">
                 <label>Login</label>
             </button>

@@ -720,14 +720,17 @@ function adicionarProduto(produto) {
      * na própria linha.
      */
 
-    linha.dataset.codigo =
-        produto.codigoDeBarras;
+     linha.dataset.id =
+    produto.idProdutos ?? produto.idProduto;
 
-    linha.dataset.preco =
-        preco;
+linha.dataset.codigo =
+    produto.codigoDeBarras;
 
-    linha.dataset.estoque =
-        estoque;
+linha.dataset.preco =
+    preco;
+
+linha.dataset.estoque =
+    estoque;
 
 
         linha.innerHTML = `
@@ -1219,61 +1222,294 @@ document.getElementById(
 CONFIRMAR PAGAMENTO
 ========================================================= */
 
-function confirmarPagamento(
-formaPagamento
-) {
+function confirmarPagamento(formaPagamento) {
 
-let mensagem = "";
+if (total <= 0) {
 
+    alert("Não há produtos na venda.");
 
-if (
-    formaPagamento === "pix"
-) {
-
-    mensagem =
-        "Pagamento via PIX confirmado!";
-
-} else {
-
-    mensagem =
-        "Pagamento via cartão confirmado!";
+    return;
 
 }
 
 
-alert(
-    mensagem
-);
+/* PEGAR PRODUTOS DO CARRINHO */
 
+const linhas =
+    document.querySelectorAll("#lista tr");
+
+const produtos = [];
+
+
+linhas.forEach(linha => {
+
+    const id =
+        parseInt(linha.dataset.id);
+
+    const quantidade =
+        parseInt(
+            linha.querySelector(".quantidade").textContent
+        );
+
+    produtos.push({
+        id: id,
+        quantidade: quantidade
+    });
+
+});
+
+
+/* CONFIRMAR */
+
+const confirmar =
+    confirm(
+        "Confirmar pagamento?\n\n" +
+        "Forma: " +
+        formaPagamento.toUpperCase() +
+        "\nValor: R$ " +
+        total.toFixed(2)
+    );
+
+
+if (!confirmar) {
+    return;
+}
+
+
+/* ENVIAR PARA O PHP */
+
+fetch("finalizar_venda.php", {
+
+    method: "POST",
+
+    headers: {
+        "Content-Type": "application/json"
+    },
+
+    body: JSON.stringify({
+
+        valor: total,
+
+        formaPagamento: formaPagamento,
+
+        produtos: produtos
+
+    })
+
+})
 
 /*
- * Por enquanto apenas fecha o modal.
- *
- * Depois vamos colocar aqui:
- *
- * 1. Registrar a venda no MySQL
- * 2. Baixar o estoque
- * 3. Registrar forma de pagamento
- * 4. Limpar o carrinho
- */
+   IMPORTANTE:
+   Aqui usamos text() temporariamente
+   para descobrir o erro real do PHP.
+*/
 
-let modalElement =
-    document.getElementById(
-        "modalPagamento"
+.then(response => {
+
+    return response.text();
+
+})
+
+.then(texto => {
+
+    console.log(
+        "Resposta do PHP:",
+        texto
     );
 
 
-let modal =
-    bootstrap.Modal.getInstance(
-        modalElement
-    );
+    let resultado;
 
 
-if (modal) {
+    try {
 
-    modal.hide();
+resultado = JSON.parse(texto);
+
+} catch (erro) {
+
+const caixa = document.createElement("div");
+
+caixa.style.position = "fixed";
+caixa.style.top = "20px";
+caixa.style.left = "20px";
+caixa.style.right = "20px";
+caixa.style.bottom = "20px";
+caixa.style.background = "white";
+caixa.style.zIndex = "99999";
+caixa.style.padding = "20px";
+caixa.style.border = "3px solid red";
+caixa.style.borderRadius = "10px";
+caixa.style.boxShadow = "0 0 20px rgba(0,0,0,0.5)";
+
+caixa.innerHTML = `
+    <h4 style="color:red;">
+        ERRO RETORNADO PELO PHP
+    </h4>
+
+    <textarea
+        id="erroPHP"
+        style="
+            width:100%;
+            height:calc(100% - 100px);
+            font-family:monospace;
+            font-size:14px;
+            resize:none;
+        "
+    ></textarea>
+
+    <button
+        id="copiarErro"
+        style="
+            margin-top:10px;
+            padding:10px 20px;
+            cursor:pointer;
+        "
+    >
+        Copiar erro
+    </button>
+
+    <button
+        id="fecharErro"
+        style="
+            margin-top:10px;
+            padding:10px 20px;
+            cursor:pointer;
+        "
+    >
+        Fechar
+    </button>
+`;
+
+
+document.body.appendChild(caixa);
+
+
+document.getElementById(
+    "erroPHP"
+).value = texto;
+
+
+document.getElementById(
+    "copiarErro"
+).onclick = function() {
+
+    const campo =
+        document.getElementById("erroPHP");
+
+    campo.select();
+
+    document.execCommand("copy");
+
+    alert("Erro copiado!");
+
+};
+
+
+document.getElementById(
+    "fecharErro"
+).onclick = function() {
+
+    caixa.remove();
+
+};
+
+
+return;
 
 }
+
+
+    /* ERRO */
+
+    if (!resultado.sucesso) {
+
+        alert(
+            "Erro ao finalizar venda:\n\n" +
+            resultado.mensagem
+        );
+
+        return;
+
+    }
+
+
+    /* VENDA REALIZADA */
+
+    alert(
+        "Venda realizada com sucesso!\n\n" +
+        "Venda Nº " +
+        resultado.idVenda
+    );
+
+
+    /* LIMPAR CARRINHO */
+
+    document.getElementById(
+        "lista"
+    ).innerHTML = "";
+
+
+    total = 0;
+
+
+    document.getElementById(
+        "total"
+    ).textContent = "0.00";
+
+
+    /* FECHAR MODAL */
+
+    const modalElement =
+        document.getElementById(
+            "modalPagamento"
+        );
+
+
+    const modal =
+        bootstrap.Modal.getInstance(
+            modalElement
+        );
+
+
+    if (modal) {
+
+        modal.hide();
+
+    }
+
+
+    /* LIMPAR CAMPO DE BUSCA */
+
+    document.getElementById(
+        "codigo"
+    ).value = "";
+
+
+    document.getElementById(
+        "codigo"
+    ).focus();
+
+
+    /* VOLTAR PARA O DASHBOARD */
+
+    setTimeout(function() {
+
+        window.location.href =
+            "index.php";
+
+    }, 500);
+
+})
+
+.catch(error => {
+
+    console.error(error);
+
+    alert(
+        "Erro de comunicação com o servidor."
+    );
+
+});
 
 }
 

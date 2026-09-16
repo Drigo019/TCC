@@ -6,7 +6,7 @@ include 'conexao.php';
 $sql_vendas = "
 SELECT SUM(valor) AS total_hoje
 FROM vendas
-WHERE data = CURDATE()
+WHERE DATE(data) = CURDATE()
 ";
 
 $result_vendas = mysqli_query($conn, $sql_vendas);
@@ -327,14 +327,15 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
 
       <table class="table table-hover">
 
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Valor</th>  
-            <th>Data</th>
-          </tr>
-        </thead>
+      <thead>
+  <tr>
+    <th>ID</th>
+    <th>Cliente</th>
+    <th>Valor</th>
+    <th>Tipo de Venda</th>
+    <th>Data</th>
+  </tr>
+</thead>
 
         <tbody>
 
@@ -355,16 +356,62 @@ while($venda = mysqli_fetch_assoc($result_ultimas)){
 
 <tr>
 
-<td>#<?= $venda['idVendas'] ?></td>
-
-<td>Cliente não registrado</td>
-
 <td>
-R$ <?= number_format($venda['valor'], 2, ',', '.') ?> 
+    #<?= $venda['idVendas'] ?>
 </td>
 
 <td>
-    <?= date('d/m/Y', strtotime($venda['data'])) ?>
+    Cliente não registrado
+</td>
+
+<td>
+    R$ <?= number_format($venda['valor'], 2, ',', '.') ?>
+</td>
+
+<td>
+    <?php
+
+    $forma = strtolower(
+        $venda['formaPagamento']
+    );
+
+    if ($forma === 'pix') {
+
+        echo '<span class="badge bg-success">
+                <i class="bi bi-qr-code"></i>
+                Pix
+              </span>';
+
+    } elseif ($forma === 'debito') {
+
+        echo '<span class="badge bg-primary">
+                <i class="bi bi-credit-card"></i>
+                Débito
+              </span>';
+
+    } elseif ($forma === 'credito') {
+
+        echo '<span class="badge bg-primary">
+                <i class="bi bi-credit-card"></i>
+                Crédito
+              </span>';
+
+    } else {
+
+        echo htmlspecialchars(
+            $venda['formaPagamento']  
+        );
+
+    }
+
+    ?>
+</td>
+
+<td>
+    <?= date(
+        'd/m/Y',
+        strtotime($venda['data'])
+    ) ?>
 </td>
 
 </tr>
