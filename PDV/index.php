@@ -251,6 +251,11 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       Funcionários
     </a>
 
+    <a href="estoque.php">
+  <i class="bi bi-boxes"></i>
+  Estoque
+</a>
+
   </div>
 
   <!-- CONTEÚDO -->
