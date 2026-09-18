@@ -479,28 +479,30 @@
                     DADOS DO CLIENTE
                 ================================================= -->
                 <h2>Dados do cliente</h2>
-                <div class="dados-compra">
-                    <label for="nomeCliente">
-                        Nome:
-                    </label>
-                    <input type="text" id="nomeCliente" name="nome" placeholder="Digite seu nome" required>
-                    <label for="telefoneCliente">
-                        Telefone:
-                    </label>
-                    <input type="text" id="telefoneCliente" name="telefone" placeholder="Digite seu telefone" required>
-                </div>
+                <form method="post" action="finalizar_compra.php">
+                    <div class="dados-compra">
+                        <label for="nome_cliente">
+                            Nome:
+                        </label>
+                        <input type="text" id="nomeCliente" name="nome" placeholder="Digite seu nome" required>
+                        <label for="telefone_cliente">
+                            Telefone:
+                        </label>
+                        <input type="text" id="telefoneCliente" name="telefone" placeholder="Digite seu telefone" required>
+                    </div>
 
-                <!-- =================================================
-                    BOTÃO FINALIZAR
-                ================================================= -->
-                <div class="botoes-finalizacao">
-                    <button type="button" class="btn-finalizar-compra" onclick="finalizarCompra()">
-                        Finalizar Compra
-                    </button>
-                    <button type="button" class="btn-cancelar-compra" onclick="fecharPopupFimCompra()">
-                        Voltar
-                    </button>
-                </div>
+                    <!-- =================================================
+                        BOTÃO FINALIZAR
+                    ================================================= -->
+                    <div class="botoes-finalizacao">
+                        <button type="submit" class="btn-finalizar-compra">
+                            Finalizar Compra
+                        </button>
+                        <button type="button" class="btn-cancelar-compra" onclick="fecharPopupFimCompra()">
+                            Voltar
+                        </button>
+                    </div>
+                </form>
         </div>
     </div>
     <!-- =====================================================
@@ -892,11 +894,4 @@
                 }
             });
         });
-
-        // =====================================================
-        // FINALIZAR COMPRA
-        // =====================================================
-        function finalizarCompra() {
-            alert("Compra finalizada com sucesso!");
-        }
     </script>
