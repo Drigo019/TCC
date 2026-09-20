@@ -480,29 +480,129 @@
                 ================================================= -->
                 <h2>Dados do cliente</h2>
                 <form method="post" action="finalizar_compra.php">
-                    <div class="dados-compra">
-                        <label for="nome_cliente">
-                            Nome:
-                        </label>
-                        <input type="text" id="nomeCliente" name="nome" placeholder="Digite seu nome" required>
-                        <label for="telefone_cliente">
-                            Telefone:
-                        </label>
-                        <input type="text" id="telefoneCliente" name="telefone" placeholder="Digite seu telefone" required>
-                    </div>
+            <div class="dados-compra">
 
-                    <!-- =================================================
-                        BOTÃO FINALIZAR
-                    ================================================= -->
-                    <div class="botoes-finalizacao">
-                        <button type="submit" class="btn-finalizar-compra">
-                            Finalizar Compra
-                        </button>
-                        <button type="button" class="btn-cancelar-compra" onclick="fecharPopupFimCompra()">
-                            Voltar
-                        </button>
-                    </div>
-                </form>
+                <label for="nomeCliente">
+                    Nome:
+                </label>
+
+                <input
+                    type="text"
+                    id="nomeCliente"
+                    name="nome"
+                    placeholder="Digite seu nome"
+                    required
+                >
+
+                <label for="telefoneCliente">
+                    Telefone:
+                </label>
+
+                <input
+                    type="text"
+                    id="telefoneCliente"
+                    name="telefone"
+                    placeholder="Digite seu telefone"
+                    required
+                >
+
+            </div>
+
+
+            <!-- =================================================
+                FORMA DE PAGAMENTO
+            ================================================= -->
+            <h2>Forma de pagamento</h2>
+
+            <div class="forma-pagamento">
+
+                <label for="form_pag">
+                    Escolha a forma de pagamento:
+                </label>
+
+                <select
+                    name="form_pag"
+                    id="form_pag"
+                    required
+                >
+
+                    <option value="">
+                        Selecione uma opção
+                    </option>
+
+                    <option value="Dinheiro">
+                        💵 Dinheiro
+                    </option>
+
+                    <option value="Cartão">
+                        💳 Cartão
+                    </option>
+
+                    <option value="Pix">
+                        📱 Pix
+                    </option>
+
+                    <option value="Crediário">
+                        🧾 Crediário
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- =================================================
+                CARRINHO EM JSON
+            ================================================= -->
+            <input
+                type="hidden"
+                name="carrinho"
+                id="carrinhoFinal"
+                value='<?php
+                    echo htmlspecialchars(
+                        json_encode(
+                            array_map(
+                                function($id, $produto) {
+
+                                    return [
+                                        "idProduto" => (int)$id,
+                                        "quantidade" => (int)$produto["quantidade"]
+                                    ];
+
+                                },
+                                array_keys($_SESSION["carrinho"]),
+                                $_SESSION["carrinho"]
+                            ),
+                            JSON_UNESCAPED_UNICODE
+                        ),
+                        ENT_QUOTES,
+                        "UTF-8"
+                    );
+                ?>'
+            >
+            <!-- =================================================
+                BOTÕES
+            ================================================= -->
+            <div class="botoes-finalizacao">
+
+                <button
+                    type="submit"
+                    class="btn-finalizar-compra"
+                >
+                    Finalizar Compra
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-cancelar-compra"
+                    onclick="fecharPopupFimCompra()"
+                >
+                    Voltar
+                </button>
+
+            </div>
+            </form>
+
         </div>
     </div>
     <!-- =====================================================

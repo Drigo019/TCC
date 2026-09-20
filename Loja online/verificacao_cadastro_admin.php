@@ -1,71 +1,139 @@
 <?php
-// Inclui o arquivo de conexão com o banco de dados
-include("conexao.php");
 
-// Captura o CPF do formulário e já valida se é um CPF válido
-// Retorna false se inválido, null se o campo não existir
-$cpf = filter_input(INPUT_POST, 'cpf', FILTER_SANITIZE_NUMBER_INT);
+session_start();
 
-// Captura a senha do formulário e remove caracteres especiais perigosos
-$senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS);
+require_once __DIR__ . "/conexao.php";
 
-    // Verifica se o CPF é inválido ou não foi enviado
-    if (empty($cpf)) 
-        {
-            echo "<script>alert('CPF inválido!');</script>";
-            exit; // Para a execução do código aqui
-        }
+// ======================================================
+// VERIFICAR MÉTODO
+// ======================================================
 
-    // Verifica se a senha está vazia
-    if (empty($senha)) 
-        {
-            echo "<script>alert('Senha inválida!');</script>";
-            exit; // Para a execução do código aqui
-        }
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    exit("Acesso inválido.");
+}
 
-// Prepara a consulta SQL para buscar a senha do usuário pelo CPF
-// O "?" é um placeholder que será substituído pelo CPF com segurança (evita SQL Injection)
-$stmt = $conexao->prepare("SELECT senha FROM usuarios WHERE cpf = ?");
+// ======================================================
+// PEGAR DADOS DO FORMULÁRIO
+// ======================================================
 
-$cpf = str_replace(['.', '-'], '', $cpf);
-$cpf = preg_replace('/(\d{3})(\d{3})(\d{3})(\d{2})/', '$1.$2.$3-$4', $cpf);
+$cpf = $_POST['cpf'] ?? '';
+$senha = $_POST['senha'] ?? '';
 
-// Substitui o "?" pelo valor de $cpf
-// "s" significa que o valor é do tipo string
-$stmt->bind_param("s", $cpf);
+// Remover máscara do CPF
+$cpf = preg_replace('/\D/', '', $cpf);
 
-// Executa a consulta no banco de dados
-$stmt->execute();
+// ======================================================
+// VALIDAR CPF
+// ======================================================
 
-// Armazena o resultado da consulta na memória para poder usar num_rows
-$stmt->store_result();
+if (empty($cpf)) {
+    echo "<script>
+        alert('CPF inválido!');
+        history.back();
+    </script>";
+    exit;
+}
 
-    // Verifica se nenhum usuário foi encontrado com esse CPF
-    if ($stmt->num_rows === 0) 
-        {
-            echo "<script>alert('Usuário não encontrado!');</script>";
-            exit; // Para a execução do código aqui
-        }
+// ======================================================
+// VALIDAR SENHA
+// ======================================================
 
-// Associa a coluna "senha" do resultado à variável $senhaHash
-$stmt->bind_result($senhaHash);
+if ($senha === '') {
+    echo "<script>
+        alert('Senha inválida!');
+        history.back();
+    </script>";
+    exit;
+}
 
-// Busca a linha do resultado e carrega na variável $senhaHash
-$stmt->fetch();
+// ======================================================
+// FORMATAR CPF
+// ======================================================
 
-// Compara a senha digitada com o hash salvo no banco
-// password_verify criptografa a senha digitada e compara com o hash
-    if (password_verify($senha, $senhaHash)) 
-        {
-            // Senha correta - redireciona para a tela principal
-            echo "<script>window.location.href='../Container Do Queijo/PDV';</script>";
-        } 
-    else 
-        {
-            // Senha incorreta
-            echo "<script>alert('Senha incorreta!');</script>";
-            echo "<script>C='../Container Do Queijo/Login/Admin.html';</script>";
-        }
+$cpfBanco = $cpf;
 
-// Fecha a consulta e libera os recursos
+if (strlen($cpf) === 11) {
+    $cpfBanco = substr($cpf, 0, 3) . "." .
+                substr($cpf, 3, 3) . "." .
+                substr($cpf, 6, 3) . "-" .
+                substr($cpf, 9, 2);
+}
+
+// ======================================================
+// BUSCAR CLIENTE
+// ======================================================
+
+$sql = "
+    SELECT idUsuario, nome, cpf, senha
+    FROM usuarios
+    WHERE cpf = ?
+    LIMIT 1
+";
+
+$stmt = $conexao->prepare($sql);
+
+if (!$stmt) {
+    die("Erro ao preparar consulta: " . $conexao->error);
+}
+
+$stmt->bind_param("s", $cpfBanco);
+
+if (!$stmt->execute()) {
+    die("Erro ao executar consulta: " . $stmt->error);
+}
+
+$resultado = $stmt->get_result();
+
+// ======================================================
+// VERIFICAR USUÁRIO
+// ======================================================
+
+if ($resultado->num_rows === 0) {
+    echo "<script>
+        alert('Usuário não encontrado!');
+        history.back();
+    </script>";
+    exit;
+}
+
+$usuario = $resultado->fetch_assoc();
+
+// ======================================================
+// VERIFICAR SENHA
+// ======================================================
+
+if (!password_verify($senha, $usuario['senha'])) {
+
+    echo "<script>
+        alert('Senha incorreta!');
+        history.back();
+    </script>";
+
+    exit;
+}
+
+// ======================================================
+// LOGIN REALIZADO
+// ======================================================
+
+// Salvar informações do cliente na sessão
+$_SESSION['idCliente'] = (int) $usuario['idUsuario'];
+$_SESSION['nomeCliente'] = $usuario['nome'];
+$_SESSION['cpfCliente'] = $usuario['cpf'];
+
+// ======================================================
+// FECHAR CONSULTA
+// ======================================================
+
 $stmt->close();
+
+// ======================================================
+// REDIRECIONAR
+// ======================================================
+
+echo "<script>
+    window.location.href = 'inicio.php';
+</script>";
+
+exit;
+?>

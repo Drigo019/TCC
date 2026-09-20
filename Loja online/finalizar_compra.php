@@ -2,25 +2,7 @@
 
 session_start();
 
-require('conexao.php');
-
-/*
-=========================================================
-FINALIZAR COMPRA
-Banco: containerdoqueijo
-
-Tabelas utilizadas:
-- clientes
-- produtos
-- vendas
-- itens_venda
-
-IMPORTANTE:
-O idCliente deve estar em:
-1. $_SESSION['idCliente']; ou
-2. POST['idCliente']
-=========================================================
-*/
+require_once __DIR__ . "/conexao.php";
 
 // ======================================================
 // VERIFICAÇÃO DO MÉTODO
@@ -31,18 +13,30 @@ if ($_SERVER["REQUEST_METHOD"] !== "POST") {
 }
 
 // ======================================================
-// PEGAR ID DO CLIENTE
+// IDENTIFICAR CLIENTE
 // ======================================================
+//
+// Se estiver logado, pega o ID da sessão.
+// Se não estiver logado, fica NULL.
+//
+// IMPORTANTE:
+// Ajuste os nomes das sessões abaixo caso no seu
+// sistema de login você use outro nome.
+//
 
-$idCliente = (int)($_POST['idCliente'] ?? $_SESSION['idCliente'] ?? 0);
+$idCliente = null;
 
-if ($idCliente <= 0) {
-    exit("
-        <script>
-            alert('Cliente não identificado. Faça login antes de finalizar a compra.');
-            history.back();
-        </script>
-    ");
+if (isset($_SESSION['idCliente']) && !empty($_SESSION['idCliente'])) {
+
+    $idCliente = (int) $_SESSION['idCliente'];
+
+} elseif (isset($_SESSION['id_cliente']) && !empty($_SESSION['id_cliente'])) {
+
+    $idCliente = (int) $_SESSION['id_cliente'];
+
+} elseif (isset($_SESSION['usuario_id']) && !empty($_SESSION['usuario_id'])) {
+
+    $idCliente = (int) $_SESSION['usuario_id'];
 }
 
 // ======================================================
@@ -50,23 +44,18 @@ if ($idCliente <= 0) {
 // ======================================================
 
 $formaPagamento = trim($_POST['form_pag'] ?? '');
+
 $carrinhoRecebido = $_POST['carrinho'] ?? '';
 
 // Aceita carrinho enviado como JSON.
 // Também aceita caso o campo já venha como array.
 if (is_array($carrinhoRecebido)) {
-    $itensCarrinho = $carrinhoRecebido;
-} else {
-    $itensCarrinho = json_decode($carrinhoRecebido, true);
-}
 
-if (!is_array($itensCarrinho) || empty($itensCarrinho)) {
-    exit("
-        <script>
-            alert('O carrinho está vazio.');
-            history.back();
-        </script>
-    ");
+    $itensCarrinho = $carrinhoRecebido;
+
+} else {
+
+    $itensCarrinho = json_decode($carrinhoRecebido, true);
 }
 
 // ======================================================
@@ -81,6 +70,7 @@ $formasPermitidas = [
 ];
 
 if (!in_array($formaPagamento, $formasPermitidas, true)) {
+
     exit("
         <script>
             alert('Forma de pagamento inválida.');
@@ -90,52 +80,16 @@ if (!in_array($formaPagamento, $formasPermitidas, true)) {
 }
 
 // ======================================================
-// GARANTIR QUE O CLIENTE EXISTE
-// ======================================================
-
-$sqlCliente = "SELECT idCliente FROM clientes WHERE idCliente = ? LIMIT 1";
-
-$stmtCliente = $conn->prepare($sqlCliente);
-
-if (!$stmtCliente) {
-    exit("Erro ao verificar cliente: " . $conn->error);
-}
-
-$stmtCliente->bind_param("i", $idCliente);
-$stmtCliente->execute();
-
-$resultadoCliente = $stmtCliente->get_result();
-
-if ($resultadoCliente->num_rows === 0) {
-    $stmtCliente->close();
-
-    exit("
-        <script>
-            alert('Cliente não encontrado.');
-            history.back();
-        </script>
-    ");
-}
-
-$stmtCliente->close();
-
-// ======================================================
 // INICIAR TRANSAÇÃO
 // ======================================================
 
-$conn->begin_transaction();
+$conexao->begin_transaction();
 
 try {
 
-    /*
-    =====================================================
-    PREPARAR CONSULTA DO PRODUTO
-
-    O preço é buscado novamente no banco.
-    Assim o valor do pedido não depende do valor enviado
-    pelo navegador.
-    =====================================================
-    */
+    // ==================================================
+    // PREPARAR CONSULTA DO PRODUTO
+    // ==================================================
 
     $sqlProduto = "
         SELECT idProduto, nome, valor, estoque
@@ -144,19 +98,18 @@ try {
         FOR UPDATE
     ";
 
-    $stmtProduto = $conn->prepare($sqlProduto);
+    $stmtProduto = $conexao->prepare($sqlProduto);
 
     if (!$stmtProduto) {
+
         throw new Exception(
-            "Erro ao preparar consulta do produto: " . $conn->error
+            "Erro ao preparar consulta do produto: " . $conexao->error
         );
     }
 
-    /*
-    =====================================================
-    PREPARAR ATUALIZAÇÃO DO ESTOQUE
-    =====================================================
-    */
+    // ==================================================
+    // PREPARAR ATUALIZAÇÃO DO ESTOQUE
+    // ==================================================
 
     $sqlEstoque = "
         UPDATE produtos
@@ -165,68 +118,107 @@ try {
           AND estoque >= ?
     ";
 
-    $stmtEstoque = $conn->prepare($sqlEstoque);
+    $stmtEstoque = $conexao->prepare($sqlEstoque);
 
     if (!$stmtEstoque) {
+
         throw new Exception(
-            "Erro ao preparar atualização do estoque: " . $conn->error
+            "Erro ao preparar atualização do estoque: " . $conexao->error
         );
     }
 
-    /*
-    =====================================================
-    PRIMEIRA PASSADA:
-    VALIDAR TODOS OS PRODUTOS E CALCULAR O TOTAL
-    =====================================================
-    */
+    // ==================================================
+    // PRIMEIRA PASSADA
+    // VALIDAR PRODUTOS E CALCULAR TOTAL
+    // ==================================================
 
     $produtosPedido = [];
+
     $valorTotal = 0.00;
 
     foreach ($itensCarrinho as $item) {
 
-        /*
-        Aceita:
-        idProduto
-        ou
-        id
-        */
+        // ----------------------------------------------
+        // ACEITA idProduto OU id
+        // ----------------------------------------------
 
-        $idProduto = (int)($item['idProduto'] ?? $item['id'] ?? 0);
+        $idProduto = (int) (
+            $item['idProduto']
+            ?? $item['id']
+            ?? 0
+        );
 
-        $quantidade = (int)($item['quantidade'] ?? 0);
+        $quantidade = (int) (
+            $item['quantidade']
+            ?? 0
+        );
+
+        // ----------------------------------------------
+        // VALIDAR ID
+        // ----------------------------------------------
 
         if ($idProduto <= 0) {
-            throw new Exception("Existe um produto inválido no carrinho.");
+
+            throw new Exception(
+                "Existe um produto inválido no carrinho."
+            );
         }
+
+        // ----------------------------------------------
+        // VALIDAR QUANTIDADE
+        // ----------------------------------------------
 
         if ($quantidade <= 0) {
-            throw new Exception("A quantidade de um produto é inválida.");
+
+            throw new Exception(
+                "A quantidade de um produto é inválida."
+            );
         }
 
-        // Busca produto e trava a linha durante a transação.
-        $stmtProduto->bind_param("i", $idProduto);
+        // ----------------------------------------------
+        // BUSCAR PRODUTO
+        // ----------------------------------------------
+
+        $stmtProduto->bind_param(
+            "i",
+            $idProduto
+        );
 
         if (!$stmtProduto->execute()) {
+
             throw new Exception(
-                "Erro ao consultar produto: " . $stmtProduto->error
+                "Erro ao consultar produto: " .
+                $stmtProduto->error
             );
         }
 
         $resultadoProduto = $stmtProduto->get_result();
 
         if ($resultadoProduto->num_rows === 0) {
+
             throw new Exception(
-                "O produto ID " . $idProduto . " não foi encontrado."
+                "O produto ID " .
+                $idProduto .
+                " não foi encontrado."
             );
         }
 
         $produto = $resultadoProduto->fetch_assoc();
 
-        $estoqueAtual = (int)$produto['estoque'];
-        $valorUnitario = (float)$produto['valor'];
+        // ----------------------------------------------
+        // DADOS DO PRODUTO
+        // ----------------------------------------------
+
+        $estoqueAtual = (int) $produto['estoque'];
+
+        $valorUnitario = (float) $produto['valor'];
+
+        // ----------------------------------------------
+        // VERIFICAR ESTOQUE
+        // ----------------------------------------------
 
         if ($estoqueAtual < $quantidade) {
+
             throw new Exception(
                 "Estoque insuficiente para o produto: " .
                 $produto['nome'] .
@@ -238,14 +230,28 @@ try {
             );
         }
 
+        // ----------------------------------------------
+        // CALCULAR SUBTOTAL
+        // ----------------------------------------------
+
         $subtotal = $valorUnitario * $quantidade;
 
+        // ----------------------------------------------
+        // GUARDAR PRODUTO
+        // ----------------------------------------------
+
         $produtosPedido[] = [
+
             'idProduto' => $idProduto,
+
             'nome' => $produto['nome'],
+
             'quantidade' => $quantidade,
+
             'valorUnitario' => $valorUnitario,
+
             'subtotal' => $subtotal
+
         ];
 
         $valorTotal += $subtotal;
@@ -253,43 +259,57 @@ try {
 
     $stmtProduto->close();
 
+    // ==================================================
+    // VERIFICAR PRODUTOS
+    // ==================================================
+
     if (empty($produtosPedido)) {
-        throw new Exception("Nenhum produto válido foi encontrado.");
+
+        throw new Exception(
+            "Nenhum produto válido foi encontrado."
+        );
     }
 
-    // Arredondamento do valor final.
+    // ==================================================
+    // ARREDONDAR TOTAL
+    // ==================================================
+
     $valorTotal = round($valorTotal, 2);
 
-    /*
-    =====================================================
-    DESCONTO E ACRÉSCIMO
-    =====================================================
-    */
+    // ==================================================
+    // VALOR FINAL
+    // ==================================================
 
-    $desconto = (float)($_POST['desconto'] ?? 0);
-    $acrescimo = (float)($_POST['acrescimo'] ?? $_POST['acrecimo'] ?? 0);
-
-    if ($desconto < 0) {
-        $desconto = 0;
-    }
-
-    if ($acrescimo < 0) {
-        $acrescimo = 0;
-    }
-
-    $valorFinal = $valorTotal - $desconto + $acrescimo;
+    $valorFinal = $valorTotal;
 
     if ($valorFinal < 0) {
-        throw new Exception("O valor final da compra não pode ser negativo.");
+
+        throw new Exception(
+            "O valor final da compra não pode ser negativo."
+        );
     }
 
     $valorFinal = round($valorFinal, 2);
 
-    /*
-    =====================================================
-    CADASTRAR A VENDA
-    =====================================================
-    */
+    // ==================================================
+    // CADASTRAR VENDA
+    // ==================================================
+    //
+    // AQUI ESTÁ A PRINCIPAL ALTERAÇÃO:
+    //
+    // Cliente logado:
+    //     idCliente = ID do cliente
+    //
+    // Cliente não logado:
+    //     idCliente = NULL
+    //
+    // ==================================================
+
+    if ($idCliente !== null) {
+
+    // ==============================================
+    // CLIENTE LOGADO
+    // ==============================================
 
     $sqlVenda = "
         INSERT INTO vendas
@@ -297,46 +317,83 @@ try {
             idCliente,
             valor,
             data,
-            formaDePagamento,
-            desconto,
-            acrecimo
+            formaDePagamento
         )
-        VALUES (?, ?, CURDATE(), ?, ?, ?)
+        VALUES (?, ?, CURDATE(), ?)
     ";
 
-    $stmtVenda = $conn->prepare($sqlVenda);
+    $stmtVenda = $conexao->prepare($sqlVenda);
 
     if (!$stmtVenda) {
         throw new Exception(
-            "Erro ao preparar cadastro da venda: " . $conn->error
+            "Erro ao preparar cadastro da venda: " .
+            $conexao->error
         );
     }
 
     $stmtVenda->bind_param(
-        "idsdd",
+        "ids",
         $idCliente,
         $valorFinal,
-        $formaPagamento,
-        $desconto,
-        $acrescimo
+        $formaPagamento
     );
 
-    if (!$stmtVenda->execute()) {
+} else {
+
+    // ==============================================
+    // CLIENTE NÃO LOGADO
+    // ==============================================
+
+    $sqlVenda = "
+        INSERT INTO vendas
+        (
+            idCliente,
+            valor,
+            data,
+            formaDePagamento
+        )
+        VALUES (NULL, ?, CURDATE(), ?)
+    ";
+
+    $stmtVenda = $conexao->prepare($sqlVenda);
+
+    if (!$stmtVenda) {
         throw new Exception(
-            "Erro ao cadastrar venda: " . $stmtVenda->error
+            "Erro ao preparar cadastro da venda: " .
+            $conexao->error
         );
     }
 
-    // Guarda o ID da venda criada.
-    $idVenda = $conn->insert_id;
+    $stmtVenda->bind_param(
+        "ds",
+        $valorFinal,
+        $formaPagamento
+    );
+}
+
+    // ==================================================
+    // EXECUTAR VENDA
+    // ==================================================
+
+    if (!$stmtVenda->execute()) {
+
+        throw new Exception(
+            "Erro ao cadastrar venda: " .
+            $stmtVenda->error
+        );
+    }
+
+    // ==================================================
+    // PEGAR ID DA VENDA
+    // ==================================================
+
+    $idVenda = $conexao->insert_id;
 
     $stmtVenda->close();
 
-    /*
-    =====================================================
-    PREPARAR CADASTRO DOS ITENS
-    =====================================================
-    */
+    // ==================================================
+    // PREPARAR CADASTRO DOS ITENS
+    // ==================================================
 
     $sqlItem = "
         INSERT INTO itens_venda
@@ -349,27 +406,32 @@ try {
         VALUES (?, ?, ?, ?)
     ";
 
-    $stmtItem = $conn->prepare($sqlItem);
+    $stmtItem = $conexao->prepare($sqlItem);
 
     if (!$stmtItem) {
+
         throw new Exception(
-            "Erro ao preparar itens da venda: " . $conn->error
+            "Erro ao preparar itens da venda: " .
+            $conexao->error
         );
     }
 
-    /*
-    =====================================================
-    CADASTRAR ITENS E BAIXAR ESTOQUE
-    =====================================================
-    */
+    // ==================================================
+    // CADASTRAR ITENS E BAIXAR ESTOQUE
+    // ==================================================
 
     foreach ($produtosPedido as $produto) {
 
         $idProduto = $produto['idProduto'];
+
         $quantidade = $produto['quantidade'];
+
         $valorUnitario = $produto['valorUnitario'];
 
-        // Cadastra o item.
+        // ----------------------------------------------
+        // CADASTRAR ITEM
+        // ----------------------------------------------
+
         $stmtItem->bind_param(
             "iiid",
             $idVenda,
@@ -379,12 +441,17 @@ try {
         );
 
         if (!$stmtItem->execute()) {
+
             throw new Exception(
-                "Erro ao cadastrar item da venda: " . $stmtItem->error
+                "Erro ao cadastrar item da venda: " .
+                $stmtItem->error
             );
         }
 
-        // Baixa o estoque.
+        // ----------------------------------------------
+        // BAIXAR ESTOQUE
+        // ----------------------------------------------
+
         $stmtEstoque->bind_param(
             "iii",
             $quantidade,
@@ -393,12 +460,15 @@ try {
         );
 
         if (!$stmtEstoque->execute()) {
+
             throw new Exception(
-                "Erro ao atualizar estoque: " . $stmtEstoque->error
+                "Erro ao atualizar estoque: " .
+                $stmtEstoque->error
             );
         }
 
         if ($stmtEstoque->affected_rows !== 1) {
+
             throw new Exception(
                 "Não foi possível atualizar o estoque do produto: " .
                 $produto['nome']
@@ -407,80 +477,111 @@ try {
     }
 
     $stmtItem->close();
+
     $stmtEstoque->close();
 
-    /*
-    =====================================================
-    CONFIRMAR TUDO
-    =====================================================
-    */
+    // ==================================================
+    // CONFIRMAR TRANSAÇÃO
+    // ==================================================
 
-    $conn->commit();
+    $conexao->commit();
 
-    // Limpar carrinho da sessão.
+    // ==================================================
+    // LIMPAR CARRINHO
+    // ==================================================
+
     $_SESSION['carrinho'] = [];
 
-    /*
-    =====================================================
-    MENSAGEM DE SUCESSO
-    =====================================================
-    */
+    // ==================================================
+    // MENSAGEM DE SUCESSO
+    // ==================================================
+
+    $valorFormatado = number_format(
+        $valorFinal,
+        2,
+        ',',
+        '.'
+    );
 
     echo "
     <!DOCTYPE html>
+
     <html lang='pt-BR'>
+
     <head>
+
         <meta charset='UTF-8'>
+
         <title>Compra finalizada</title>
+
     </head>
+
     <body>
 
-    <script>
-        alert('Compra finalizada com sucesso!\\nNúmero da venda: {$idVenda}\\nValor: R$ " .
-        number_format($valorFinal, 2, ',', '.') .
-        "');
-        window.location.href = 'inicio.php';
-    </script>
+        <script>
+
+            alert(
+                'Compra finalizada com sucesso!\\n\\n' +
+                'Número da venda: {$idVenda}\\n' +
+                'Valor: R$ {$valorFormatado}'
+            );
+
+            window.location.href = 'inicio.php';
+
+        </script>
 
     </body>
+
     </html>
     ";
 
 } catch (Throwable $e) {
 
-    /*
-    =====================================================
-    SE QUALQUER COISA DER ERRADO:
-    DESFAZ A VENDA, ITENS E ESTOQUE.
-    =====================================================
-    */
+    // ==================================================
+    // DESFAZER TUDO
+    // ==================================================
 
-    $conn->rollback();
+    $conexao->rollback();
+
+    // ==================================================
+    // MOSTRAR ERRO
+    // ==================================================
 
     echo "
     <!DOCTYPE html>
+
     <html lang='pt-BR'>
+
     <head>
+
         <meta charset='UTF-8'>
+
         <title>Erro</title>
+
     </head>
+
     <body>
 
-    <script>
-        alert(" .
-        json_encode(
-            "Não foi possível finalizar a compra.\n\n" . $e->getMessage(),
-            JSON_UNESCAPED_UNICODE
-        ) .
-        ");
-        history.back();
-    </script>
+        <script>
+
+            alert(" .
+            json_encode(
+                "Não foi possível finalizar a compra.\n\n" .
+                $e->getMessage(),
+                JSON_UNESCAPED_UNICODE
+            ) .
+            ");
+
+            history.back();
+
+        </script>
 
     </body>
+
     </html>
     ";
 }
 
-$conn->close();
+$conexao->close();
 
 ?>
