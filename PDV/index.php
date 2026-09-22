@@ -54,6 +54,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
   <link rel="stylesheet" href="css/estilo.css">
 
   <style>
+    
 
 @font-face {
         font-family: RopaSans;

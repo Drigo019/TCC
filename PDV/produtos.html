@@ -14,6 +14,81 @@
             <link rel="stylesheet" href="estilo.css">
             <style>
 
+                /* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+    width: 240px;
+    height: 100vh;
+
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    background: linear-gradient(
+        180deg,
+        #111827,
+        #1f2937
+    );
+
+    padding: 30px 20px;
+
+    border-radius: 0 20px 20px 0;
+
+    box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+
+    z-index: 1000;
+}
+
+
+/* LOGO */
+
+.logo {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 40px;
+    font-size: 20px;
+    font-family: 'RopaSans';
+}
+
+
+/* LINKS */
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    color: #d1d5db;
+
+    padding: 14px 16px;
+
+    text-decoration: none;
+
+    border-radius: 14px;
+
+    margin-bottom: 10px;
+
+    transition: 0.3s;
+
+    font-size: 16px;
+}
+
+
+.sidebar a:hover {
+    background: #374151;
+    color: white;
+    transform: translateX(5px);
+}
+
+
+/* ÍCONES */
+
+.sidebar i {
+    font-size: 20px;
+}
+
                 /* =========================
                    FORMULÁRIO
                 ========================= */
@@ -150,6 +225,39 @@
         </head>
 
         <body class="bg-light">
+
+            <div class="sidebar">
+
+    <h2 class="logo">
+        Container do Queijo
+    </h2>
+
+    <a href="index.php">
+        <i class="bi bi-house"></i>
+        Dashboard
+    </a>
+
+    <a href="pdv.html">
+        <i class="bi bi-cart"></i>
+        PDV
+    </a>
+
+    <a href="produtos.html">
+        <i class="bi bi-box-seam"></i>
+        Produtos
+    </a>
+
+    <a href="funcionarios.html">
+        <i class="bi bi-people"></i>
+        Funcionários
+    </a>
+
+    <a href="estoque.php">
+        <i class="bi bi-boxes"></i>
+        Estoque
+    </a>
+
+</div>
             <form action="salvar_produto.php"
             method="post"
             class="container mt-5"

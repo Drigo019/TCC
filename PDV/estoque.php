@@ -424,7 +424,14 @@ table {
 
 <div class="sidebar">
 
-    <h2 class="logo">Container do Queijo</h2>
+    <h2 class="logo">
+        Container do Queijo
+    </h2>
+
+    <a href="index.php">
+        <i class="bi bi-house"></i>
+        Dashboard
+    </a>
 
     <a href="pdv.html">
         <i class="bi bi-cart"></i>
