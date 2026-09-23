@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14/09/2026 às 23:09
+-- Tempo de geração: 23/09/2026 às 16:12
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -127,6 +127,32 @@ INSERT INTO `funcionarios` (`idFuncionario`, `nome`, `cargo`, `numero`, `email`,
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `itens_venda`
+--
+
+CREATE TABLE `itens_venda` (
+  `idItem` int(11) NOT NULL,
+  `idVenda` int(11) NOT NULL,
+  `idProduto` int(11) NOT NULL,
+  `quantidade` int(11) NOT NULL,
+  `valorUnitario` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `itens_venda`
+--
+
+INSERT INTO `itens_venda` (`idItem`, `idVenda`, `idProduto`, `quantidade`, `valorUnitario`) VALUES
+(1, 3, 27, 1, 79.99),
+(2, 4, 24, 1, 39.99),
+(3, 5, 24, 1, 39.99),
+(4, 6, 23, 1, 99.90),
+(5, 7, 27, 1, 79.99),
+(6, 8, 23, 1, 99.90);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `produtos`
 --
 
@@ -152,11 +178,11 @@ INSERT INTO `produtos` (`idProduto`, `nome`, `codigoDeBarras`, `valor`, `validad
 (25, 'Requeijão de Colher ', 7, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86165dfb53_1e2aa7ce-3b63-447c-838b-890176620dc8.jpeg', NULL),
 (19, 'Queijo Recheado com requeijão ', 1, 29.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86089a4e18_c875ebfe-7a67-4c5a-b9af-ba9724cc13ac.jpeg', NULL),
 (20, 'Requeijão Scala 400g', 2, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa860aa8a1e0_2aea2284-f65e-4234-95c2-f7e6cdc6aa57.jpeg', NULL),
-(21, 'Kit 4 Queijos', 3, 34.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa860c51dc32_2a460709-432c-458c-8db3-e39c3b199bd7.jpeg', NULL),
+(21, 'Kit 4 Queijos', 3, 34.99, NULL, 133, 'Refrigerado', 'queijos', '../imagens/6aa860c51dc32_2a460709-432c-458c-8db3-e39c3b199bd7.jpeg', NULL),
 (22, 'Salaminho Fatiado ', 4, 8.99, NULL, 10, 'Refrigerado', 'defumados', '../imagens/6aa860e7d9eed_711f8246-79bc-4507-9b3d-3757d979f47a.jpeg', NULL),
-(23, 'Queijo Azul ', 5, 99.90, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86105d65e8_8c865777-613a-4063-957d-5b1bba7415f3.jpeg', NULL),
-(24, 'Queijo Fresco ', 6, 39.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86133900f8_274255c8-8aa9-4bea-b398-6b48e2efd482.jpeg', NULL),
-(27, 'Queijo parmesão ', 9, 79.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa8619fb1b51_25b9a594-75b1-4127-9884-39a8184e915c.jpeg', NULL),
+(23, 'Queijo Azul ', 5, 99.90, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa86105d65e8_8c865777-613a-4063-957d-5b1bba7415f3.jpeg', NULL),
+(24, 'Queijo Fresco ', 6, 39.99, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa86133900f8_274255c8-8aa9-4bea-b398-6b48e2efd482.jpeg', NULL),
+(27, 'Queijo parmesão ', 9, 79.99, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa8619fb1b51_25b9a594-75b1-4127-9884-39a8184e915c.jpeg', NULL),
 (28, 'Queijo Minas Padrão ', 10, 39.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa861bf729b9_f94eb560-ac1b-4d51-903c-5d41147abb3f.jpeg', NULL);
 
 -- --------------------------------------------------------
@@ -183,7 +209,8 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`idUsuario`, `nome`, `foto`, `cpf`, `email`, `senha`, `idFornecedor`, `idFuncionario`) VALUES
 (1, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$VgiEz..hrP9eJGhHrVdbQ..bjYK/F7tuBR9ndy4F6/NOapSiP8eWy', NULL, NULL),
 (2, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$wV95HDGlgL720gsUxGYrPOK8.jY/4g99ceCewYq1OBTkfUDD2gSz.', NULL, NULL),
-(3, 'fellipy', '', '540.689.518-45', 'fellipysilva986@gmail.com', '$2y$10$HBGpE83aucpb39yvNykqCu5IEHVKn3japM8Q9ycZ9J84dQ.2v6J7i', NULL, NULL);
+(3, 'fellipy', '', '540.689.518-45', 'fellipysilva986@gmail.com', '$2y$10$HBGpE83aucpb39yvNykqCu5IEHVKn3japM8Q9ycZ9J84dQ.2v6J7i', NULL, NULL),
+(4, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$RuIYqoZ5wOS7URETUjJw.OZNfjZhyEoNCPw8zxu5GWWx.gNmHf4Ha', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -209,11 +236,23 @@ CREATE TABLE `vendas` (
   `valor` float(10,2) DEFAULT NULL,
   `data` date DEFAULT NULL,
   `formaDePagamento` enum('Dinheiro','Cartao','Pix','Crediario') DEFAULT NULL,
-  `descponto` float(10,2) DEFAULT NULL,
-  `acrecimo` float(10,2) DEFAULT NULL,
   `idProduto` int(11) DEFAULT NULL,
   `idCliente` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Despejando dados para a tabela `vendas`
+--
+
+INSERT INTO `vendas` (`idVendas`, `valor`, `data`, `formaDePagamento`, `idProduto`, `idCliente`) VALUES
+(1, 79.99, '2026-09-20', 'Cartao', NULL, NULL),
+(2, 79.99, '2026-09-20', 'Cartao', NULL, NULL),
+(3, 79.99, '2026-09-20', 'Dinheiro', NULL, NULL),
+(4, 39.99, '2026-09-20', 'Crediario', NULL, NULL),
+(5, 39.99, '2026-09-20', 'Cartao', NULL, NULL),
+(6, 99.90, '2026-09-21', 'Pix', NULL, NULL),
+(7, 79.99, '2026-09-22', 'Dinheiro', NULL, NULL),
+(8, 99.90, '2026-09-23', 'Crediario', NULL, NULL);
 
 --
 -- Índices para tabelas despejadas
@@ -257,6 +296,12 @@ ALTER TABLE `fornecedores`
 ALTER TABLE `funcionarios`
   ADD PRIMARY KEY (`idFuncionario`),
   ADD KEY `idEnderecoFuncionario` (`idEnderecoFuncionario`);
+
+--
+-- Índices de tabela `itens_venda`
+--
+ALTER TABLE `itens_venda`
+  ADD PRIMARY KEY (`idItem`);
 
 --
 -- Índices de tabela `produtos`
@@ -318,6 +363,12 @@ ALTER TABLE `funcionarios`
   MODIFY `idFuncionario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de tabela `itens_venda`
+--
+ALTER TABLE `itens_venda`
+  MODIFY `idItem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
@@ -327,7 +378,7 @@ ALTER TABLE `produtos`
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `vendaprodutos`
@@ -339,7 +390,7 @@ ALTER TABLE `vendaprodutos`
 -- AUTO_INCREMENT de tabela `vendas`
 --
 ALTER TABLE `vendas`
-  MODIFY `idVendas` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idVendas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
