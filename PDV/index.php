@@ -113,6 +113,25 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       font-size:16px;
     }
 
+    /* =========================================
+   ABA ATIVA
+========================================= */
+
+.sidebar a.ativo {
+    background: #374151;
+    color: white;
+
+    transform: scale(1.08);
+
+    position: relative;
+    z-index: 10;
+
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+
+    margin-left: 3px;
+    margin-right: -3px;
+}
+
     .sidebar a:hover{
       background:#374151;
       color:white;
@@ -236,6 +255,11 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
   <div class="sidebar">
 
     <h2 class="logo">Container do Queijo </h2>
+
+    <a href="index.php" class="ativo">
+    <i class="bi bi-house"></i>
+    Dashboard
+</a>
 
     <a href="pdv.html">
       <i class="bi bi-cart"></i>

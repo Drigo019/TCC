@@ -122,6 +122,25 @@ body {
     font-size: 16px;
 }
 
+/* =========================================
+   ABA ATIVA
+========================================= */
+
+.sidebar a.ativo {
+    background: #374151;
+    color: white;
+
+    transform: scale(1.08);
+
+    position: relative;
+    z-index: 10;
+
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+
+    margin-left: 3px;
+    margin-right: -3px;
+}
+
 
 /* HOVER DOS LINKS */
 
