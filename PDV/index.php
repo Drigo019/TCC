@@ -402,7 +402,7 @@ while($venda = mysqli_fetch_assoc($result_ultimas)){
     <?php
 
     $forma = strtolower(
-        $venda['formaPagamento']
+        $venda['formaDePagamento']
     );
 
     if ($forma === 'pix') {
@@ -429,7 +429,7 @@ while($venda = mysqli_fetch_assoc($result_ultimas)){
     } else {
 
         echo htmlspecialchars(
-            $venda['formaPagamento']  
+            $venda['formaDePagamento']  
         );
 
     }

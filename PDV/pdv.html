@@ -143,22 +143,22 @@
                 <i class="bi bi-house"></i>
                 Dashboard
             </a>
-        
-            <a href="pdv.html">
+            
+            <a href="pdv.html" class="ativo">
                 <i class="bi bi-cart"></i>
                 PDV
             </a>
-        
+            
             <a href="produtos.html">
                 <i class="bi bi-box-seam"></i>
                 Produtos
             </a>
-        
+            
             <a href="funcionarios.html">
                 <i class="bi bi-people"></i>
                 Funcionários
             </a>
-        
+            
             <a href="estoque.php">
                 <i class="bi bi-boxes"></i>
                 Estoque
@@ -595,7 +595,7 @@
                             class="btn btn-primary mt-3"
                             id="confirmarCartao"
                             style="display: none;"
-                            onclick="confirmarPagamento('cartao')"
+                            onclick="confirmarPagamento(tipoCartaoSelecionado)"
                         >
 
                             <i class="bi bi-check-circle"></i>
@@ -639,7 +639,7 @@
 
     let total = 0;
 
-
+    let tipoCartaoSelecionado = "";
 
     /* =========================================================
     BUSCAR PRODUTO PELO CÓDIGO DE BARRAS
@@ -1311,34 +1311,36 @@
 
     function selecionarTipoCartao(tipo) {
 
-    let nome =
-        tipo === "debito"
-            ? "Débito"
-            : "Crédito";
+tipoCartaoSelecionado = tipo;
+
+let nome =
+    tipo === "debito"
+        ? "Débito"
+        : "Crédito";
 
 
-    document.getElementById(
-        "tipoCartaoSelecionado"
-    ).innerHTML = `
+document.getElementById(
+    "tipoCartaoSelecionado"
+).innerHTML = `
 
-        <div class="alert alert-primary">
+    <div class="alert alert-primary">
 
-            Pagamento selecionado:
+        Pagamento selecionado:
 
-            <strong>
-                ${nome}
-            </strong>
+        <strong>
+            ${nome}
+        </strong>
 
-        </div>
+    </div>
 
-    `;
+`;
 
 
-    document.getElementById(
-        "confirmarCartao"
-    ).style.display = "inline-block";
+document.getElementById(
+    "confirmarCartao"
+).style.display = "inline-block";
 
-    }
+}
 
 
 
@@ -1370,7 +1372,7 @@
     CONFIRMAR PAGAMENTO
     ========================================================= */
 
-    function confirmarPagamento(formaPagamento) {
+    function confirmarPagamento(formaDePagamento) {
 
     if (total <= 0) {
 
@@ -1379,6 +1381,27 @@
         return;
 
     }
+
+    let formaBanco = "";
+
+if (formaDePagamento === "pix") {
+
+    formaBanco = "Pix";
+
+} else if (formaDePagamento === "debito") {
+
+    formaBanco = "Debito";
+
+} else if (formaDePagamento === "credito") {
+
+    formaBanco = "Credito";
+
+} else {
+
+    alert("Forma de pagamento inválida.");
+
+    return;
+}
 
 
     /* PEGAR PRODUTOS DO CARRINHO */
@@ -1413,7 +1436,7 @@
         confirm(
             "Confirmar pagamento?\n\n" +
             "Forma: " +
-            formaPagamento.toUpperCase() +
+            formaDePagamento.toUpperCase() +
             "\nValor: R$ " +
             total.toFixed(2)
         );
@@ -1436,13 +1459,13 @@
 
         body: JSON.stringify({
 
-            valor: total,
+valor: total,
 
-            formaPagamento: formaPagamento,
+formaDePagamento: formaBanco,
 
-            produtos: produtos
+produtos: produtos
 
-        })
+})
 
     })
 

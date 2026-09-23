@@ -10,7 +10,7 @@ $sql = "
         categoria,
         estoque
     FROM produtos
-    ORDER BY nome ASC
+    ORDER BY codigodebarras ASC
 ";
 
 $resultado = mysqli_query($conn, $sql);
@@ -467,7 +467,7 @@ table {
         Funcionários
     </a>
 
-    <a href="estoque.php">
+    <a href="estoque.php" class='ativo'>
         <i class="bi bi-boxes"></i>
         Estoque
     </a>
@@ -522,7 +522,7 @@ table {
 
                         <th>Estoque atual</th>
 
-                        <th>Adicionar</th>
+                        <th>Quantidade</th>
 
                         <th>Ação</th>
 
@@ -584,7 +584,7 @@ table {
                                     type="number"
                                     min="1"
                                     class="form-control quantidade-adicionar"
-                                    placeholder="Quantidade"
+                                    placeholder=""
                                 >
 
                             </td>
@@ -592,19 +592,38 @@ table {
 
                             <td>
 
-                                <button
-                                    class="btn btn-success"
-                                    onclick="adicionarEstoque(
-                                        <?= $produto['idProduto'] ?>,
-                                        this
-                                    )"
-                                >
+    <div class="d-flex gap-2">
 
-                                    + Adicionar
+        <!-- ADICIONAR -->
+        <button
+            type="button"
+            class="btn btn-success"
+            onclick="adicionarEstoque(
+                <?= $produto['idProduto'] ?>,
+                this
+            )"
+        >
+            <i class="bi bi-plus-lg"></i>
+            Quantidade
+        </button>
 
-                                </button>
 
-                            </td>
+        <!-- RETIRAR -->
+        <button
+            type="button"
+            class="btn btn-danger"
+            onclick="retirarEstoque(
+                <?= $produto['idProduto'] ?>,
+                this
+            )"
+        >
+            <i class="bi bi-dash-lg"></i>
+            Retirar
+        </button>
+
+    </div>
+
+</td>
 
                         </tr>
 
@@ -803,6 +822,199 @@ function adicionarEstoque(idProduto, botao) {
         );
 
     });
+
+}
+
+function retirarEstoque(idProduto, botao) {
+
+const linha =
+    botao.closest("tr");
+
+
+const campo =
+    linha.querySelector(
+        ".quantidade-adicionar"
+    );
+
+
+const quantidade =
+    parseInt(campo.value);
+
+
+/* ================================
+   VALIDA QUANTIDADE
+================================= */
+
+if (!quantidade || quantidade <= 0) {
+
+    alert(
+        "Digite uma quantidade válida."
+    );
+
+    campo.focus();
+
+    return;
+}
+
+
+/* ================================
+   PEGA O ESTOQUE ATUAL
+================================= */
+
+const estoqueElement =
+    linha.querySelector(
+        "td:nth-child(4) span"
+    );
+
+
+const estoqueAtual =
+    parseInt(
+        estoqueElement.textContent
+    );
+
+
+/* ================================
+   VERIFICA ESTOQUE
+================================= */
+
+if (quantidade > estoqueAtual) {
+
+    alert(
+        "Não é possível retirar " +
+        quantidade +
+        " unidade(s).\n\n" +
+        "Estoque disponível: " +
+        estoqueAtual
+    );
+
+    campo.focus();
+
+    return;
+}
+
+
+/* ================================
+   CONFIRMAÇÃO
+================================= */
+
+const confirmar =
+    confirm(
+        "Retirar " +
+        quantidade +
+        " unidade(s) do estoque?"
+    );
+
+
+if (!confirmar) {
+
+    return;
+
+}
+
+
+/* ================================
+   ENVIA PARA O PHP
+================================= */
+
+fetch(
+    "retirar_estoque.php",
+    {
+
+        method: "POST",
+
+        headers: {
+
+            "Content-Type":
+                "application/json"
+
+        },
+
+        body: JSON.stringify({
+
+            idProduto: idProduto,
+
+            quantidade: quantidade
+
+        })
+
+    }
+)
+
+
+.then(
+    response =>
+        response.json()
+)
+
+
+.then(resultado => {
+
+
+    /* ================================
+       ERRO
+    ================================= */
+
+    if (!resultado.sucesso) {
+
+        alert(
+            "Erro: " +
+            resultado.mensagem
+        );
+
+        return;
+    }
+
+
+    /* ================================
+       ATUALIZA ESTOQUE NA TELA
+    ================================= */
+
+    estoqueElement.textContent =
+        resultado.estoque;
+
+
+    /* ================================
+       ATUALIZA A COR
+    ================================= */
+
+    if (
+        resultado.estoque <= 5
+    ) {
+
+        estoqueElement.className =
+            "estoque-baixo";
+
+    } else {
+
+        estoqueElement.className =
+            "estoque-normal";
+
+    }
+
+
+    /* ================================
+       LIMPA CAMPO
+    ================================= */
+
+    campo.value = "";
+
+
+    alert(
+        "Estoque retirado com sucesso!"
+    );
+
+})
+
+
+.catch(error => {
+
+    console.error(error);
+
+    alert(
+        "Erro de comunicação com o servidor."
+    );
+
+});
 
 }
 

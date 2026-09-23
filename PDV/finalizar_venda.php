@@ -32,7 +32,7 @@ if (!$dados) {
 
 $produtos = $dados['produtos'] ?? [];
 $valor = floatval($dados['valor'] ?? 0);
-$formaPagamento = $dados['formaPagamento'] ?? '';
+$formaDePagamento = $dados['formaDePagamento'] ?? '';
 
 
 if (empty($produtos)) {
@@ -193,9 +193,9 @@ try {
 
         $sqlVenda = "
         INSERT INTO vendas
-        (valor, data, formaPagamento)
+        (valor, data, formaDePagamento)
         VALUES
-        ($valorBanco, NOW(), '$formaPagamento')
+        ($valorBanco, NOW(), '$formaDePagamento')
     ";
 
 
@@ -288,8 +288,8 @@ try {
         "idVenda" =>
             $idVenda,
 
-        "formaPagamento" =>
-            $formaPagamento
+        "formaDePagamento" =>
+            $formaDePagamento
 
     ]);
 

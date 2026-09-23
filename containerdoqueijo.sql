@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.1.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Tempo de geração: 23/09/2026 às 16:12
--- Versão do servidor: 10.4.32-MariaDB
--- Versão do PHP: 8.2.12
+-- Host: 127.0.0.1:3306
+-- Tempo de geração: 23-Set-2026 às 15:15
+-- Versão do servidor: 5.7.36
+-- versão do PHP: 7.4.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,34 +24,39 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `clientes`
+-- Estrutura da tabela `clientes`
 --
 
-CREATE TABLE `clientes` (
+DROP TABLE IF EXISTS `clientes`;
+CREATE TABLE IF NOT EXISTS `clientes` (
   `idCliente` int(11) NOT NULL,
-  `nome` varchar(255) DEFAULT NULL,
-  `cpf` char(14) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `senha` varchar(255) DEFAULT NULL,
-  `idEndereco` int(11) DEFAULT NULL
+  `nome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cpf` char(14) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `senha` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `idEndereco` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idCliente`),
+  KEY `idEndereco` (`idEndereco`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `enderecosclientes`
+-- Estrutura da tabela `enderecosclientes`
 --
 
-CREATE TABLE `enderecosclientes` (
+DROP TABLE IF EXISTS `enderecosclientes`;
+CREATE TABLE IF NOT EXISTS `enderecosclientes` (
   `idEnderecoCliente` int(11) NOT NULL,
-  `rua` varchar(255) DEFAULT NULL,
+  `rua` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
-  `bairro` varchar(255) DEFAULT NULL,
-  `cep` char(9) DEFAULT NULL
+  `bairro` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cep` char(9) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idEnderecoCliente`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Despejando dados para a tabela `enderecosclientes`
+-- Extraindo dados da tabela `enderecosclientes`
 --
 
 INSERT INTO `enderecosclientes` (`idEnderecoCliente`, `rua`, `numero`, `bairro`, `cep`) VALUES
@@ -60,62 +65,72 @@ INSERT INTO `enderecosclientes` (`idEnderecoCliente`, `rua`, `numero`, `bairro`,
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `enderecosfornecedores`
+-- Estrutura da tabela `enderecosfornecedores`
 --
 
-CREATE TABLE `enderecosfornecedores` (
-  `idEnderecoFornecedor` int(11) NOT NULL,
-  `rua` varchar(255) DEFAULT NULL,
+DROP TABLE IF EXISTS `enderecosfornecedores`;
+CREATE TABLE IF NOT EXISTS `enderecosfornecedores` (
+  `idEnderecoFornecedor` int(11) NOT NULL AUTO_INCREMENT,
+  `rua` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
-  `bairro` varchar(255) DEFAULT NULL,
-  `cep` char(9) DEFAULT NULL
+  `bairro` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cep` char(9) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idEnderecoFornecedor`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `enderecosfuncionarios`
+-- Estrutura da tabela `enderecosfuncionarios`
 --
 
-CREATE TABLE `enderecosfuncionarios` (
-  `idEnderecoFuncionrio` int(11) NOT NULL,
-  `rua` varchar(255) DEFAULT NULL,
+DROP TABLE IF EXISTS `enderecosfuncionarios`;
+CREATE TABLE IF NOT EXISTS `enderecosfuncionarios` (
+  `idEnderecoFuncionrio` int(11) NOT NULL AUTO_INCREMENT,
+  `rua` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `numero` int(11) DEFAULT NULL,
-  `bairro` varchar(255) DEFAULT NULL,
-  `cep` char(9) DEFAULT NULL
+  `bairro` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cep` char(9) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  PRIMARY KEY (`idEnderecoFuncionrio`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `fornecedores`
+-- Estrutura da tabela `fornecedores`
 --
 
-CREATE TABLE `fornecedores` (
-  `idFornecedor` int(11) NOT NULL,
-  `nome` varchar(255) DEFAULT NULL,
+DROP TABLE IF EXISTS `fornecedores`;
+CREATE TABLE IF NOT EXISTS `fornecedores` (
+  `idFornecedor` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `telefone` int(11) DEFAULT NULL,
-  `idEnderecoFornecedor` int(11) DEFAULT NULL
+  `idEnderecoFornecedor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idFornecedor`),
+  KEY `idEnderecoFornecedor` (`idEnderecoFornecedor`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `funcionarios`
+-- Estrutura da tabela `funcionarios`
 --
 
-CREATE TABLE `funcionarios` (
-  `idFuncionario` int(11) NOT NULL,
-  `nome` varchar(255) DEFAULT NULL,
-  `cargo` enum('chefe','funcionario') NOT NULL,
+DROP TABLE IF EXISTS `funcionarios`;
+CREATE TABLE IF NOT EXISTS `funcionarios` (
+  `idFuncionario` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cargo` enum('chefe','funcionario') COLLATE utf8mb4_unicode_ci NOT NULL,
   `numero` int(11) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `senha` varchar(255) DEFAULT NULL,
-  `idEnderecoFuncionario` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `senha` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `idEnderecoFuncionario` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idFuncionario`),
+  KEY `idEnderecoFuncionario` (`idEnderecoFuncionario`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Despejando dados para a tabela `funcionarios`
+-- Extraindo dados da tabela `funcionarios`
 --
 
 INSERT INTO `funcionarios` (`idFuncionario`, `nome`, `cargo`, `numero`, `email`, `senha`, `idEnderecoFuncionario`) VALUES
@@ -127,83 +142,94 @@ INSERT INTO `funcionarios` (`idFuncionario`, `nome`, `cargo`, `numero`, `email`,
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `itens_venda`
+-- Estrutura da tabela `itens_venda`
 --
 
-CREATE TABLE `itens_venda` (
-  `idItem` int(11) NOT NULL,
+DROP TABLE IF EXISTS `itens_venda`;
+CREATE TABLE IF NOT EXISTS `itens_venda` (
+  `idItem` int(11) NOT NULL AUTO_INCREMENT,
   `idVenda` int(11) NOT NULL,
   `idProduto` int(11) NOT NULL,
   `quantidade` int(11) NOT NULL,
-  `valorUnitario` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `valorUnitario` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`idItem`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
 
 --
--- Despejando dados para a tabela `itens_venda`
+-- Extraindo dados da tabela `itens_venda`
 --
 
 INSERT INTO `itens_venda` (`idItem`, `idVenda`, `idProduto`, `quantidade`, `valorUnitario`) VALUES
-(1, 3, 27, 1, 79.99),
-(2, 4, 24, 1, 39.99),
-(3, 5, 24, 1, 39.99),
-(4, 6, 23, 1, 99.90),
-(5, 7, 27, 1, 79.99),
-(6, 8, 23, 1, 99.90);
+(1, 3, 27, 1, '79.99'),
+(2, 4, 24, 1, '39.99'),
+(3, 5, 24, 1, '39.99'),
+(4, 6, 23, 1, '99.90'),
+(5, 7, 27, 1, '79.99'),
+(6, 8, 23, 1, '99.90'),
+(7, 9, 23, 1, '99.90'),
+(8, 9, 21, 1, '34.99');
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `produtos`
+-- Estrutura da tabela `produtos`
 --
 
-CREATE TABLE `produtos` (
-  `idProduto` int(11) NOT NULL,
-  `nome` varchar(255) DEFAULT NULL,
+DROP TABLE IF EXISTS `produtos`;
+CREATE TABLE IF NOT EXISTS `produtos` (
+  `idProduto` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `codigoDeBarras` int(11) DEFAULT NULL,
   `valor` float(10,2) DEFAULT NULL,
   `validade` date DEFAULT NULL,
   `estoque` int(11) DEFAULT NULL,
-  `Armazenamento` enum('Refrigerado','Normal') NOT NULL,
-  `categoria` enum('frios','defumados','doces','bebidas','queijos') NOT NULL,
-  `imagem` varchar(255) DEFAULT NULL,
-  `idFornecedor` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `Armazenamento` enum('Refrigerado','Normal') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `categoria` enum('frios','defumados','doces','bebidas','queijos') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `imagem` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `idFornecedor` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idProduto`),
+  KEY `idFornecedor` (`idFornecedor`)
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Despejando dados para a tabela `produtos`
+-- Extraindo dados da tabela `produtos`
 --
 
 INSERT INTO `produtos` (`idProduto`, `nome`, `codigoDeBarras`, `valor`, `validade`, `estoque`, `Armazenamento`, `categoria`, `imagem`, `idFornecedor`) VALUES
 (26, 'Queijo Fresco 500g ', 8, 24.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa8618563462_21c80348-2feb-4477-aaba-2020e17f1a6e.jpeg', NULL),
-(25, 'Requeijão de Colher ', 7, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86165dfb53_1e2aa7ce-3b63-447c-838b-890176620dc8.jpeg', NULL),
-(19, 'Queijo Recheado com requeijão ', 1, 29.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86089a4e18_c875ebfe-7a67-4c5a-b9af-ba9724cc13ac.jpeg', NULL),
-(20, 'Requeijão Scala 400g', 2, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa860aa8a1e0_2aea2284-f65e-4234-95c2-f7e6cdc6aa57.jpeg', NULL),
-(21, 'Kit 4 Queijos', 3, 34.99, NULL, 133, 'Refrigerado', 'queijos', '../imagens/6aa860c51dc32_2a460709-432c-458c-8db3-e39c3b199bd7.jpeg', NULL),
+(25, 'Requeijao de Colher ', 7, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86165dfb53_1e2aa7ce-3b63-447c-838b-890176620dc8.jpeg', NULL),
+(19, 'Queijo Recheado com requeijao ', 1, 29.99, NULL, 1, 'Refrigerado', 'queijos', '../imagens/6aa86089a4e18_c875ebfe-7a67-4c5a-b9af-ba9724cc13ac.jpeg', NULL),
+(20, 'Requeijao Scala 400g', 2, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa860aa8a1e0_2aea2284-f65e-4234-95c2-f7e6cdc6aa57.jpeg', NULL),
+(21, 'Kit 4 Queijos', 3, 34.99, NULL, 132, 'Refrigerado', 'queijos', '../imagens/6aa860c51dc32_2a460709-432c-458c-8db3-e39c3b199bd7.jpeg', NULL),
 (22, 'Salaminho Fatiado ', 4, 8.99, NULL, 10, 'Refrigerado', 'defumados', '../imagens/6aa860e7d9eed_711f8246-79bc-4507-9b3d-3757d979f47a.jpeg', NULL),
-(23, 'Queijo Azul ', 5, 99.90, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa86105d65e8_8c865777-613a-4063-957d-5b1bba7415f3.jpeg', NULL),
+(23, 'Queijo Azul ', 5, 99.90, NULL, 7, 'Refrigerado', 'queijos', '../imagens/6aa86105d65e8_8c865777-613a-4063-957d-5b1bba7415f3.jpeg', NULL),
 (24, 'Queijo Fresco ', 6, 39.99, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa86133900f8_274255c8-8aa9-4bea-b398-6b48e2efd482.jpeg', NULL),
-(27, 'Queijo parmesão ', 9, 79.99, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa8619fb1b51_25b9a594-75b1-4127-9884-39a8184e915c.jpeg', NULL),
-(28, 'Queijo Minas Padrão ', 10, 39.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa861bf729b9_f94eb560-ac1b-4d51-903c-5d41147abb3f.jpeg', NULL);
+(27, 'Queijo parmesao ', 9, 79.99, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa8619fb1b51_25b9a594-75b1-4127-9884-39a8184e915c.jpeg', NULL),
+(28, 'Queijo Minas Padrao ', 10, 39.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa861bf729b9_f94eb560-ac1b-4d51-903c-5d41147abb3f.jpeg', NULL);
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `usuarios`
+-- Estrutura da tabela `usuarios`
 --
 
-CREATE TABLE `usuarios` (
-  `idUsuario` int(11) NOT NULL,
-  `nome` varchar(255) DEFAULT NULL,
-  `foto` varchar(255) NOT NULL,
-  `cpf` char(14) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `senha` varchar(255) DEFAULT NULL,
+DROP TABLE IF EXISTS `usuarios`;
+CREATE TABLE IF NOT EXISTS `usuarios` (
+  `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
+  `nome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `foto` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cpf` char(14) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `senha` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `idFornecedor` int(11) DEFAULT NULL,
-  `idFuncionario` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `idFuncionario` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idUsuario`),
+  KEY `idFornecedor` (`idFornecedor`),
+  KEY `idFuncionario` (`idFuncionario`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Despejando dados para a tabela `usuarios`
+-- Extraindo dados da tabela `usuarios`
 --
 
 INSERT INTO `usuarios` (`idUsuario`, `nome`, `foto`, `cpf`, `email`, `senha`, `idFornecedor`, `idFuncionario`) VALUES
@@ -215,33 +241,41 @@ INSERT INTO `usuarios` (`idUsuario`, `nome`, `foto`, `cpf`, `email`, `senha`, `i
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `vendaprodutos`
+-- Estrutura da tabela `vendaprodutos`
 --
 
-CREATE TABLE `vendaprodutos` (
-  `idVendaProdutos` int(11) NOT NULL,
+DROP TABLE IF EXISTS `vendaprodutos`;
+CREATE TABLE IF NOT EXISTS `vendaprodutos` (
+  `idVendaProdutos` int(11) NOT NULL AUTO_INCREMENT,
   `quantidade` float(10,2) DEFAULT NULL,
   `idVenda` int(11) DEFAULT NULL,
-  `idProduto` int(11) DEFAULT NULL
+  `idProduto` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idVendaProdutos`),
+  KEY `idVenda` (`idVenda`),
+  KEY `idProduto` (`idProduto`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `vendas`
+-- Estrutura da tabela `vendas`
 --
 
-CREATE TABLE `vendas` (
-  `idVendas` int(11) NOT NULL,
+DROP TABLE IF EXISTS `vendas`;
+CREATE TABLE IF NOT EXISTS `vendas` (
+  `idVendas` int(11) NOT NULL AUTO_INCREMENT,
   `valor` float(10,2) DEFAULT NULL,
   `data` date DEFAULT NULL,
-  `formaDePagamento` enum('Dinheiro','Cartao','Pix','Crediario') DEFAULT NULL,
+  `formaDePagamento` enum('Dinheiro','Cartao','Debito','Credito','Pix','Crediario') COLLATE utf8mb4_unicode_ci NOT NULL,
   `idProduto` int(11) DEFAULT NULL,
-  `idCliente` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  `idCliente` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idVendas`),
+  KEY `idProduto` (`idProduto`),
+  KEY `idCliente` (`idCliente`)
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Despejando dados para a tabela `vendas`
+-- Extraindo dados da tabela `vendas`
 --
 
 INSERT INTO `vendas` (`idVendas`, `valor`, `data`, `formaDePagamento`, `idProduto`, `idCliente`) VALUES
@@ -252,145 +286,15 @@ INSERT INTO `vendas` (`idVendas`, `valor`, `data`, `formaDePagamento`, `idProdut
 (5, 39.99, '2026-09-20', 'Cartao', NULL, NULL),
 (6, 99.90, '2026-09-21', 'Pix', NULL, NULL),
 (7, 79.99, '2026-09-22', 'Dinheiro', NULL, NULL),
-(8, 99.90, '2026-09-23', 'Crediario', NULL, NULL);
-
---
--- Índices para tabelas despejadas
---
-
---
--- Índices de tabela `clientes`
---
-ALTER TABLE `clientes`
-  ADD PRIMARY KEY (`idCliente`),
-  ADD KEY `idEndereco` (`idEndereco`);
-
---
--- Índices de tabela `enderecosclientes`
---
-ALTER TABLE `enderecosclientes`
-  ADD PRIMARY KEY (`idEnderecoCliente`);
-
---
--- Índices de tabela `enderecosfornecedores`
---
-ALTER TABLE `enderecosfornecedores`
-  ADD PRIMARY KEY (`idEnderecoFornecedor`);
-
---
--- Índices de tabela `enderecosfuncionarios`
---
-ALTER TABLE `enderecosfuncionarios`
-  ADD PRIMARY KEY (`idEnderecoFuncionrio`);
-
---
--- Índices de tabela `fornecedores`
---
-ALTER TABLE `fornecedores`
-  ADD PRIMARY KEY (`idFornecedor`),
-  ADD KEY `idEnderecoFornecedor` (`idEnderecoFornecedor`);
-
---
--- Índices de tabela `funcionarios`
---
-ALTER TABLE `funcionarios`
-  ADD PRIMARY KEY (`idFuncionario`),
-  ADD KEY `idEnderecoFuncionario` (`idEnderecoFuncionario`);
-
---
--- Índices de tabela `itens_venda`
---
-ALTER TABLE `itens_venda`
-  ADD PRIMARY KEY (`idItem`);
-
---
--- Índices de tabela `produtos`
---
-ALTER TABLE `produtos`
-  ADD PRIMARY KEY (`idProduto`),
-  ADD KEY `idFornecedor` (`idFornecedor`);
-
---
--- Índices de tabela `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`idUsuario`),
-  ADD KEY `idFornecedor` (`idFornecedor`),
-  ADD KEY `idFuncionario` (`idFuncionario`);
-
---
--- Índices de tabela `vendaprodutos`
---
-ALTER TABLE `vendaprodutos`
-  ADD PRIMARY KEY (`idVendaProdutos`),
-  ADD KEY `idVenda` (`idVenda`),
-  ADD KEY `idProduto` (`idProduto`);
-
---
--- Índices de tabela `vendas`
---
-ALTER TABLE `vendas`
-  ADD PRIMARY KEY (`idVendas`),
-  ADD KEY `idProduto` (`idProduto`),
-  ADD KEY `idCliente` (`idCliente`);
-
---
--- AUTO_INCREMENT para tabelas despejadas
---
-
---
--- AUTO_INCREMENT de tabela `enderecosfornecedores`
---
-ALTER TABLE `enderecosfornecedores`
-  MODIFY `idEnderecoFornecedor` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `enderecosfuncionarios`
---
-ALTER TABLE `enderecosfuncionarios`
-  MODIFY `idEnderecoFuncionrio` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `fornecedores`
---
-ALTER TABLE `fornecedores`
-  MODIFY `idFornecedor` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `funcionarios`
---
-ALTER TABLE `funcionarios`
-  MODIFY `idFuncionario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de tabela `itens_venda`
---
-ALTER TABLE `itens_venda`
-  MODIFY `idItem` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
--- AUTO_INCREMENT de tabela `produtos`
---
-ALTER TABLE `produtos`
-  MODIFY `idProduto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
-
---
--- AUTO_INCREMENT de tabela `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `idUsuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de tabela `vendaprodutos`
---
-ALTER TABLE `vendaprodutos`
-  MODIFY `idVendaProdutos` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de tabela `vendas`
---
-ALTER TABLE `vendas`
-  MODIFY `idVendas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+(8, 99.90, '2026-09-23', 'Crediario', NULL, NULL),
+(9, 134.89, '2026-09-23', 'Pix', NULL, NULL),
+(10, 29.99, '2026-09-23', 'Pix', NULL, NULL),
+(11, 29.99, '2026-09-23', 'Cartao', NULL, NULL),
+(12, 29.99, '2026-09-23', 'Cartao', NULL, NULL),
+(13, 29.99, '2026-09-23', 'Cartao', NULL, NULL),
+(14, 29.99, '2026-09-23', 'Debito', NULL, NULL),
+(15, 29.99, '2026-09-23', 'Credito', NULL, NULL),
+(16, 59.98, '2026-09-23', 'Pix', NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
