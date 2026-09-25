@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 23-Set-2026 às 15:15
+-- Tempo de geração: 25-Set-2026 às 15:18
 -- Versão do servidor: 5.7.36
 -- versão do PHP: 7.4.26
 
@@ -65,54 +65,6 @@ INSERT INTO `enderecosclientes` (`idEnderecoCliente`, `rua`, `numero`, `bairro`,
 -- --------------------------------------------------------
 
 --
--- Estrutura da tabela `enderecosfornecedores`
---
-
-DROP TABLE IF EXISTS `enderecosfornecedores`;
-CREATE TABLE IF NOT EXISTS `enderecosfornecedores` (
-  `idEnderecoFornecedor` int(11) NOT NULL AUTO_INCREMENT,
-  `rua` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `numero` int(11) DEFAULT NULL,
-  `bairro` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cep` char(9) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`idEnderecoFornecedor`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `enderecosfuncionarios`
---
-
-DROP TABLE IF EXISTS `enderecosfuncionarios`;
-CREATE TABLE IF NOT EXISTS `enderecosfuncionarios` (
-  `idEnderecoFuncionrio` int(11) NOT NULL AUTO_INCREMENT,
-  `rua` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `numero` int(11) DEFAULT NULL,
-  `bairro` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cep` char(9) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`idEnderecoFuncionrio`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Estrutura da tabela `fornecedores`
---
-
-DROP TABLE IF EXISTS `fornecedores`;
-CREATE TABLE IF NOT EXISTS `fornecedores` (
-  `idFornecedor` int(11) NOT NULL AUTO_INCREMENT,
-  `nome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `telefone` int(11) DEFAULT NULL,
-  `idEnderecoFornecedor` int(11) DEFAULT NULL,
-  PRIMARY KEY (`idFornecedor`),
-  KEY `idEnderecoFornecedor` (`idEnderecoFornecedor`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Estrutura da tabela `funcionarios`
 --
 
@@ -127,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `funcionarios` (
   `idEnderecoFuncionario` int(11) DEFAULT NULL,
   PRIMARY KEY (`idFuncionario`),
   KEY `idEnderecoFuncionario` (`idEnderecoFuncionario`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `funcionarios`
@@ -137,7 +89,8 @@ INSERT INTO `funcionarios` (`idFuncionario`, `nome`, `cargo`, `numero`, `email`,
 (1, 'Rodrigo Jesus de Carvalho', 'funcionario', NULL, NULL, NULL, NULL),
 (2, 'Rodrigo Jesus de Carvalho', 'funcionario', NULL, NULL, NULL, NULL),
 (3, '1', 'chefe', NULL, NULL, NULL, NULL),
-(4, 'Rodrigo', 'funcionario', NULL, NULL, NULL, NULL);
+(4, 'Rodrigo', 'funcionario', NULL, NULL, NULL, NULL),
+(5, 'Maycol', 'funcionario', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -153,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `itens_venda` (
   `quantidade` int(11) NOT NULL,
   `valorUnitario` decimal(10,2) NOT NULL,
   PRIMARY KEY (`idItem`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Extraindo dados da tabela `itens_venda`
@@ -167,7 +120,8 @@ INSERT INTO `itens_venda` (`idItem`, `idVenda`, `idProduto`, `quantidade`, `valo
 (5, 7, 27, 1, '79.99'),
 (6, 8, 23, 1, '99.90'),
 (7, 9, 23, 1, '99.90'),
-(8, 9, 21, 1, '34.99');
+(8, 9, 21, 1, '34.99'),
+(9, 19, 26, 1, '24.99');
 
 -- --------------------------------------------------------
 
@@ -189,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `idFornecedor` int(11) DEFAULT NULL,
   PRIMARY KEY (`idProduto`),
   KEY `idFornecedor` (`idFornecedor`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `produtos`
@@ -198,13 +152,13 @@ CREATE TABLE IF NOT EXISTS `produtos` (
 INSERT INTO `produtos` (`idProduto`, `nome`, `codigoDeBarras`, `valor`, `validade`, `estoque`, `Armazenamento`, `categoria`, `imagem`, `idFornecedor`) VALUES
 (26, 'Queijo Fresco 500g ', 8, 24.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa8618563462_21c80348-2feb-4477-aaba-2020e17f1a6e.jpeg', NULL),
 (25, 'Requeijao de Colher ', 7, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86165dfb53_1e2aa7ce-3b63-447c-838b-890176620dc8.jpeg', NULL),
-(19, 'Queijo Recheado com requeijao ', 1, 29.99, NULL, 1, 'Refrigerado', 'queijos', '../imagens/6aa86089a4e18_c875ebfe-7a67-4c5a-b9af-ba9724cc13ac.jpeg', NULL),
+(19, 'Queijo Recheado com requeijao ', 1, 29.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86089a4e18_c875ebfe-7a67-4c5a-b9af-ba9724cc13ac.jpeg', NULL),
 (20, 'Requeijao Scala 400g', 2, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa860aa8a1e0_2aea2284-f65e-4234-95c2-f7e6cdc6aa57.jpeg', NULL),
-(21, 'Kit 4 Queijos', 3, 34.99, NULL, 132, 'Refrigerado', 'queijos', '../imagens/6aa860c51dc32_2a460709-432c-458c-8db3-e39c3b199bd7.jpeg', NULL),
+(21, 'Kit 4 Queijos', 3, 34.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa860c51dc32_2a460709-432c-458c-8db3-e39c3b199bd7.jpeg', NULL),
 (22, 'Salaminho Fatiado ', 4, 8.99, NULL, 10, 'Refrigerado', 'defumados', '../imagens/6aa860e7d9eed_711f8246-79bc-4507-9b3d-3757d979f47a.jpeg', NULL),
-(23, 'Queijo Azul ', 5, 99.90, NULL, 7, 'Refrigerado', 'queijos', '../imagens/6aa86105d65e8_8c865777-613a-4063-957d-5b1bba7415f3.jpeg', NULL),
-(24, 'Queijo Fresco ', 6, 39.99, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa86133900f8_274255c8-8aa9-4bea-b398-6b48e2efd482.jpeg', NULL),
-(27, 'Queijo parmesao ', 9, 79.99, NULL, 8, 'Refrigerado', 'queijos', '../imagens/6aa8619fb1b51_25b9a594-75b1-4127-9884-39a8184e915c.jpeg', NULL),
+(23, 'Queijo Azul ', 5, 99.90, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86105d65e8_8c865777-613a-4063-957d-5b1bba7415f3.jpeg', NULL),
+(24, 'Queijo Fresco ', 6, 39.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86133900f8_274255c8-8aa9-4bea-b398-6b48e2efd482.jpeg', NULL),
+(27, 'Queijo parmesao ', 9, 79.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa8619fb1b51_25b9a594-75b1-4127-9884-39a8184e915c.jpeg', NULL),
 (28, 'Queijo Minas Padrao ', 10, 39.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa861bf729b9_f94eb560-ac1b-4d51-903c-5d41147abb3f.jpeg', NULL);
 
 -- --------------------------------------------------------
@@ -217,7 +171,6 @@ DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
   `idUsuario` int(11) NOT NULL AUTO_INCREMENT,
   `nome` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `foto` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cpf` char(14) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `email` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `senha` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -226,17 +179,18 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   PRIMARY KEY (`idUsuario`),
   KEY `idFornecedor` (`idFornecedor`),
   KEY `idFuncionario` (`idFuncionario`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `usuarios`
 --
 
-INSERT INTO `usuarios` (`idUsuario`, `nome`, `foto`, `cpf`, `email`, `senha`, `idFornecedor`, `idFuncionario`) VALUES
-(1, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$VgiEz..hrP9eJGhHrVdbQ..bjYK/F7tuBR9ndy4F6/NOapSiP8eWy', NULL, NULL),
-(2, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$wV95HDGlgL720gsUxGYrPOK8.jY/4g99ceCewYq1OBTkfUDD2gSz.', NULL, NULL),
-(3, 'fellipy', '', '540.689.518-45', 'fellipysilva986@gmail.com', '$2y$10$HBGpE83aucpb39yvNykqCu5IEHVKn3japM8Q9ycZ9J84dQ.2v6J7i', NULL, NULL),
-(4, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$RuIYqoZ5wOS7URETUjJw.OZNfjZhyEoNCPw8zxu5GWWx.gNmHf4Ha', NULL, NULL);
+INSERT INTO `usuarios` (`idUsuario`, `nome`, `cpf`, `email`, `senha`, `idFornecedor`, `idFuncionario`) VALUES
+(1, 'Rodrigo', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$VgiEz..hrP9eJGhHrVdbQ..bjYK/F7tuBR9ndy4F6/NOapSiP8eWy', NULL, NULL),
+(2, 'Rodrigo', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$wV95HDGlgL720gsUxGYrPOK8.jY/4g99ceCewYq1OBTkfUDD2gSz.', NULL, NULL),
+(3, 'fellipy', '540.689.518-45', 'fellipysilva986@gmail.com', '$2y$10$HBGpE83aucpb39yvNykqCu5IEHVKn3japM8Q9ycZ9J84dQ.2v6J7i', NULL, NULL),
+(4, 'Rodrigo', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$RuIYqoZ5wOS7URETUjJw.OZNfjZhyEoNCPw8zxu5GWWx.gNmHf4Ha', NULL, NULL),
+(5, 'Maycol', '11111111111111', 'Maycolsander@gmail.com', '$2y$10$2ObEZugNOIkJEBqteBKqB.hXusnJ4J3TXks3XoQ5FZ0MA5Ayr5wf.', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -272,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   PRIMARY KEY (`idVendas`),
   KEY `idProduto` (`idProduto`),
   KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `vendas`
@@ -294,7 +248,11 @@ INSERT INTO `vendas` (`idVendas`, `valor`, `data`, `formaDePagamento`, `idProdut
 (13, 29.99, '2026-09-23', 'Cartao', NULL, NULL),
 (14, 29.99, '2026-09-23', 'Debito', NULL, NULL),
 (15, 29.99, '2026-09-23', 'Credito', NULL, NULL),
-(16, 59.98, '2026-09-23', 'Pix', NULL, NULL);
+(16, 59.98, '2026-09-23', 'Pix', NULL, NULL),
+(17, 200.00, '2026-09-25', 'Pix', NULL, NULL),
+(18, 200.00, '2026-09-25', 'Pix', NULL, NULL),
+(19, 24.99, '2026-09-25', 'Dinheiro', NULL, NULL),
+(20, 200.00, '2026-09-25', 'Debito', NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
