@@ -24,6 +24,16 @@
     }
 
     // =====================================================
+    // CONTADOR DO CARRINHO
+    // =====================================================
+    $quantidadeCarrinho = 0;
+
+    foreach ($_SESSION['carrinho'] as $produtoCarrinho) {
+        $quantidadeCarrinho += (int)$produtoCarrinho['quantidade'];
+    }
+
+
+    // =====================================================
     // FUNÇÃO PARA VOLTAR À PÁGINA
     // =====================================================
 
@@ -241,20 +251,35 @@
     <table class="topo">
         <tr>
             <td>
-                <img id="logo" src="../Imagens/Logo.jpeg" style="height: 40px; width: 90px; margin-left: 20px; margin-right: 90px">
-                <input type="text" id="pesquisa" name="pesquisa" class="form-control barra_pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" autofocus>
+                <img id="logo" src="../Imagens/Logo.jpeg" style="height: 65px; width: 120px; margin-left: 20px; margin-right: 90px;">
             </td>
             <td>
-                <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
-                    <img id="icon_carrinho" src="../Imagens/Carrinho.png" style="height:40px; width:40px;">
-                    <br>
-                    <label>Carrinho</label>
-                </button>
+                <input type="text" id="pesquisa" name="pesquisa" class="barra_pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" autofocus>
+            </td>
+            <td>
+            <td>
+            <button 
+                type="button" 
+                class="btn_topo" 
+                onclick="alterar_div()" 
+                id="btn_carrinho"
+            >
+                <img 
+                    id="icon_carrinho" 
+                    src="../Imagens/Carrinho.png" 
+                    style="height:40px; width:40px;"
+                >
+
+                <span id="contador_carrinho">
+                    <?php echo $quantidadeCarrinho; ?>
+                </span>
+            </button>
+        </td>
+
             </td>
             <td style="width:5%;">
                 <button type="button" class="btn_topo" onclick="abrirPopuplogin() ">
-                    <img id="cliente" src="../Imagens/Cliente.png" style="height:40px;">
-                    <label>Login</label>
+                    <img id="cliente" src="../Imagens/Cliente.png" style="height:40px;"> 
                 </button>
             </td>
         </tr>
@@ -994,4 +1019,28 @@
                 }
             });
         });
-    </script>
+
+        // =====================================================
+        // CONTADOR DO CARRINHO
+        // =====================================================
+        function atualizarContadorCarrinho() {
+
+        const contador = document.getElementById("contador_carrinho");
+
+        if (!contador) {
+            return;
+        }
+
+        const quantidade = parseInt(contador.textContent);
+
+        if (quantidade <= 0) {
+            contador.style.display = "none";
+        } else {
+            contador.style.display = "flex";
+        }
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+        atualizarContadorCarrinho();
+        });
+</script>

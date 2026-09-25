@@ -68,9 +68,7 @@ body {
     position: fixed;
 
     background: linear-gradient(
-        180deg,
-        #111827,
-        #1f2937
+        black
     );
 
     padding: 30px 20px;
@@ -443,8 +441,8 @@ table {
 
 <div class="sidebar">
 
-    <h2 class="logo">
-        Container do Queijo
+    <h2>
+        <img id="logo" src="../imagens/logo.jpeg" style="height: 100px; width: 180px; margin-left: 0px; margin-right: 0px; margin-top: -20px;">
     </h2>
 
     <a href="index.php">

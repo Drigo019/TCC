@@ -75,7 +75,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       height:100vh;
       position:fixed;
 
-      background:linear-gradient(180deg,#111827,#1f2937);
+      background:linear-gradient(black);
 
       padding:30px 20px;
 
@@ -254,7 +254,7 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
 
   <div class="sidebar">
 
-    <h2 class="logo">Container do Queijo </h2>
+    <img id="logo" src="../imagens/logo.jpeg" style="height: 100px; width: 180px; margin-left: 0px; margin-right: 0px; margin-top: -20px;">
 
     <a href="index.php" class="ativo">
     <i class="bi bi-house"></i>

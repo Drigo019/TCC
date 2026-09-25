@@ -13,6 +13,7 @@ body {
     height: 100%;
     overflow-y: hidden;
     overflow-x: hidden;
+    font-family: Arial;
 }
 
 button {
@@ -91,6 +92,39 @@ button {
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
+    margin-bottom: 100px;
+}
+#btn_carrinho {
+    position: relative;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+#contador_carrinho {
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    min-width: 20px;
+    height: 20px;
+
+    padding: 2px;
+
+    background-color: red;
+    color: white;
+
+    border-radius: 50%;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    box-sizing: border-box;
 }
 
 /* Card */
@@ -130,7 +164,7 @@ button {
     font-size: 16px;
     border-radius: 10px;
     border: 0;
-    margin-bottom: 20px;
+    margin-top: auto;
 }
 
 /* =====================================================
@@ -163,44 +197,375 @@ button {
 
 
 /* =====================================================
-    CARRINHO
+   CARRINHO
 ===================================================== */
+
 .local_carrinho {
     width: 0;
     height: calc(100vh - 95px);
-    border: 0;
-    background-color: rgba(255, 255, 255, 0.966);
+
+    background: #f8f8f8;
+
     overflow-y: auto;
     overflow-x: hidden;
+
     box-sizing: border-box;
-    /* Começa fora da tela */
+
     transform: translateX(100%);
+
     transition:
         width 0.4s ease-in-out,
         transform 0.4s ease-in-out,
         border 0.4s ease-in-out;
+
+    box-shadow: -5px 0 20px rgba(0, 0, 0, 0.15);
 }
 
 
 /* =====================================================
-    CARRINHO ABERTO
+   CARRINHO ABERTO
 ===================================================== */
+
 .produtos_categorias_carrinho.carrinho_aberto .local_carrinho {
     width: 30%;
-    border: 2px white solid;
+
+    min-width: 320px;
+
+    border-left: 1px solid #ddd;
+
     transform: translateX(0);
 }
 
-.btn_carrinho {
-    height: 20px;
-    width: 35%;
-    border: 1px solid;
-    border-radius: 4px;
-    transition: transform 0.2s ease-in-out;
+
+/* =====================================================
+   ÁREA INTERNA DO CARRINHO
+===================================================== */
+
+.carrinho {
+    width: 100%;
+    box-sizing: border-box;
+
+    padding: 20px 15px 30px;
 }
 
-.btn_carrinho:hover {
+
+/* =====================================================
+   TÍTULOS
+===================================================== */
+
+.carrinho h2 {
+    font-family: Arial, sans-serif;
+
+    margin: 5px 0 20px;
+
+    color: #222;
+
+    font-size: 25px;
+
+    border-bottom: 2px solid #e0b52f;
+
+    padding-bottom: 10px;
+}
+
+
+/* =====================================================
+   PRODUTO DENTRO DO CARRINHO
+===================================================== */
+
+.carrinho > div > div[style*="border-bottom"] {
+
+    background: white;
+
+    border: 1px solid #e3e3e3 !important;
+
+    border-radius: 12px;
+
+    padding: 15px !important;
+
+    margin: 12px 0 !important;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+    transition: 0.2s ease;
+}
+
+
+.carrinho > div > div[style*="border-bottom"]:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =====================================================
+   NOME DO PRODUTO
+===================================================== */
+
+.carrinho > div > div[style*="border-bottom"] strong:first-child {
+
+    display: block;
+
+    font-size: 17px;
+
+    color: #222;
+
+    margin-bottom: 10px;
+}
+
+
+/* =====================================================
+   BOTÕES + E -
+===================================================== */
+
+.carrinho > div > div[style*="border-bottom"] button {
+
+    border: none;
+
+    cursor: pointer;
+
+    font-weight: bold;
+
+    transition: 0.2s ease;
+}
+
+
+/* botão - e + */
+
+.carrinho > div > div[style*="border-bottom"] button:first-of-type,
+.carrinho > div > div[style*="border-bottom"] button:nth-of-type(2) {
+
+    width: 30px;
+
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: #222;
+
+    color: white;
+
+    font-size: 18px;
+
+    line-height: 30px;
+
+    padding: 0;
+
+    margin: 0 5px;
+}
+
+
+.carrinho > div > div[style*="border-bottom"] button:first-of-type:hover,
+.carrinho > div > div[style*="border-bottom"] button:nth-of-type(2):hover {
+
+    background: #e0b52f;
+
+    color: #222;
+
     transform: scale(1.1);
+}
+
+
+/* =====================================================
+   QUANTIDADE
+===================================================== */
+
+.carrinho > div > div[style*="border-bottom"] strong {
+
+    font-size: 16px;
+}
+
+
+/* =====================================================
+   BOTÃO RETIRAR
+===================================================== */
+
+.carrinho > div > div[style*="border-bottom"] button:last-child {
+
+    background: #fff;
+
+    color: #c62828;
+
+    border: 1px solid #c62828;
+
+    border-radius: 6px;
+
+    padding: 7px 12px;
+
+    margin-top: 10px;
+
+    font-size: 13px;
+}
+
+
+.carrinho > div > div[style*="border-bottom"] button:last-child:hover {
+
+    background: #c62828;
+
+    color: white;
+}
+
+
+/* =====================================================
+   LIMPAR CARRINHO
+===================================================== */
+
+.carrinho .btn_carrinho {
+
+    width: 90%;
+
+    height: 40px;
+
+    background: white;
+
+    color: #555;
+
+    border: 1px solid #aaa;
+
+    border-radius: 8px;
+
+    font-size: 14px;
+
+    margin: 10px auto;
+
+    transition: 0.2s ease;
+}
+
+
+.carrinho .btn_carrinho:hover {
+
+    background: #333;
+
+    color: white;
+
+    transform: translateY(-2px);
+}
+
+
+/* =====================================================
+   ÁREA FIM DA COMPRA
+===================================================== */
+
+.carrinho > div:last-child {
+
+    background: white;
+
+    border-radius: 12px;
+
+    padding: 15px;
+
+    margin-top: 20px;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+
+    border: 1px solid #e3e3e3;
+}
+
+
+.carrinho > div:last-child h2 {
+
+    border-bottom: none;
+
+    text-align: center;
+
+    margin-bottom: 5px;
+}
+
+
+/* =====================================================
+   TOTAL
+===================================================== */
+
+.carrinho > div:last-child h4 {
+
+    font-size: 20px;
+
+    color: #222;
+
+    margin: 15px 0;
+}
+
+
+.carrinho > div:last-child h4::first-line {
+
+    color: #333;
+}
+
+
+/* =====================================================
+   BOTÃO COMPRAR
+===================================================== */
+
+.carrinho > div:last-child .btn_carrinho {
+
+    width: 90%;
+
+    height: 45px;
+
+    background: #e0b52f;
+
+    color: #222;
+
+    border: none;
+
+    border-radius: 8px;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+
+    transition: 0.2s ease;
+}
+
+
+.carrinho > div:last-child .btn_carrinho:hover {
+
+    background: #c99e20;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =====================================================
+   CARRINHO VAZIO
+===================================================== */
+
+.carrinho:has(div:only-child) {
+
+}
+
+
+/* =====================================================
+   BARRA DE ROLAGEM DO CARRINHO
+===================================================== */
+
+.local_carrinho::-webkit-scrollbar {
+
+    width: 7px;
+}
+
+
+.local_carrinho::-webkit-scrollbar-track {
+
+    background: #f1f1f1;
+}
+
+
+.local_carrinho::-webkit-scrollbar-thumb {
+
+    background: #bbb;
+
+    border-radius: 10px;
+}
+
+
+.local_carrinho::-webkit-scrollbar-thumb:hover {
+
+    background: #888;
 }
 
 #btn_carrinho {
