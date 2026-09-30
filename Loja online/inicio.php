@@ -250,36 +250,48 @@
     ===================================================== -->
     <table class="topo">
         <tr>
-            <td>
-                <img id="logo" src="../Imagens/Logo.jpeg" style="height: 65px; width: 120px; margin-left: 20px; margin-right: 90px;">
+            <td rowspan="2">
+                <img id="logo" src="../Imagens/Logo.jpeg" style="height: 80px; width: 160px; margin-left: 20px;">
             </td>
             <td>
                 <input type="text" id="pesquisa" name="pesquisa" class="barra_pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" autofocus>
             </td>
-            <td>
-            <td>
-            <button 
-                type="button" 
-                class="btn_topo" 
-                onclick="alterar_div()" 
-                id="btn_carrinho"
-            >
-                <img 
-                    id="icon_carrinho" 
-                    src="../Imagens/Carrinho.png" 
-                    style="height:40px; width:40px;"
-                >
-
-                <span id="contador_carrinho">
-                    <?php echo $quantidadeCarrinho; ?>
-                </span>
-            </button>
-        </td>
-
+            <td rowspan="2">
+                <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
+                    <img id="icon_carrinho" src="../Imagens/Carrinho.png" style="height:40px; width:40px;">
+                    <span id="contador_carrinho">
+                        <?php echo $quantidadeCarrinho; ?>
+                    </span>
+                </button>
             </td>
-            <td style="width:5%;">
+            <td style="width:5%;" rowspan="2">
                 <button type="button" class="btn_topo" onclick="abrirPopuplogin() ">
                     <img id="cliente" src="../Imagens/Cliente.png" style="height:40px;"> 
+                </button>
+            </td>
+        </tr>
+        <!-- =====================================================
+            CATEGORIAS
+        ===================================================== -->
+        <tr id="lista-categorias" >
+            <td style="border-left: 15px solid;">
+                <button type="button" onclick="alterarCategoria('')">
+                    Todos
+                </button>
+                <button type="button" onclick="alterarCategoria('Promoções')">
+                    Promoções
+                </button>
+                <button type="button" onclick="alterarCategoria('Queijos')">
+                    Queijos
+                </button>
+                <button type="button" onclick="alterarCategoria('Defumados')">
+                    Defumados
+                </button>
+                <button type="button" onclick="alterarCategoria('Doces')">
+                    Doces
+                </button>
+                <button type="button" onclick="alterarCategoria('Bebidas')">
+                    Bebidas
                 </button>
             </td>
         </tr>
@@ -288,154 +300,72 @@
         Janela do Popup Login
     ===================================================== -->
     <div id="modalFundoLogin" class="modal-fundo">
-        <div class="modal">
-            <button type="button"class="btn-fechar"onclick="fecharPopuplogin()">
-                ×
-            </button>
-            <form action="verificacao_cadastro_cliente.php" method="post">
-                <div>
-                    <table align="center">
-                        <tr>
-                            <td align="center" colspan="2">
-                                <h1>
-                                    Entre na sua conta
-                                </h1>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                CPF:
-                            </th>
-                            <td>
-                                <input type="text" id="cpf" name="cpf" maxlength="14" oninput="mascaraCPF(this)"  placeholder="000.000.000-00" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>
-                                Senha:
-                            </th>
-                            <td>
-                                <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" colspan="2">
-                                <button type="submit" value="Entrar">
-                                    Entrar
-                                </button> 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td align="center" colspan="2">
-                                <button type="button" class="btn-abrir" onclick="abrirPopupcadastro() ">
-                                    <label>Não possuo uma conta</label>
-                                </button>
-                            </td>
-                        </tr>
-                    </table> 
-                </div>
-            </form>
-        </div>
+        <div class="modal popup-compra popup-login">
+        <button type="button" class="btn-fechar" onclick="fecharPopuplogin()">
+            ×
+        </button>
+        <h1>Entre na sua conta</h1>
+        <form action="verificacao_cadastro_cliente.php" method="post">
+            <div class="dados-compra">
+                <label for="cpf">CPF:</label>
+                <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
+                <label for="senha_tela_de_login">Senha:</label>
+                <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
+                <button type="submit" class="btn-finalizar-compra">
+                    Entrar
+                </button>
+                <button type="button" class="btn-cancelar-compra" onclick="abrirPopupcadastro()">
+                    Não possuo uma conta
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
     </div>
     <!-- =====================================================
         Janela do Popup Login
     ===================================================== -->
-    <div id="modalFundoCadastro" class="modal-fundo" align="center">
-        <div class="modal">
-            <button type="button"class="btn-fechar"onclick="fecharPopupcadastro()">
-                ×
-            </button>
-            <form action="cadastro_cliente.php" method="post">
-                <div>
-                    <table>
-                            <tr> 
-                                <td align="center" colspan="2">
-                                    <h1>
-                                        Crie sua conta
-                                    </h1>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Nome:</label>
-                                </th>
-                                <td>
-                                    <input type="text" name="nome" placeholder="Digite seu Nome:" required>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>E-mail:</label>
-                                </th>
-                                <td>
-                                    <input type="email" name="email" placeholder="Digite seu E-mail" required>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>CPF:</label>
-                                </th>
-                                <td>
-                                    <input type="text" id="cpf" name="cpf" maxlength="14" oninput="mascaraCPF(this)"  placeholder="000.000.000-00" required>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Senha:</label>
-                                </th>
-                                <td>
-                                    <input type="password" name="senha" placeholder="Digite sua senha" required>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th colspan="2">
-                                    ENDEREÇO
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>
-                                    CEP:
-                                </th>
-                                <td>
-                                    <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" required maxlength="9" oninput="mascaraCEP(this)">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Rua:</label>
-                                </th>
-                                <td>
-                                    <input type="text" name="rua" placeholder="Digite sua Rua" required>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Número:</label>
-                                </th>
-                                <td>
-                                    <input type="number" name="numero" placeholder="Digite o número" required>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>
-                                    <label>Bairro:</label>
-                                </th>
-                                    <td>
-                                        <input type="text" name="bairro" placeholder="Digite seu Bairro" required>
-                                    </td>
-                            </tr>
-                            <tr>
-                                <td colspan="2" align="center">
-                                    <button type="submit" onclick="vazio()"> 
-                                        Cadastrar
-                                    </button>
-                                </td>
-                            </tr>
-                    </table>
-                </div>
-            </form>
-        </div>
+    <div id="modalFundoCadastro" class="modal-fundo">
+        <div class="modal popup-compra popup-cadastro">
+        <button type="button" class="btn-fechar" onclick="fecharPopupcadastro()">
+            ×
+        </button>
+        <h1>Crie sua conta</h1>
+        <form action="cadastro_cliente.php" method="post">
+            <h2>Dados pessoais</h2>
+            <div class="dados-compra">
+                <label for="nomeCadastro">Nome:</label>
+                <input type="text" id="nomeCadastro" name="nome" placeholder="Digite seu nome" required>
+                <label for="emailCadastro">E-mail:</label>
+                <input type="email" id="emailCadastro" name="email" placeholder="Digite seu e-mail" required>
+                <label for="cpfCadastro">CPF:</label>
+                <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
+                <label for="senhaCadastro">Senha:</label>
+                <input type="password" id="senhaCadastro" name="senha" placeholder="Digite sua senha" required>
+            </div>
+            <h2>Endereço</h2>
+            <div class="dados-compra">
+                <label for="cep">CEP:</label>
+                <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" maxlength="9" oninput="mascaraCEP(this)" required>
+                <label for="rua">Rua:</label>
+                <input type="text" name="rua" id="rua" placeholder="Digite sua rua" required>
+                <label for="numero">Número:</label>
+                <input type="number" name="numero" id="numero" placeholder="Digite o número" required>
+                <label for="bairro">Bairro:</label>
+                <input type="text" name="bairro" id="bairro" placeholder="Digite seu bairro" required>
+            </div>
+            <div class="botoes-finalizacao">
+                <button type="submit" class="btn-finalizar-compra" onclick="vazio()">
+                    Cadastrar
+                </button>
+                <button type="button" class="btn-cancelar-compra" onclick="fecharPopupcadastro()">
+                    Voltar
+                </button>
+            </div>
+        </form>
     </div>
+</div>
     <!-- =====================================================
         POPUP FINALIZAÇÃO DA COMPRA
     ===================================================== -->
@@ -523,13 +453,7 @@
                     Telefone:
                 </label>
 
-                <input
-                    type="text"
-                    id="telefoneCliente"
-                    name="telefone"
-                    placeholder="Digite seu telefone"
-                    required
-                >
+                <input type="text" name="telefone" id="telefone" maxlength="15" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" required>
 
             </div>
 
@@ -630,42 +554,6 @@
 
         </div>
     </div>
-    <!-- =====================================================
-        CATEGORIAS
-    ===================================================== -->
-    <ul id="lista-categorias">
-        <li>
-            <button type="button" onclick="alterarCategoria('')">
-                Todos
-            </button>
-        </li>
-        <li>
-            <button type="button" onclick="alterarCategoria('Promoções')">
-                Promoções
-            </button>
-        </li>
-        <li>
-            <button type="button" onclick="alterarCategoria('Queijos')">
-                Queijos
-            </button>
-        </li>
-        <li>
-            <button type="button" onclick="alterarCategoria('Defumados')">
-                Defumados
-            </button>
-        </li>
-        <li>
-            <button type="button" onclick="alterarCategoria('Doces')">
-                Doces
-            </button>
-        </li>
-        <li>
-            <button type="button" onclick="alterarCategoria('Bebidas')">
-                Bebidas
-            </button>
-        </li>
-    </ul>
-
     <!-- =====================================================
         ÁREA PRINCIPAL
     ===================================================== -->
@@ -1039,8 +927,40 @@
             contador.style.display = "flex";
         }
         }
-
+        // =====================================================
+        // MASCARA DO CPF
+        // =====================================================
         document.addEventListener("DOMContentLoaded", function() {
-        atualizarContadorCarrinho();
-        });
+            atualizarContadorCarrinho();
+            });
+        function mascaraCPF(input) {
+            let valor = input.value.replace(/\D/g, '');
+
+            valor = valor.substring(0, 11);
+
+            valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+            valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+            valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+            input.value = valor;
+        }
+
+        // =====================================================
+        // MASCARA DO CPF
+        // =====================================================
+        function mascaraTelefone(input) {
+            let valor = input.value.replace(/\D/g, '');
+
+            valor = valor.substring(0, 11);
+
+            if (valor.length <= 10) {
+                valor = valor.replace(/(\d{2})(\d)/, '($1) $2');
+                valor = valor.replace(/(\d{4})(\d)/, '$1-$2');
+            } else {
+                valor = valor.replace(/(\d{2})(\d)/, '($1) $2');
+                valor = valor.replace(/(\d{5})(\d)/, '$1-$2');
+            }
+
+            input.value = valor;
+        }
 </script>

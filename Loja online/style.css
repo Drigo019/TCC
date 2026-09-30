@@ -66,23 +66,17 @@ button {
     margin-bottom: 10;
 }
 
-#lista-categorias > li {
-    float: left;
-    margin-left: 40px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-    padding: 15px;
-    text-transform: uppercase;
-}
-
-#lista-categorias > li:hover {
-    background-color: yellow;
-    border-radius: 20px;
-}
-
-#lista-categorias button{
-    background-color: yellow;
-    border: none;
+#lista-categorias > td > button {
+    background-color: black;
+    color: white;
+    border: 1px solid rgb(255, 255, 255);
     border-radius: 5px;
+}
+
+#lista-categorias td > button:hover {
+    background-color: rgb(252, 255, 74);
+    color: rgb(0, 0, 0);
+    border: 1px solid rgb(255, 255, 255);
 }
 
 /* Produtos */
@@ -753,4 +747,108 @@ button {
 .btn-finalizar-compra:hover,
 .btn-cancelar-compra:hover {
     opacity: 0.85;
+}
+
+/* =====================================================
+   POPUPS DE LOGIN E CADASTRO
+   Mesmo estilo da Finalização da Compra
+===================================================== */
+
+.popup-login,
+.popup-cadastro {
+    width: 500px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* Título */
+
+.popup-login h1,
+.popup-cadastro h1 {
+    text-align: center;
+    margin: 0 0 25px 0;
+}
+
+/* Subtítulos */
+
+.popup-login h2,
+.popup-cadastro h2 {
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+/* Área dos campos */
+
+.popup-login .dados-compra,
+.popup-cadastro .dados-compra {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Labels */
+
+.popup-login .dados-compra label,
+.popup-cadastro .dados-compra label {
+    font-weight: bold;
+    text-align: left;
+    margin-top: 5px;
+}
+
+/* Inputs */
+
+.popup-login .dados-compra input,
+.popup-cadastro .dados-compra input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+/* Foco */
+
+.popup-login .dados-compra input:focus,
+.popup-cadastro .dados-compra input:focus {
+    border-color: #999;
+}
+
+/* Botões */
+
+.popup-login .btn-finalizar-compra,
+.popup-cadastro .btn-finalizar-compra,
+.popup-login .btn-cancelar-compra,
+.popup-cadastro .btn-cancelar-compra {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* Área dos botões */
+
+.popup-login .botoes-finalizacao,
+.popup-cadastro .botoes-finalizacao {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+/* Fundo do popup */
+
+#modalFundoLogin,
+#modalFundoCadastro,
+#modalFundoFimCompra {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+/* Rolagem apenas no conteúdo quando necessário */
+
+.popup-cadastro {
+    max-height: 90vh;
+    overflow-y: auto;
 }
