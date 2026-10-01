@@ -852,3 +852,631 @@ button {
     max-height: 90vh;
     overflow-y: auto;
 }
+
+/* =========================================================
+   RESPONSIVIDADE - CELULAR
+   ========================================================= */
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    /* =========================
+       GERAL
+       ========================= */
+
+    html,
+    body {
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+
+    /* =========================
+       TOPO
+       ========================= */
+
+    .topo {
+        width: 100% !important;
+        height: auto !important;
+        padding: 6px 8px !important;
+        margin: 0 !important;
+        display: block !important;
+    }
+
+    .topo tbody,
+    .topo tr {
+        display: block !important;
+        width: 100% !important;
+    }
+
+    .topo td {
+        width: auto !important;
+        padding: 2px 0 !important;
+        text-align: center !important;
+    }
+
+
+    /* =========================
+       LOGO
+       ========================= */
+
+    .topo img {
+        width: 100px !important;
+        max-width: 100px !important;
+        height: auto !important;
+        max-height: 48px !important;
+        margin: 0 auto !important;
+        object-fit: contain !important;
+    }
+
+
+    /* =========================
+       PESQUISA
+       ========================= */
+
+    #pesquisa,
+    .barra_pesquisa {
+        display: block !important;
+
+        width: 94% !important;
+        max-width: 94% !important;
+
+        height: 36px !important;
+
+        margin: 5px auto !important;
+
+        font-size: 13px !important;
+    }
+
+
+    /* =========================
+       CARRINHO E LOGIN
+       ========================= */
+
+    #btn_carrinho,
+    #cliente {
+
+        display: inline-flex !important;
+
+        width: 34px !important;
+        height: 34px !important;
+
+        min-width: 34px !important;
+        max-width: 34px !important;
+
+        min-height: 34px !important;
+        max-height: 34px !important;
+
+        padding: 3px !important;
+
+        margin: 2px 3px !important;
+
+        align-items: center !important;
+        justify-content: center !important;
+
+        vertical-align: middle !important;
+
+        box-sizing: border-box !important;
+
+        background: transparent !important;
+        border: none !important;
+    }
+
+    #btn_carrinho img,
+    #cliente img {
+
+        width: 20px !important;
+        height: 20px !important;
+
+        max-width: 20px !important;
+        max-height: 20px !important;
+
+        object-fit: contain !important;
+
+        margin: 0 !important;
+    }
+
+
+    /* Contador do carrinho */
+
+    #contador_carrinho {
+        top: -2px !important;
+        right: -2px !important;
+
+        min-width: 17px !important;
+        height: 17px !important;
+
+        font-size: 10px !important;
+    }
+
+
+    /* =========================
+       CATEGORIAS
+       ========================= */
+
+    #lista-categorias {
+
+        width: 100% !important;
+        height: 44px !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+
+        white-space: nowrap !important;
+
+        padding: 4px 7px !important;
+
+        gap: 5px !important;
+
+        scrollbar-width: none;
+    }
+
+    #lista-categorias::-webkit-scrollbar {
+        display: none;
+    }
+
+    #lista-categorias button {
+
+        flex: 0 0 auto !important;
+
+        height: 30px !important;
+
+        padding: 0 9px !important;
+
+        font-size: 10px !important;
+
+        border-radius: 5px !important;
+
+        white-space: nowrap !important;
+    }
+
+
+    /* =========================
+       ÁREA PRINCIPAL
+       ========================= */
+
+    .produtos_categorias_carrinho {
+
+        width: 100% !important;
+
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        display: block !important;
+
+        overflow: visible !important;
+    }
+
+    .produtos_categorias {
+
+        width: 100% !important;
+
+        height: auto !important;
+
+        min-height: 0 !important;
+
+        overflow: visible !important;
+    }
+
+
+    /* =========================
+       CARROSSEL
+       ========================= */
+
+    .carousel,
+    .carrossel,
+    #carousel {
+
+        width: 100% !important;
+        max-width: 100% !important;
+
+        height: auto !important;
+
+        margin: 0 auto !important;
+
+        overflow: hidden !important;
+    }
+
+    .carousel img,
+    .carrossel img,
+    #carousel img {
+
+        width: 100% !important;
+
+        height: auto !important;
+
+        max-height: 145px !important;
+
+        object-fit: cover !important;
+    }
+
+
+    /* =========================
+       PRODUTOS
+       ========================= */
+
+    .carrinho_container {
+
+        width: 100% !important;
+
+        display: grid !important;
+
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+        gap: 10px !important;
+
+        padding: 10px 8px 30px !important;
+
+        margin: 0 !important;
+    }
+
+    .produto {
+
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
+
+        padding: 8px !important;
+
+        margin: 0 !important;
+
+        border-radius: 8px !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        align-items: center !important;
+
+        text-align: center !important;
+    }
+
+    .produto img {
+
+        width: 100% !important;
+
+        max-width: 125px !important;
+
+        height: 125px !important;
+
+        max-height: 125px !important;
+
+        object-fit: contain !important;
+
+        margin: 0 auto 5px !important;
+    }
+
+    .produto h3,
+    .produto h4,
+    .produto p {
+
+        max-width: 100% !important;
+
+        margin: 3px 0 !important;
+
+        font-size: 12px !important;
+
+        line-height: 1.25 !important;
+
+        word-break: break-word !important;
+    }
+
+    .produto button {
+
+        width: 100% !important;
+
+        max-width: 180px !important;
+
+        min-height: 34px !important;
+
+        height: auto !important;
+
+        padding: 6px 4px !important;
+
+        font-size: 10px !important;
+
+        margin-top: auto !important;
+    }
+
+
+    /* =========================
+       CARRINHO
+       ========================= */
+
+    .local_carrinho {
+
+        position: fixed !important;
+
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        height: 85vh !important;
+
+        max-height: 85vh !important;
+
+        background: #fff !important;
+
+        z-index: 999 !important;
+
+        overflow-y: auto !important;
+
+        overflow-x: hidden !important;
+
+        transform: translateY(100%) !important;
+
+        border: none !important;
+
+        border-top: 2px solid #222 !important;
+
+        transition: transform .3s ease !important;
+    }
+
+    .carrinho_aberto .local_carrinho {
+
+        transform: translateY(0) !important;
+    }
+
+    .carrinho {
+
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        padding: 10px !important;
+
+        margin: 0 !important;
+    }
+
+
+    /* Título */
+
+    .carrinho h2 {
+
+        width: 100% !important;
+
+        text-align: center !important;
+
+        font-size: 20px !important;
+
+        margin: 5px 0 15px !important;
+    }
+
+
+    /* Fim da compra */
+
+    .carrinho > div:last-child {
+
+        width: 100% !important;
+
+        min-width: 0 !important;
+
+        max-width: none !important;
+
+        height: auto !important;
+
+        margin: 15px 0 !important;
+
+        padding: 15px !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        align-items: center !important;
+
+        text-align: center !important;
+
+        box-sizing: border-box !important;
+    }
+
+    .carrinho > div:last-child h2 {
+
+        width: 100% !important;
+
+        font-size: 18px !important;
+
+        text-align: center !important;
+
+        margin: 5px 0 !important;
+    }
+
+    .carrinho > div:last-child h4 {
+
+        width: 100% !important;
+
+        font-size: 18px !important;
+
+        text-align: center !important;
+    }
+
+    .carrinho > div:last-child .btn_carrinho {
+
+        width: 90% !important;
+
+        max-width: 250px !important;
+
+        height: 42px !important;
+    }
+
+
+    /* =========================
+       POPUPS
+       ========================= */
+
+    .modal-fundo {
+
+        width: 100vw !important;
+        height: 100vh !important;
+
+        padding: 10px !important;
+
+        z-index: 10000 !important;
+    }
+
+    .modal,
+    .popup-compra,
+    .popup-login,
+    .popup-cadastro {
+
+        width: 100% !important;
+
+        max-width: 100% !important;
+
+        max-height: 90vh !important;
+
+        padding: 18px !important;
+
+        margin: 0 !important;
+
+        border-radius: 10px !important;
+
+        overflow-y: auto !important;
+
+        position: relative !important;
+
+        z-index: 10001 !important;
+    }
+
+
+    /* =========================
+       CHECKOUT
+       ========================= */
+
+    .resumo-produtos {
+
+        width: 100% !important;
+
+        max-height: 220px !important;
+
+        overflow-y: auto !important;
+    }
+
+    .item-resumo {
+
+        gap: 8px !important;
+    }
+
+    .imagem-resumo {
+
+        width: 60px !important;
+
+        height: 60px !important;
+
+        flex-shrink: 0 !important;
+    }
+
+    .dados-compra {
+
+        width: 100% !important;
+    }
+
+    .dados-compra input,
+    .dados-compra select {
+
+        width: 100% !important;
+
+        height: 38px !important;
+
+        font-size: 13px !important;
+    }
+
+    .botoes-finalizacao {
+
+        width: 100% !important;
+
+        display: flex !important;
+
+        flex-direction: column !important;
+
+        gap: 8px !important;
+    }
+
+    .botoes-finalizacao button {
+
+        width: 100% !important;
+
+        min-height: 40px !important;
+    }
+}
+
+
+/* =========================================================
+   CELULAR MUITO PEQUENO
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .carrinho_container {
+
+        grid-template-columns: 1fr !important;
+
+        padding-left: 15px !important;
+
+        padding-right: 15px !important;
+    }
+
+    .produto img {
+
+        max-width: 160px !important;
+
+        height: 160px !important;
+
+        max-height: 160px !important;
+    }
+}
+
+/* =====================================================
+   CORREÇÃO DO CARROSSEL
+   ===================================================== */
+
+.carrossel {
+    position: relative;
+    width: 100%;
+    overflow: hidden !important;
+}
+
+.carrossel-container {
+    display: flex;
+    width: 100%;
+    overflow: hidden !important;
+}
+
+.carrossel-slide {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.carrossel-slide img {
+    display: block;
+    width: 100% !important;
+    height: auto;
+    object-fit: cover;
+}

@@ -871,17 +871,28 @@
         // Popup fim de compra
         // =====================================================
         function abrirPopupFimCompra() {
-                document.getElementById("modalFundoFimCompra").style.display = "flex";
+
+            // Fecha o carrinho
+            const areaCarrinho = document.querySelector(".produtos_categorias_carrinho");
+
+            if (areaCarrinho) {
+                areaCarrinho.classList.remove("carrinho_aberto");
             }
-        function fecharPopupFimCompra() {
-            document.getElementById("modalFundoFimCompra").style.display = "none";
+
+            // Abre o popup
+            const popup = document.getElementById("modalFundoFimCompra");
+
+            if (popup) {
+                popup.style.display = "flex";
+            }
         }
-        // Fechar clicando no fundo escuro
-        document.getElementById("modalFundoFimCompra").addEventListener("click", function(event) {
-            if (event.target === this) {
-                fecharPopup();
+        function fecharPopupFimCompra() {
+            const popup = document.getElementById("modalFundoFimCompra");
+
+            if (popup) {
+                popup.style.display = "none";
             }
-        });
+        }
 
         // =====================================================
         // PESQUISA DE PRODUTOS

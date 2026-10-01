@@ -1,21 +1,33 @@
 /* =========================
+   ÁREA DO CARROSSEL
+========================= */
+
+#centro {
+    width: 100%;
+    overflow: hidden;
+}
+
+.slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+
+/* =========================
    CONTAINER DOS SLIDES
 ========================= */
 
-.slides{
+.slides {
+    display: flex;
 
-    /* coloca slides lado a lado */
-   display: flex;
+    /* 3 imagens = 300% */
+    width: 300%;
 
-   /* 300% porque existem 3 slides
-       (100% para cada imagem) */
-   width: 300%;
+    height: 100%;
 
-    /* ocupa toda altura do slider */
-   height: 100%;
-
-    /* anima movimentação horizontal */
-   transition: transform 1s ease-in-out;
+    transition: transform 1s ease-in-out;
 }
 
 
@@ -23,45 +35,57 @@
    CADA SLIDE
 ========================= */
 
-.slide{
+.slide {
+    /*
+       Cada imagem ocupa exatamente
+       1/3 do container de 300%
+    */
+    flex: 0 0 33.333333%;
 
-    /* largura mínima */
-   min-width: 400px;
+    width: 33.333333%;
+    min-width: 0;
 
-    /* ocupa 100% da largura disponível */
-   width: 100%;
+    height: 100%;
 
-    /* ocupa toda altura */
-   height: 100%;
+    object-fit: cover;
 
-   /* preenche sem distorcer
-       cortando excesso se necessário */
-   object-fit: cover;
+    display: block;
 }
 
 
 /* =========================
-   INDICADORES (BOLINHAS)
+   IMAGENS
 ========================= */
 
-.indicators{
+.reajuste {
+    width: 100%;
+    height: 100%;
 
-    /* posicionamento livre dentro do slider */
+    /*
+       Mantém a imagem inteira
+       dentro do espaço
+    */
+    object-fit: contain;
 
-    /* fica no fundo */
-   bottom: 0px;
+    display: block;
+}
 
-    /* altura da barra */
-   height: 10%;
 
-    /* ocupa toda largura */
-   width: 100%;
+/* =========================
+   INDICADORES
+========================= */
 
-    /* centraliza horizontalmente */
-   text-align: center;
+.indicators {
+    position: absolute;
 
-    /* centraliza verticalmente o conteúdo */
-   line-height: 40px;
+    bottom: 10px;
+    left: 0;
+
+    width: 100%;
+
+    text-align: center;
+
+    z-index: 10;
 }
 
 
@@ -69,31 +93,21 @@
    BOLINHAS
 ========================= */
 
-.dot{
+.dot {
+    height: 12px;
+    width: 12px;
 
-    /* altura da bolinha */
-   height: 12px;
+    margin: 0 5px;
 
-    /* largura da bolinha */
-   width: 12px;
+    background-color: #bbb;
 
-    /* margem lateral */
-   margin: 0 5px;
+    display: inline-block;
 
-    /* cor padrão */
-   background-color: #bbb;
+    border-radius: 50%;
 
-    /* permite ficar lado a lado */
-   display: inline-block;
+    cursor: pointer;
 
-    /* transforma em círculo */
-   border-radius: 50%;
-
-    /* cursor de clique */
-   cursor: pointer;
-
-    /* anima troca de cor */
-   transition: background-color 0.6s ease;
+    transition: background-color 0.6s ease;
 }
 
 
@@ -101,25 +115,78 @@
    BOLINHA ATIVA
 ========================= */
 
-.dot.active{
+.dot.active {
+    background-color: #333333;
 
-    /* cor da bolinha ativa */
-   background-color: #333333;
-
-    /* borda externa sem alterar layout */
-   outline: 2px solid #bbb;
-
-   /* distância inferior
-       (não funciona sem position) */
-   bottom: 10px;
+    outline: 2px solid #bbb;
 }
 
+
 /* =========================
-   IMAGENS DENTRO DOS SLIDES
+   CELULAR
 ========================= */
 
-.reajuste{
-   width: 100%;
-   height: 100%;
-   object-fit: contain; /* Ajusta a imagem inteira dentro da div */
+@media (max-width: 600px) {
+
+    #centro {
+        width: 100%;
+        max-width: 100%;
+        overflow: hidden;
+    }
+
+    .slider {
+        width: 100%;
+        max-width: 100%;
+
+        overflow: hidden;
+    }
+
+    .slides {
+        width: 300%;
+        height: 180px;
+    }
+
+    .slide {
+        flex: 0 0 33.333333%;
+
+        width: 33.333333%;
+
+        min-width: 0;
+
+        height: 180px;
+    }
+
+    .reajuste {
+        width: 100%;
+        height: 100%;
+
+        object-fit: contain;
+    }
+
+    .indicators {
+        bottom: 5px;
+    }
+
+    .dot {
+        width: 9px;
+        height: 9px;
+
+        margin: 0 4px;
+    }
+}
+
+
+/* =========================
+   CELULARES PEQUENOS
+========================= */
+
+@media (max-width: 380px) {
+
+    .slides {
+        height: 150px;
+    }
+
+    .slide {
+        height: 150px;
+    }
 }
