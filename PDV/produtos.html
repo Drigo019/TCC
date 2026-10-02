@@ -274,11 +274,11 @@
     </a>
 
 </div>
-            <form action="salvar_produto.php"
-            method="post"
-            class="container mt-5"
-            id="formProduto"
-            enctype="multipart/form-data">
+            <form
+    class="container mt-5"
+    id="formProduto"
+    enctype="multipart/form-data"
+>
             
             <label for="arquivo">Escolha a imagem do produto</label>
 
@@ -368,6 +368,167 @@
 
         </form> 
 
+        <!-- =========================================
+     MENSAGEM DE PRODUTO CADASTRADO
+========================================= -->
+
+<div
+    id="mensagemSucesso"
+    class="container"
+    style="display:none;"
+>
+
+    <div class="card border-0 shadow-lg rounded-4">
+
+        <div class="card-body p-4">
+
+            <div class="text-center mb-4">
+
+                <div
+                    class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center"
+                    style="width:70px;height:70px;"
+                >
+                    <i
+                        class="bi bi-check-lg"
+                        style="font-size:40px;"
+                    ></i>
+                </div>
+
+                <h2 class="text-success mt-3">
+                    Produto cadastrado com sucesso!
+                </h2>
+
+                <p class="text-muted">
+                    O produto foi adicionado ao estoque.
+                </p>
+
+            </div>
+
+
+            <!-- DADOS DO PRODUTO -->
+
+            <div class="row g-3">
+
+                <div class="col-md-6">
+
+                    <div class="p-3 bg-light rounded-3">
+
+                        <small class="text-muted">
+                            Código de barras
+                        </small>
+
+                        <h5 id="sucessoCodigo" class="mb-0">
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-6">
+
+                    <div class="p-3 bg-light rounded-3">
+
+                        <small class="text-muted">
+                            Produto
+                        </small>
+
+                        <h5 id="sucessoNome" class="mb-0">
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="p-3 bg-light rounded-3">
+
+                        <small class="text-muted">
+                            Preço
+                        </small>
+
+                        <h5 id="sucessoPreco" class="mb-0 text-success">
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="p-3 bg-light rounded-3">
+
+                        <small class="text-muted">
+                            Estoque inicial
+                        </small>
+
+                        <h5 id="sucessoEstoque" class="mb-0">
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-4">
+
+                    <div class="p-3 bg-light rounded-3">
+
+                        <small class="text-muted">
+                            Armazenamento
+                        </small>
+
+                        <h5 id="sucessoArmazenamento" class="mb-0">
+                        </h5>
+
+                    </div>
+
+                </div>
+
+
+                <div class="col-md-12">
+
+                    <div class="p-3 bg-light rounded-3">
+
+                        <small class="text-muted">
+                            Categoria
+                        </small>
+
+                        <h5 id="sucessoCategoria" class="mb-0">
+                        </h5>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="text-center mt-4">
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    onclick="novoProduto()"
+                >
+
+                    <i class="bi bi-plus-circle"></i>
+
+                    Cadastrar outro produto
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
         <div id="zoomModal" class="zoom-modal">
 
             <img id="imagemZoom"
@@ -378,6 +539,191 @@
         </div>
 
         <script src="script.js"></script>    
+        <script>
+
+document
+    .getElementById("formProduto")
+    .addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const formulario = this;
+
+        const dados = new FormData(formulario);
+
+
+        const botao =
+            formulario.querySelector(".btnSalvar");
+
+
+        botao.disabled = true;
+
+        botao.innerHTML = `
+            <span
+                class="spinner-border spinner-border-sm"
+            ></span>
+
+            Salvando...
+        `;
+
+
+        fetch("salvar_produto.php", {
+
+            method: "POST",
+
+            body: dados
+
+        })
+
+        .then(response => response.json())
+
+        .then(resultado => {
+
+            if (!resultado.sucesso) {
+
+                alert(
+                    resultado.mensagem ||
+                    "Erro ao cadastrar o produto."
+                );
+
+                botao.disabled = false;
+
+                botao.innerHTML =
+                    "Salvar Produto";
+
+                return;
+
+            }
+
+
+            /* =====================================
+               ESCONDE O FORMULÁRIO
+            ===================================== */
+
+            formulario.style.display = "none";
+
+
+            /* =====================================
+               PREENCHE OS DADOS DA CONFIRMAÇÃO
+            ===================================== */
+
+            document.getElementById(
+                "sucessoCodigo"
+            ).textContent =
+                resultado.produto.codigo;
+
+
+            document.getElementById(
+                "sucessoNome"
+            ).textContent =
+                resultado.produto.nome;
+
+
+            document.getElementById(
+                "sucessoPreco"
+            ).textContent =
+                "R$ " +
+                parseFloat(
+                    resultado.produto.preco
+                ).toFixed(2).replace(".", ",");
+
+
+            document.getElementById(
+                "sucessoEstoque"
+            ).textContent =
+                resultado.produto.estoque +
+                " unidade(s)";
+
+
+            document.getElementById(
+                "sucessoArmazenamento"
+            ).textContent =
+                resultado.produto.armazenamento;
+
+
+            document.getElementById(
+                "sucessoCategoria"
+            ).textContent =
+                resultado.produto.categoria;
+
+
+            /* =====================================
+               MOSTRA A MENSAGEM
+            ===================================== */
+
+            document.getElementById(
+                "mensagemSucesso"
+            ).style.display = "block";
+
+
+            /* Volta para o topo */
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        })
+
+        .catch(error => {
+
+            console.error(error);
+
+            alert(
+                "Erro de comunicação com o servidor."
+            );
+
+            botao.disabled = false;
+
+            botao.innerHTML =
+                "Salvar Produto";
+
+        });
+
+    });
+
+
+
+/* =========================================
+   CADASTRAR OUTRO PRODUTO
+========================================= */
+
+function novoProduto() {
+
+    document.getElementById(
+        "mensagemSucesso"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "formProduto"
+    ).style.display = "block";
+
+
+    document.getElementById(
+        "formProduto"
+    ).reset();
+
+
+    document.getElementById(
+        "previewImagem"
+    ).style.display = "none";
+
+
+    document.getElementById(
+        "previewImagem"
+    ).src = "";
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+</script>
 
         </body>
         </html>
