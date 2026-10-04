@@ -86,7 +86,6 @@ button {
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
-    margin-bottom: 100px;
 }
 #btn_carrinho {
     position: relative;
@@ -1486,4 +1485,105 @@ button {
     width: 100% !important;
     height: auto;
     object-fit: cover;
+}
+
+/* =====================================================
+   RODAPÉ
+===================================================== */
+
+.rodape {
+    width: 100%;
+    background-color: #111;
+    color: white;
+    margin-top: 50px;
+    padding-top: 40px;
+}
+
+/* Área com as informações */
+.rodape-container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+
+    padding-bottom: 35px;
+}
+
+/* Cada coluna */
+.rodape-coluna h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+
+    font-size: 20px;
+    color: #ffffff;
+}
+
+.rodape-coluna p {
+    margin: 8px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #dddddd;
+}
+
+/* Parte inferior */
+.rodape-inferior {
+    width: 100%;
+    border-top: 1px solid #333;
+
+    text-align: center;
+
+    padding: 18px 0;
+}
+
+.rodape-inferior p {
+    margin: 0;
+    font-size: 13px;
+    color: #000000;
+}
+
+@media (max-width: 768px) {
+
+    .rodape-container {
+        width: 85%;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 25px;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .rodape {
+        margin-top: 30px;
+        padding-top: 30px;
+    }
+
+    .rodape-container {
+        width: 85%;
+
+        grid-template-columns: 1fr;
+
+        text-align: center;
+
+        gap: 25px;
+    }
+
+    .rodape-coluna h3 {
+        font-size: 18px;
+    }
+
+    .rodape-coluna p {
+        font-size: 14px;
+    }
+
+    .rodape-inferior p {
+        font-size: 12px;
+        padding: 0 15px;
+    }
+
 }

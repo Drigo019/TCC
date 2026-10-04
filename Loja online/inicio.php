@@ -328,44 +328,44 @@
     ===================================================== -->
     <div id="modalFundoCadastro" class="modal-fundo">
         <div class="modal popup-compra popup-cadastro">
-        <button type="button" class="btn-fechar" onclick="fecharPopupcadastro()">
-            ×
-        </button>
-        <h1>Crie sua conta</h1>
-        <form action="cadastro_cliente.php" method="post">
-            <h2>Dados pessoais</h2>
-            <div class="dados-compra">
-                <label for="nomeCadastro">Nome:</label>
-                <input type="text" id="nomeCadastro" name="nome" placeholder="Digite seu nome" required>
-                <label for="emailCadastro">E-mail:</label>
-                <input type="email" id="emailCadastro" name="email" placeholder="Digite seu e-mail" required>
-                <label for="cpfCadastro">CPF:</label>
-                <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
-                <label for="senhaCadastro">Senha:</label>
-                <input type="password" id="senhaCadastro" name="senha" placeholder="Digite sua senha" required>
-            </div>
-            <h2>Endereço</h2>
-            <div class="dados-compra">
-                <label for="cep">CEP:</label>
-                <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" maxlength="9" oninput="mascaraCEP(this)" required>
-                <label for="rua">Rua:</label>
-                <input type="text" name="rua" id="rua" placeholder="Digite sua rua" required>
-                <label for="numero">Número:</label>
-                <input type="number" name="numero" id="numero" placeholder="Digite o número" required>
-                <label for="bairro">Bairro:</label>
-                <input type="text" name="bairro" id="bairro" placeholder="Digite seu bairro" required>
-            </div>
-            <div class="botoes-finalizacao">
-                <button type="submit" class="btn-finalizar-compra" onclick="vazio()">
-                    Cadastrar
-                </button>
-                <button type="button" class="btn-cancelar-compra" onclick="fecharPopupcadastro()">
-                    Voltar
-                </button>
-            </div>
-        </form>
+            <button type="button" class="btn-fechar" onclick="fecharPopupcadastro()">
+                ×
+            </button>
+            <h1>Crie sua conta</h1>
+            <form action="cadastro_cliente.php" method="post">
+                <h2>Dados pessoais</h2>
+                <div class="dados-compra">
+                    <label for="nomeCadastro">Nome:</label>
+                    <input type="text" id="nomeCadastro" name="nome" placeholder="Digite seu nome" required>
+                    <label for="emailCadastro">E-mail:</label>
+                    <input type="email" id="emailCadastro" name="email" placeholder="Digite seu e-mail" required>
+                    <label for="cpfCadastro">CPF:</label>
+                    <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
+                    <label for="senhaCadastro">Senha:</label>
+                    <input type="password" id="senhaCadastro" name="senha" placeholder="Digite sua senha" required>
+                </div>
+                <h2>Endereço</h2>
+                <div class="dados-compra">
+                    <label for="cep">CEP:</label>
+                    <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" maxlength="9" oninput="mascaraCEP(this)" required>
+                    <label for="rua">Rua:</label>
+                    <input type="text" name="rua" id="rua" placeholder="Digite sua rua" required>
+                    <label for="numero">Número:</label>
+                    <input type="number" name="numero" id="numero" placeholder="Digite o número" required>
+                    <label for="bairro">Bairro:</label>
+                    <input type="text" name="bairro" id="bairro" placeholder="Digite seu bairro" required>
+                </div>
+                <div class="botoes-finalizacao">
+                    <button type="submit" class="btn-finalizar-compra" onclick="vazio()">
+                        Cadastrar
+                    </button>
+                    <button type="button" class="btn-cancelar-compra" onclick="fecharPopupcadastro()">
+                        Voltar
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
     <!-- =====================================================
         POPUP FINALIZAÇÃO DA COMPRA
     ===================================================== -->
@@ -384,9 +384,7 @@
                     <?php if (!empty($_SESSION['carrinho'])): ?>
                         <?php $totalFinal = 0; ?>
                         <?php foreach ($_SESSION['carrinho'] as $key => $produto): ?>
-                            <?php
-                            $subtotalProduto = $produto['quantidade'] * $produto['valor']; $totalFinal += $subtotalProduto;
-                            ?>
+                            <?php $subtotalProduto = $produto['quantidade'] * $produto['valor']; $totalFinal += $subtotalProduto; ?>
                             <div class="item-resumo">
                                 <!-- IMAGEM -->
                                 <img src="../Produtos/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>" class="imagem-resumo">
@@ -416,7 +414,6 @@
                         <p>Carrinho vazio.</p>
                     <?php endif; ?>
                 </div>
-
                 <!-- =================================================
                     TOTAL
                 ================================================= -->
@@ -429,95 +426,60 @@
                         <?php echo number_format( $totalFinal ?? 0, 2, ',', '.');?>
                     </strong>
                 </div>
-
                 <!-- =================================================
                     DADOS DO CLIENTE
                 ================================================= -->
                 <h2>Dados do cliente</h2>
                 <form method="post" action="finalizar_compra.php">
             <div class="dados-compra">
-
                 <label for="nomeCliente">
                     Nome:
                 </label>
-
-                <input
-                    type="text"
-                    id="nomeCliente"
-                    name="nome"
-                    placeholder="Digite seu nome"
-                    required
-                >
-
+                <input type="text" id="nomeCliente" name="nome" placeholder="Digite seu nome" required>
                 <label for="telefoneCliente">
                     Telefone:
                 </label>
-
                 <input type="text" name="telefone" id="telefone" maxlength="15" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" required>
-
             </div>
-
-
             <!-- =================================================
                 FORMA DE PAGAMENTO
             ================================================= -->
             <h2>Forma de pagamento</h2>
-
             <div class="forma-pagamento">
-
                 <label for="form_pag">
                     Escolha a forma de pagamento:
                 </label>
-
-                <select
-                    name="form_pag"
-                    id="form_pag"
-                    required
-                >
-
+                <select name="form_pag" id="form_pag" required>
                     <option value="">
                         Selecione uma opção
                     </option>
-
                     <option value="Dinheiro">
                         💵 Dinheiro
                     </option>
-
                     <option value="Cartão">
                         💳 Cartão
                     </option>
-
                     <option value="Pix">
                         📱 Pix
                     </option>
-
                     <option value="Crediário">
                         🧾 Crediário
                     </option>
-
                 </select>
-
             </div>
-
-
             <!-- =================================================
                 CARRINHO EM JSON
             ================================================= -->
-            <input
-                type="hidden"
-                name="carrinho"
-                id="carrinhoFinal"
-                value='<?php
+            <input type="hidden" name="carrinho" id="carrinhoFinal" value='
+                <?php
                     echo htmlspecialchars(
                         json_encode(
                             array_map(
                                 function($id, $produto) {
-
                                     return [
                                         "idProduto" => (int)$id,
                                         "quantidade" => (int)$produto["quantidade"]
                                     ];
-
                                 },
                                 array_keys($_SESSION["carrinho"]),
                                 $_SESSION["carrinho"]
@@ -533,25 +495,14 @@
                 BOTÕES
             ================================================= -->
             <div class="botoes-finalizacao">
-
-                <button
-                    type="submit"
-                    class="btn-finalizar-compra"
-                >
+                <button type="submit" class="btn-finalizar-compra">
                     Finalizar Compra
                 </button>
-
-                <button
-                    type="button"
-                    class="btn-cancelar-compra"
-                    onclick="fecharPopupFimCompra()"
-                >
+                <button type="button" class="btn-cancelar-compra" onclick="fecharPopupFimCompra()">
                     Voltar
                 </button>
-
             </div>
             </form>
-
         </div>
     </div>
     <!-- =====================================================
@@ -561,24 +512,24 @@
     <!-- =================================================
         PRODUTOS
     ================================================= -->
-        <div class="produtos_categorias">
+    <div class="produtos_categorias">
     <!-- =================================================
         CARROSSEL
     ================================================= -->
-            <div id="centro">
-                <div class="slider">
-                    <div class="slides">
-                        <img src="../Imagens/FotosQueijos/f1.webp" alt="imagem 1" class="slide active accordion reajuste">
-                        <img src="../Imagens/FotosQueijos/f2.webp" alt="imagem 2" class="slide reajuste">
-                        <img src="../Imagens/FotosQueijos/f3.webp" alt="imagem 3" class="slide reajuste">
-                    </div>
-                    <div class="indicators">
-                        <span class="dot active" data-index="0"></span>
-                        <span class="dot" data-index="1"></span>
-                        <span class="dot" data-index="2"></span>
-                    </div>
-                </div>
+    <div id="centro">
+        <div class="slider">
+            <div class="slides">
+                <img src="../Imagens/FotosQueijos/f1.webp" alt="imagem 1" class="slide active accordion reajuste">
+                <img src="../Imagens/FotosQueijos/f2.webp" alt="imagem 2" class="slide reajuste">
+                <img src="../Imagens/FotosQueijos/f3.webp" alt="imagem 3" class="slide reajuste">
             </div>
+            <div class="indicators">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+            </div>
+        </div>
+    </div>
     <!-- =================================================
         PRODUTOS
     ================================================= -->
@@ -616,6 +567,45 @@
                     <?php endif; ?>
                 </div>
             </div>
+            <!-- =====================================================
+                RODAPÉ
+            ===================================================== -->
+            <footer class="rodape">
+                <div class="rodape-container">
+                    <!-- INFORMAÇÕES DA LOJA -->
+                    <div class="rodape-coluna">
+                        <h3>Container do Queijo</h3>
+                        <p>
+                            Produtos selecionados para você degustar, descobrir e se apaixonar.
+                        </p>
+                    </div>
+                    <!-- INFORMAÇÕES DO RESPONSÁVEL -->
+                    <div class="rodape-coluna">
+                        <h3>Responsável</h3>
+                        <p><strong>Nome:</strong> NOME DO DONO</p>
+                        <p><strong>CNPJ:</strong> 00.000.000/0000-00</p>
+                    </div>
+                    <!-- CONTATO -->
+                    <div class="rodape-coluna">
+                        <h3>Contato</h3>
+                        <p>📱 (19) 99229-5270</p>
+                        <p>📧 contato@containerdoqueijo.com</p>
+                    </div>
+                    <!-- ENDEREÇO -->
+                    <div class="rodape-coluna">
+                        <h3>Onde estamos</h3>
+                        <p>
+                            Rua Cel Diogo, nº 1149<br>
+                            Centro - Mococa/SP
+                        </p>
+                    </div>
+                </div>
+                <div class="rodape-inferior">
+                    <p>
+                        © <?php echo date('Y'); ?> Container do Queijo. Todos os direitos reservados.
+                    </p>
+                </div>
+            </footer>
         </div>
     <!-- =================================================
         CARRINHO
@@ -666,9 +656,9 @@
                                     </button>
                                 </div>
                             <?php endforeach; ?>
-    <!-- =================================================
-        LIMPAR
-    ================================================= -->
+                            <!-- =================================================
+                                LIMPAR
+                            ================================================= -->
                             <div align="center">
                                 <button type="button" class="btn_carrinho" onclick="limparCarrinho()">
                                     Limpar Carrinho
@@ -680,9 +670,9 @@
                             </div>
                         <?php endif; ?>
                     </div>
-    <!-- =================================================
-        FIM DA COMPRA
-    ================================================= -->
+                    <!-- =================================================
+                        FIM DA COMPRA
+                    ================================================= -->
                     <div style="width:28vw">
                         <h2 align="center">
                             Fim da compra
