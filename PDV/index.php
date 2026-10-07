@@ -61,6 +61,24 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
         src: url(fontes/RopaSans-Regular.ttf);
       }
 
+      .tabela-vendas {
+    max-height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 12px;
+}
+
+.tabela-vendas table {
+    margin-top: 0;
+}
+
+.tabela-vendas thead th {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 2;
+}
+
     body{
       margin:0;
       background:#f4f6fb;
@@ -244,6 +262,107 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       margin-top:15px;
     }
 
+    /* =========================================
+   BOTÃO DA SIDEBAR
+========================================= */
+
+.botao-sidebar {
+
+position: absolute;
+
+top: 20px;
+
+right: -18px;
+
+width: 36px;
+
+height: 36px;
+
+border: none;
+
+border-radius: 50%;
+
+background: #212529;
+
+color: white;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+cursor: pointer;
+
+box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+
+transition: 0.3s;
+
+z-index: 1001;
+}
+
+
+.botao-sidebar:hover {
+
+transform: scale(1.1);
+
+background: #343a40;
+
+}
+
+
+/* =========================================
+SIDEBAR ESCONDIDA
+========================================= */
+
+.sidebar.escondida {
+
+transform: translateX(-100%);
+
+}
+
+
+/* =========================================
+CONTEÚDO QUANDO SIDEBAR ESTÁ ABERTA
+========================================= */
+
+.pdv-container {
+
+margin-left: 260px;
+
+transition: margin-left 0.3s ease;
+
+}
+
+
+/* =========================================
+CONTEÚDO QUANDO SIDEBAR ESTÁ FECHADA
+========================================= */
+
+.pdv-container.sidebar-fechada {
+
+margin-left: 20px;
+
+}
+
+
+/* =========================================
+SETA QUANDO SIDEBAR ESTÁ FECHADA
+========================================= */
+
+.sidebar.escondida .botao-sidebar {
+
+right: -54px;
+
+}
+
+
+.sidebar.escondida .botao-sidebar i {
+
+transform: rotate(180deg);
+
+}
+
 
   </style>
 </head>
@@ -260,6 +379,15 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
     <i class="bi bi-house"></i>
     Dashboard
 </a>
+
+<button
+    type="button"
+    class="botao-sidebar"
+    onclick="alternarSidebar()"
+    title="Ocultar menu"
+>
+    <i class="bi bi-chevron-left"></i>
+</button>
 
     <a href="pdv.html">
       <i class="bi bi-cart"></i>
@@ -355,107 +483,230 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
 
       <h4>Últimas Vendas</h4>
 
-      <table class="table table-hover">
+      <div class="tabela-vendas">
 
-      <thead>
-  <tr>
-    <th>ID</th>
-    <th>Cliente</th>
-    <th>Valor</th>
-    <th>Tipo de Venda</th>
-    <th>Data</th>
-  </tr>
-</thead>
+    <table class="table table-hover">
+
+        <thead>
+            <tr>
+
+                <th>ID</th>
+
+                <th>Cliente</th>
+
+                <th>Valor</th>
+
+                <th>Tipo de Venda</th>
+
+                <th>Data</th>
+
+            </tr>
+        </thead>
+
 
         <tbody>
 
-<?php
+            <?php
 
-$sql_ultimas = "
-SELECT *
-FROM vendas
-ORDER BY idVendas DESC
-LIMIT 5
-";
+            $sql_ultimas = "
+            SELECT *
+            FROM vendas
+            ORDER BY idVendas DESC
+            ";
 
-$result_ultimas = mysqli_query($conn, $sql_ultimas);
+            $result_ultimas =
+                mysqli_query(
+                    $conn,
+                    $sql_ultimas
+                );
 
-while($venda = mysqli_fetch_assoc($result_ultimas)){
+            while (
+                $venda =
+                mysqli_fetch_assoc(
+                    $result_ultimas
+                )
+            ) {
 
-?>
+            ?>
 
-<tr>
+            <tr>
 
-<td>
-    #<?= $venda['idVendas'] ?>
-</td>
+                <td>
+                    #<?= $venda['idVendas'] ?>
+                </td>
 
-<td>
-    Cliente não registrado
-</td>
+                <td>
+                    Cliente não registrado
+                </td>
 
-<td>
-    R$ <?= number_format($venda['valor'], 2, ',', '.') ?>
-</td>
+                <td>
+                    R$
+                    <?= number_format(
+                        $venda['valor'],
+                        2,
+                        ',',
+                        '.'
+                    ) ?>
+                </td>
 
-<td>
-    <?php
 
-    $forma = strtolower(
-        $venda['formaDePagamento']
-    );
+                <td>
 
-    if ($forma === 'pix') {
+                    <?php
 
-        echo '<span class="badge bg-success">
-                <i class="bi bi-qr-code"></i>
-                Pix
-              </span>';
+                    $forma =
+                        $venda['formaDePagamento'];
 
-    } elseif ($forma === 'debito') {
+                    switch ($forma) {
 
-        echo '<span class="badge bg-primary">
-                <i class="bi bi-credit-card"></i>
-                Débito
-              </span>';
+                        case 'Pix':
 
-    } elseif ($forma === 'credito') {
+                            echo '
+                            <span class="badge bg-success">
+                                <i class="bi bi-qr-code"></i>
+                                Pix
+                            </span>';
 
-        echo '<span class="badge bg-primary">
-                <i class="bi bi-credit-card"></i>
-                Crédito
-              </span>';
+                            break;
 
-    } else {
 
-        echo htmlspecialchars(
-            $venda['formaDePagamento']  
-        );
+                        case 'Debito':
 
-    }
+                            echo '
+                            <span class="badge bg-primary">
+                                <i class="bi bi-credit-card"></i>
+                                Débito
+                            </span>';
 
-    ?>
-</td>
+                            break;
 
-<td>
-    <?= date(
-        'd/m/Y',
-        strtotime($venda['data'])
-    ) ?>
-</td>
 
-</tr>
+                        case 'Credito':
 
-<?php } ?>
+                            echo '
+                            <span class="badge bg-info text-dark">
+                                <i class="bi bi-credit-card-2-front"></i>
+                                Crédito
+                            </span>';
 
-</tbody>
+                            break;
 
-      </table>
+
+                        case 'Dinheiro':
+
+                            echo '
+                            <span class="badge bg-warning text-dark">
+                                <i class="bi bi-cash-coin"></i>
+                                Dinheiro
+                            </span>';
+
+                            break;
+
+
+                        case 'Crediario':
+
+                            echo '
+                            <span class="badge bg-secondary">
+                                <i class="bi bi-journal-text"></i>
+                                Crediário
+                            </span>';
+
+                            break;
+
+
+                        case 'Cartao':
+
+                            echo '
+                            <span class="badge bg-primary">
+                                <i class="bi bi-credit-card"></i>
+                                Cartão
+                            </span>';
+
+                            break;
+
+
+                        default:
+
+                            echo '
+                            <span class="badge bg-dark">
+                                <i class="bi bi-question-circle"></i>
+                                ' .
+                                htmlspecialchars($forma) .
+                                '
+                            </span>';
+
+                            break;
+
+                    }
+
+                    ?>
+
+                </td>
+
+
+                <td>
+                    <?= date(
+                        'd/m/Y',
+                        strtotime(
+                            $venda['data']
+                        )
+                    ) ?>
+                </td>
+
+            </tr>
+
+            <?php } ?>
+
+        </tbody>
+
+    </table>
+
+</div>
 
     </div>
 
   </div>
 
 <script src="js/script.js"></script>
+
+<script>
+
+function alternarSidebar() {
+
+    const sidebar =
+        document.querySelector(".sidebar");
+
+    const conteudo =
+        document.querySelector(".pdv-container");
+
+    const botao =
+        document.querySelector(".botao-sidebar");
+
+    sidebar.classList.toggle("escondida");
+
+    conteudo.classList.toggle("sidebar-fechada");
+
+
+    const escondida =
+        sidebar.classList.contains("escondida");
+
+
+    if (escondida) {
+
+        botao.title =
+            "Mostrar menu";
+
+    }
+
+    else {
+
+        botao.title =
+            "Ocultar menu";
+
+    }
+
+}
+
+</script>
 </body>
 </html>

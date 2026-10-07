@@ -1,203 +1,499 @@
-    <!DOCTYPE html>
-    <html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-br">
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head>
 
-        <title>PDV</title>
+    <meta charset="UTF-8">
 
-        <!-- Bootstrap -->
-            <link
-                href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-                rel="stylesheet"
-            >
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-            <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        </head>
+    <title>PDV</title>
+
+
+    <!-- =========================================
+         BOOTSTRAP
+    ========================================== -->
+
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+
+    <!-- =========================================
+         BOOTSTRAP ICONS
+    ========================================== -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
 
     <style>
+
         /* =========================================
-    SIDEBAR
-    ========================================= */
+           SIDEBAR
+        ========================================= */
 
-    .sidebar {
-        width: 240px;
-        height: 100vh;
+        .sidebar {
 
-        position: fixed;
-        left: 0;
-        top: 0;
+            width: 240px;
 
-        background: linear-gradient(
-           black
-        );
+            height: 100vh;
 
-        padding: 30px 20px;
+            position: fixed;
 
-        border-radius: 0 20px 20px 0;
+            left: 0;
 
-        box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+            top: 0;
 
-        z-index: 1000;
-    }
+            background: black;
 
+            padding: 30px 20px;
 
-    /* LOGO */
+            border-radius: 0 20px 20px 0;
 
-    .logo {
-        color: white;
+            box-shadow:
+                5px 0 20px rgba(0,0,0,0.1);
 
-        font-weight: bold;
+            z-index: 1000;
 
-        margin-bottom: 40px;
-
-        font-size: 20px;
-
-        font-family: 'RopaSans';
-    }
+        }
 
 
-    /* LINKS */
+        /* =========================================
+           LOGO
+        ========================================= */
 
-    .sidebar a {
-        display: flex;
+        .logo {
 
-        align-items: center;
+            color: white;
 
-        gap: 12px;
+            font-weight: bold;
 
-        color: #d1d5db;
+            margin-bottom: 40px;
 
-        padding: 14px 16px;
+            font-size: 20px;
 
-        text-decoration: none;
+            font-family: 'RopaSans';
 
-        border-radius: 14px;
+        }
 
-        margin-bottom: 10px;
 
-        transition: 0.3s;
+        /* =========================================
+           LINKS DA SIDEBAR
+        ========================================= */
 
-        font-size: 16px;
-    }
+        .sidebar a {
 
-    /* =========================================
-   ABA ATIVA
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            color: #d1d5db;
+
+            padding: 14px 16px;
+
+            text-decoration: none;
+
+            border-radius: 14px;
+
+            margin-bottom: 10px;
+
+            transition: 0.3s;
+
+            font-size: 16px;
+
+        }
+
+
+        .sidebar a:hover {
+
+            background: #374151;
+
+            color: white;
+
+            transform: translateX(5px);
+
+        }
+
+
+        /* =========================================
+           ABA ATIVA
+        ========================================= */
+
+        .sidebar a.ativo {
+
+            background: #374151;
+
+            color: white;
+
+            transform: scale(1.08);
+
+            position: relative;
+
+            z-index: 10;
+
+            box-shadow:
+                0 6px 15px rgba(0,0,0,0.25);
+
+            margin-left: 3px;
+
+            margin-right: -3px;
+
+        }
+
+
+        /* =========================================
+           ÍCONES
+        ========================================= */
+
+        .sidebar i {
+
+            font-size: 20px;
+
+        }
+
+
+        /* =========================================
+           CONTEÚDO DO PDV
+        ========================================= */
+
+        .pdv-container {
+
+            margin-left: 260px;
+
+        }
+
+
+        /* =========================================
+           TABELA
+        ========================================= */
+
+        .table-responsive {
+
+            overflow-x: auto;
+
+        }
+
+
+        /* =========================================
+           MODAL
+        ========================================= */
+
+        .modal-content {
+
+            border: none;
+
+            box-shadow:
+                0 15px 40px rgba(0,0,0,0.25);
+
+        }
+
+
+        /* =========================================
+           BOTÕES DE PAGAMENTO
+        ========================================= */
+
+        .botao-pagamento {
+
+            min-height: 120px;
+
+            font-size: 17px;
+
+            border-radius: 15px;
+
+            transition: 0.2s;
+
+        }
+
+
+        .botao-pagamento:hover {
+
+            transform: translateY(-3px);
+
+        }
+
+
+        .botao-pagamento i {
+
+            font-size: 30px;
+
+        }
+
+        /* =========================================
+   SIDEBAR
 ========================================= */
 
-.sidebar a.ativo {
-    background: #374151;
-    color: white;
+.sidebar {
 
-    transform: scale(1.08);
+width: 240px;
 
-    position: relative;
-    z-index: 10;
+height: 100vh;
 
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+position: fixed;
 
-    margin-left: 3px;
-    margin-right: -3px;
+left: 0;
+
+top: 0;
+
+background: black;
+
+padding: 30px 20px;
+
+border-radius: 0 20px 20px 0;
+
+box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+
+z-index: 1000;
+
+transition: transform 0.3s ease;
+
 }
 
 
-    .sidebar a:hover {
-        background: #374151;
+/* =========================================
+CONTEÚDO
+========================================= */
 
-        color: white;
+.conteudo-principal {
 
-        transform: translateX(5px);
-    }
+margin-left: 260px;
 
+transition: margin-left 0.3s ease;
 
-    /* ÍCONES */
-
-    .sidebar i {
-        font-size: 20px;
-    }
+}
 
 
-    /* =========================================
-    CONTEÚDO DO PDV
-    ========================================= */
+/* =========================================
+BOTÃO DA SIDEBAR
+========================================= */
 
-    .pdv-container {
-        margin-left: 260px;
-    }
+.botao-sidebar {
+
+position: absolute;
+
+top: 20px;
+
+right: -18px;
+
+width: 36px;
+
+height: 36px;
+
+border: none;
+
+border-radius: 50%;
+
+background: #212529;
+
+color: white;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+cursor: pointer;
+
+box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+
+transition: 0.3s;
+
+z-index: 1001;
+
+}
+
+
+.botao-sidebar:hover {
+
+transform: scale(1.1);
+
+background: #343a40;
+
+}
+
+
+/* =========================================
+SIDEBAR FECHADA
+========================================= */
+
+.sidebar.escondida {
+
+transform: translateX(-100%);
+
+}
+
+
+/* =========================================
+CONTEÚDO SEM SIDEBAR
+========================================= */
+
+.conteudo-principal.sidebar-fechada {
+
+margin-left: 20px;
+
+}
+
+
+/* =========================================
+BOTÃO QUANDO FECHADA
+========================================= */
+
+.sidebar.escondida .botao-sidebar {
+
+right: -54px;
+
+}
+
+
+.sidebar.escondida .botao-sidebar i {
+
+transform: rotate(180deg);
+
+}
+
     </style>
 
+</head>
 
-    <body class="bg-light">
 
-        <div class="sidebar">
+<body class="bg-light">
 
-            <h2>
-                <img id="logo" src="../imagens/logo.jpeg" style="height: 100px; width: 180px; margin-left: 0px; margin-right: 0px; margin-top: -20px;">
-            </h2>
+
+<!-- =====================================================
+     SIDEBAR
+====================================================== -->
+
+<div class="sidebar">
+
+
+    <h2>
+
+        <img
+            id="logo"
+            src="../imagens/logo.jpeg"
+            style="
+                height:100px;
+                width:180px;
+                margin-left:0;
+                margin-right:0;
+                margin-top:-20px;
+            "
+        >
         
-            <a href="index.php">
-                <i class="bi bi-house"></i>
-                Dashboard
-            </a>
-            
-            <a href="pdv.html" class="ativo">
-                <i class="bi bi-cart"></i>
-                PDV
-            </a>
-            
-            <a href="produtos.html">
-                <i class="bi bi-box-seam"></i>
-                Produtos
-            </a>
-            
-            <a href="funcionarios.html">
-                <i class="bi bi-people"></i>
-                Funcionários
-            </a>
-            
-            <a href="estoque.php">
-                <i class="bi bi-boxes"></i>
-                Estoque
-            </a>
-        
-        </div>
+
+    </h2>
 
 
-        <div class="pdv-container">
+    <a href="index.php">
 
-            <div class="container py-5">
-        
-                <div class="row justify-content-center">
-        
-                    <div class="col-md-10">
+        <i class="bi bi-house"></i>
 
-                <div class="card shadow border-0 rounded-4">
+        Dashboard
+
+    </a>
+
+
+    <a
+        href="pdv.html"
+        class="ativo"
+    >
+
+        <i class="bi bi-cart"></i>
+
+        PDV
+
+    </a>
+
+
+    <a href="produtos.html">
+
+        <i class="bi bi-box-seam"></i>
+
+        Produtos
+
+    </a>
+
+
+    <a href="funcionarios.html">
+
+        <i class="bi bi-people"></i>
+
+        Funcionários
+
+    </a>
+
+
+    <a href="estoque.php">
+
+        <i class="bi bi-boxes"></i>
+
+        Estoque
+
+    </a>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     CONTEÚDO
+====================================================== -->
+
+<div class="conteudo-principal">
+
+
+    <div class="container py-5">
+
+
+        <div class="row justify-content-center">
+
+
+            <div class="col-md-10">
+
+
+                <div
+                    class="card shadow border-0 rounded-4"
+                >
+
 
                     <div class="card-body p-4">
 
 
-                        <!-- ======================================
-                            TÍTULO
-                        ======================================= -->
+                        <!-- =================================
+                             TÍTULO
+                        ================================== -->
 
                         <h2 class="text-center mb-4">
 
-                            <i class="bi bi-cart-fill text-success"></i>
+                            <i
+                                class="bi bi-cart-fill text-success"
+                            ></i>
 
                             PDV
 
                         </h2>
 
 
-                        <!-- ======================================
-                            BUSCA DO PRODUTO
-                        ======================================= -->
+
+                        <!-- =================================
+                             BUSCA DO PRODUTO
+                        ================================== -->
 
                         <div class="row g-3">
 
+
                             <div class="col-md-8">
+
 
                                 <input
                                     type="text"
@@ -207,10 +503,12 @@
                                     autofocus
                                 >
 
+
                             </div>
 
 
                             <div class="col-md-4">
+
 
                                 <button
                                     type="button"
@@ -218,29 +516,38 @@
                                     onclick="buscarProduto()"
                                 >
 
-                                    <i class="bi bi-upc-scan"></i>
+                                    <i
+                                        class="bi bi-upc-scan"
+                                    ></i>
 
                                     Buscar
 
                                 </button>
 
+
                             </div>
 
+
                         </div>
-                        
 
 
 
+                        <!-- =================================
+                             LISTA DE PRODUTOS
+                        ================================== -->
 
-                        <!-- ======================================
-                            LISTA DE PRODUTOS
-                        ======================================= -->
+                        <div
+                            class="table-responsive mt-4"
+                        >
 
-                        <div class="table-responsive mt-4">
 
-                            <table class="table table-hover align-middle">
+                            <table
+                                class="table table-hover align-middle"
+                            >
+
 
                                 <thead class="table-success">
+
 
                                     <tr>
 
@@ -264,6 +571,7 @@
 
                                     </tr>
 
+
                                 </thead>
 
 
@@ -271,20 +579,27 @@
 
                                 </tbody>
 
+
                             </table>
+
 
                         </div>
 
 
-                        <!-- ======================================
-                            TOTAL
-                        ======================================= -->
 
-                        <div class="text-end mt-4">
+                        <!-- =================================
+                             TOTAL
+                        ================================== -->
+
+                        <div
+                            class="text-end mt-4"
+                        >
 
                             <h3>
 
-                                Total: R$
+                                Total:
+
+                                R$
 
                                 <span id="total">
                                     0.00
@@ -292,23 +607,37 @@
 
                             </h3>
 
+
                         </div>
-                        <!-- ======================================
-        FINALIZAR COMPRA
-    ======================================= -->
 
-    <div class="text-end mt-3">
 
-        <button
-            type="button"
-            class="btn btn-primary btn-lg"
-            onclick="abrirPagamento()"
-        >
-            <i class="bi bi-cart-check"></i>
-            Finalizar Compra
-        </button>
 
-    </div>
+                        <!-- =================================
+                             FINALIZAR COMPRA
+                        ================================== -->
+
+                        <div
+                            class="text-end mt-3"
+                        >
+
+
+                            <button
+                                type="button"
+                                class="btn btn-primary btn-lg"
+                                onclick="abrirPagamento()"
+                            >
+
+                                <i
+                                    class="bi bi-cart-check"
+                                ></i>
+
+                                Finalizar Compra
+
+                            </button>
+
+
+                        </div>
+
 
                     </div>
 
@@ -320,676 +649,754 @@
 
     </div>
 
+</div>
 
-    <!-- ======================================
-        MODAL DE PAGAMENTO
-    ======================================= -->
+
+
+<!-- =====================================================
+     MODAL DE PAGAMENTO
+====================================================== -->
+
+<div
+    class="modal fade"
+    id="modalPagamento"
+    tabindex="-1"
+    aria-hidden="true"
+>
+
 
     <div
-        class="modal fade"
-        id="modalPagamento"
-        tabindex="-1"
-        aria-hidden="true"
+        class="modal-dialog modal-dialog-centered"
     >
 
-        <div class="modal-dialog modal-dialog-centered">
 
-            <div class="modal-content rounded-4">
+        <div
+            class="modal-content rounded-4"
+        >
 
-                <div class="modal-header">
 
-                    <h5 class="modal-title">
+            <!-- =========================================
+                 CABEÇALHO
+            ========================================== -->
 
-                        <i class="bi bi-credit-card"></i>
+            <div class="modal-header">
 
-                        Finalizar Compra
+
+                <h5 class="modal-title">
+
+                    <i
+                        class="bi bi-credit-card"
+                    ></i>
+
+                    Finalizar Compra
+
+                </h5>
+
+
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                ></button>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 CORPO
+            ========================================== -->
+
+            <div class="modal-body text-center">
+
+
+                <!-- =====================================
+                     TOTAL
+                ====================================== -->
+
+                <h4 class="mb-4">
+
+                    Total:
+
+                    <strong>
+
+                        R$
+
+                        <span id="totalPagamento">
+                            0.00
+                        </span>
+
+                    </strong>
+
+                </h4>
+
+
+
+                <!-- =====================================
+                     OPÇÕES DE PAGAMENTO
+                ====================================== -->
+
+                <div id="pagamentoOpcoes">
+
+
+                    <h6 class="mb-3">
+
+                        Escolha a forma de pagamento:
+
+                    </h6>
+
+
+
+                    <div class="row g-3">
+
+
+                        <!-- =============================
+                             PIX
+                        ============================== -->
+
+                        <div class="col-6">
+
+
+                            <button
+                                type="button"
+                                class="btn btn-success w-100 py-3 botao-pagamento"
+                                onclick="selecionarPix()"
+                            >
+
+                                <i
+                                    class="bi bi-qr-code"
+                                ></i>
+
+                                <br>
+
+                                PIX
+
+                            </button>
+
+
+                        </div>
+
+
+
+                        <!-- =============================
+                             DINHEIRO
+                        ============================== -->
+
+                        <div class="col-6">
+
+
+                            <button
+                                type="button"
+                                class="btn btn-warning w-100 py-3 botao-pagamento"
+                                onclick="selecionarDinheiro()"
+                            >
+
+                                <i
+                                    class="bi bi-cash-stack"
+                                ></i>
+
+                                <br>
+
+                                Dinheiro
+
+                            </button>
+
+
+                        </div>
+
+
+
+                        <!-- =============================
+                             CARTÃO
+                        ============================== -->
+
+                        <div class="col-6">
+
+
+                            <button
+                                type="button"
+                                class="btn btn-primary w-100 py-3 botao-pagamento"
+                                onclick="selecionarCartao()"
+                            >
+
+                                <i
+                                    class="bi bi-credit-card"
+                                ></i>
+
+                                <br>
+
+                                Cartão
+
+                            </button>
+
+
+                        </div>
+
+
+
+                        <!-- =============================
+                             CREDIÁRIO
+                        ============================== -->
+
+                        <div class="col-6">
+
+
+                            <button
+                                type="button"
+                                class="btn btn-secondary w-100 py-3 botao-pagamento"
+                                onclick="selecionarCrediario()"
+                            >
+
+                                <i
+                                    class="bi bi-journal-text"
+                                ></i>
+
+                                <br>
+
+                                Crediário
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- =====================================
+                     ÁREA DO CARTÃO
+                ====================================== -->
+
+                <div
+                    id="pagamentoCartao"
+                    style="display:none;"
+                >
+
+
+                    <h5 class="text-primary">
+
+                        Pagamento via Cartão
 
                     </h5>
 
+
+                    <p>
+
+                        Total a pagar:
+
+                    </p>
+
+
+                    <h3 class="mb-4">
+
+                        R$
+
+                        <span id="valorCartao">
+                            0.00
+                        </span>
+
+                    </h3>
+
+
+
+                    <div class="row g-3">
+
+
+                        <!-- =============================
+                             DÉBITO
+                        ============================== -->
+
+                        <div class="col-6">
+
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary w-100 py-3"
+                                onclick="selecionarTipoCartao('Debito')"
+                            >
+
+                                <i
+                                    class="bi bi-credit-card"
+                                ></i>
+
+                                <br>
+
+                                Débito
+
+                            </button>
+
+
+                        </div>
+
+
+
+                        <!-- =============================
+                             CRÉDITO
+                        ============================== -->
+
+                        <div class="col-6">
+
+
+                            <button
+                                type="button"
+                                class="btn btn-outline-primary w-100 py-3"
+                                onclick="selecionarTipoCartao('Credito')"
+                            >
+
+                                <i
+                                    class="bi bi-credit-card-2-front"
+                                ></i>
+
+                                <br>
+
+                                Crédito
+
+                            </button>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- =================================
+                         TIPO SELECIONADO
+                    ================================== -->
+
+                    <div
+                        id="tipoCartaoSelecionado"
+                        class="mt-3"
+                    ></div>
+
+
+
+                    <!-- =================================
+                         CONFIRMAR CARTÃO
+                    ================================== -->
+
                     <button
                         type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                    ></button>
+                        class="btn btn-primary mt-3"
+                        id="confirmarCartao"
+                        style="display:none;"
+                        onclick="confirmarPagamento(tipoCartaoEscolhido)"
+                    >
+
+                        <i
+                            class="bi bi-check-circle"
+                        ></i>
+
+                        Confirmar pagamento
+
+                    </button>
+
+
+                    <!-- =================================
+                         VOLTAR
+                    ================================== -->
+
+                    <button
+                        type="button"
+                        class="btn btn-secondary mt-3"
+                        onclick="voltarPagamento()"
+                    >
+
+                        Voltar
+
+                    </button>
+
 
                 </div>
 
-
-                <div class="modal-body text-center">
-
-
-                    <!-- TOTAL -->
-
-                    <h4 class="mb-4">
-
-                        Total:
-
-                        <strong>
-                            R$
-                            <span id="totalPagamento">
-                                0.00
-                            </span>
-                        </strong>
-
-                    </h4>
-
-
-                    <!-- =================================
-                        ESCOLHA DO PAGAMENTO
-                    ================================== -->
-
-                    <div
-                        id="opcoesPagamento"
-                    >
-
-                        <h6 class="mb-3">
-                            Escolha a forma de pagamento:
-                        </h6>
-
-
-                        <div class="row g-3">
-
-                            <!-- PIX -->
-
-                            <div class="col-6">
-
-                                <button
-                                    type="button"
-                                    class="btn btn-success w-100 py-3"
-                                    onclick="selecionarPix()"
-                                >
-
-                                    <i
-                                        class="bi bi-qr-code"
-                                        style="font-size: 25px;"
-                                    ></i>
-
-                                    <br>
-
-                                    PIX
-
-                                </button>
-
-                            </div>
-
-
-                            <!-- CARTÃO -->
-
-                            <div class="col-6">
-
-                                <button
-                                    type="button"
-                                    class="btn btn-primary w-100 py-3"
-                                    onclick="selecionarCartao()"
-                                >
-
-                                    <i
-                                        class="bi bi-credit-card"
-                                        style="font-size: 25px;"
-                                    ></i>
-
-                                    <br>
-
-                                    Cartão
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <!-- =================================
-                        PIX
-                    ================================== -->
-
-                    <div
-                        id="pagamentoPix"
-                        style="display: none;"
-                    >
-
-                        <h5 class="text-success">
-                            Pagamento via PIX
-                        </h5>
-
-                        <p>
-                            Total a pagar:
-                        </p>
-
-                        <h3>
-                            R$
-                            <span id="valorPix">
-                                0.00
-                            </span>
-                        </h3>
-
-
-                        <!-- QR CODE -->
-
-                        <div
-                            class="border rounded p-4 my-3"
-                        >
-
-                            <i
-                                class="bi bi-qr-code"
-                                style="font-size: 100px;"
-                            ></i>
-
-                        </div>
-
-
-                        <p class="text-muted">
-                            QR Code será gerado aqui.
-                        </p>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-success"
-                            onclick="confirmarPagamento('pix')"
-                        >
-
-                            <i class="bi bi-check-circle"></i>
-
-                            Confirmar pagamento
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            onclick="voltarPagamento()"
-                        >
-
-                            Voltar
-
-                        </button>
-
-                    </div>
-
-
-                    <!-- =================================
-                        CARTÃO
-                    ================================== -->
-
-                    <div
-                        id="pagamentoCartao"
-                        style="display: none;"
-                    >
-
-                        <h5 class="text-primary">
-                            Pagamento via Cartão
-                        </h5>
-
-
-                        <p>
-                            Total a pagar:
-                        </p>
-
-                        <h3 class="mb-4">
-
-                            R$
-
-                            <span id="valorCartao">
-                                0.00
-                            </span>
-
-                        </h3>
-
-
-                        <div class="row g-3">
-
-                            <div class="col-6">
-
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-primary w-100 py-3"
-                                    onclick="selecionarTipoCartao('debito')"
-                                >
-
-                                    <i class="bi bi-credit-card"></i>
-
-                                    <br>
-
-                                    Débito
-
-                                </button>
-
-                            </div>
-
-
-                            <div class="col-6">
-
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-primary w-100 py-3"
-                                    onclick="selecionarTipoCartao('credito')"
-                                >
-
-                                    <i class="bi bi-credit-card-2-front"></i>
-
-                                    <br>
-
-                                    Crédito
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="tipoCartaoSelecionado"
-                            class="mt-3"
-                        ></div>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-primary mt-3"
-                            id="confirmarCartao"
-                            style="display: none;"
-                            onclick="confirmarPagamento(tipoCartaoSelecionado)"
-                        >
-
-                            <i class="bi bi-check-circle"></i>
-
-                            Confirmar pagamento
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="btn btn-secondary mt-3"
-                            onclick="voltarPagamento()"
-                        >
-
-                            Voltar
-
-                        </button>
-
-                    </div>
-
-
-                </div>
 
             </div>
+
 
         </div>
 
     </div>
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
-    </script>
-
-    <script>
+</div>
 
 
-    /* =========================================================
-    TOTAL DA VENDA
-    ========================================================= */
 
-    let total = 0;
+<!-- =====================================================
+     BOOTSTRAP JS
+====================================================== -->
 
-    let tipoCartaoSelecionado = "";
-
-    /* =========================================================
-    BUSCAR PRODUTO PELO CÓDIGO DE BARRAS
-    ========================================================= */
-
-    function buscarProduto() {
-
-        let campo =
-            document.getElementById("codigo");
-
-        let codigo =
-            campo.value.trim();
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+></script>
 
 
-        // Não permite busca vazia
-        if (codigo === "") {
 
-            alert(
-                "Digite ou leia o código de barras!"
+<script>
+
+
+/* =========================================================
+   VARIÁVEIS
+========================================================= */
+
+let total = 0;
+
+let tipoCartaoEscolhido = "";
+
+
+
+/* =========================================================
+   BUSCAR PRODUTO
+========================================================= */
+
+function buscarProduto() {
+
+
+    const campo =
+        document.getElementById("codigo");
+
+
+    const codigo =
+        campo.value.trim();
+
+
+    if (codigo === "") {
+
+        alert(
+            "Digite ou leia o código de barras!"
+        );
+
+        campo.focus();
+
+        return;
+
+    }
+
+
+    fetch(
+        "buscar_produto.php?codigo=" +
+        encodeURIComponent(codigo)
+    )
+
+
+    .then(response => {
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Erro na resposta do servidor."
             );
 
-            campo.focus();
-
-            return;
         }
 
 
-        fetch(
-            "buscar_produto.php?codigo=" +
-            encodeURIComponent(codigo)
-        )
+        return response.json();
 
-        .then(response => {
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "Erro na resposta do servidor."
-                );
-            }
-
-            return response.json();
-
-        })
-
-        .then(produto => {
+    })
 
 
-            /* =============================================
-            PRODUTO NÃO ENCONTRADO
-            ============================================= */
-
-            if (produto.erro) {
-
-                alert(
-                    "Produto não encontrado!"
-                );
-
-                campo.select();
-
-                return;
-            }
+    .then(produto => {
 
 
-            /* =============================================
-            ADICIONA O PRODUTO
-            ============================================= */
-
-            adicionarProduto(produto);
-
-
-            /* =============================================
-            LIMPA O CAMPO
-            ============================================= */
-
-            campo.value = "";
-
-
-            /* =============================================
-            DEVOLVE O FOCO PARA O CAMPO
-            ============================================= */
-
-            campo.focus();
-
-        })
-
-        .catch(error => {
-
-            console.error(error);
+        if (produto.erro) {
 
             alert(
-                "Erro ao buscar o produto."
+                produto.mensagem ||
+                "Produto não encontrado!"
             );
 
-        });
+            campo.select();
+
+            return;
+
+        }
+
+
+        adicionarProduto(produto);
+
+
+        campo.value = "";
+
+
+        campo.focus();
+
+    })
+
+
+    .catch(error => {
+
+
+        console.error(error);
+
+
+        alert(
+            "Erro ao buscar o produto."
+        );
+
+    });
+
+}
+
+
+
+/* =========================================================
+   ADICIONAR PRODUTO
+========================================================= */
+
+function adicionarProduto(produto) {
+
+
+    const preco =
+        parseFloat(produto.valor);
+
+
+    const lista =
+        document.getElementById("lista");
+
+
+    /*
+     * Verifica se o produto já está
+     * no carrinho.
+     */
+
+    const linhaExistente =
+        lista.querySelector(
+            `tr[data-codigo="${produto.codigoDeBarras}"]`
+        );
+
+
+    /* =====================================
+       PRODUTO JÁ EXISTE
+    ====================================== */
+
+    if (linhaExistente) {
+
+
+        const quantidadeElement =
+            linhaExistente.querySelector(
+                ".quantidade"
+            );
+
+
+        let quantidade =
+            parseInt(
+                quantidadeElement.textContent
+            );
+
+
+        const estoque =
+            parseInt(
+                linhaExistente.dataset.estoque
+            );
+
+
+        if (quantidade >= estoque) {
+
+            alert(
+                "Não há mais unidades desse produto em estoque."
+            );
+
+            return;
+
+        }
+
+
+        quantidade++;
+
+
+        quantidadeElement.textContent =
+            quantidade;
+
+
+        const estoqueElement =
+            linhaExistente.querySelector(
+                ".estoque-atual"
+            );
+
+
+        estoqueElement.textContent =
+            estoque - quantidade;
+
+
+        atualizarTotal();
+
+
+        return;
 
     }
 
 
 
-    /* =========================================================
-    ADICIONAR PRODUTO
-    ========================================================= */
+    /* =====================================
+       PRODUTO NOVO
+    ====================================== */
 
-    function adicionarProduto(produto) {
-
-
-        let preco =
-            parseFloat(produto.valor);
+    const estoque =
+        parseInt(produto.estoque);
 
 
-        let lista =
-            document.getElementById("lista");
+    if (estoque <= 0) {
+
+        alert(
+            "Este produto está sem estoque."
+        );
+
+        return;
+
+    }
 
 
-        /*
-        * Procuramos uma linha que já tenha
-        * o mesmo código de barras.
-        */
-
-        let linhaExistente =
-            lista.querySelector(
-                `tr[data-codigo="${produto.codigoDeBarras}"]`
-            );
+    const linha =
+        document.createElement("tr");
 
 
-        /* =====================================================
-        PRODUTO JÁ EXISTE
-        ===================================================== */
+    /*
+     * ID CORRETO:
+     *
+     * idProduto
+     */
 
-        if (linhaExistente) {
+    linha.dataset.id =
+        produto.idProduto;
 
-
-            let quantidadeElement =
-                linhaExistente.querySelector(
-                    ".quantidade"
-                );
-
-
-            let quantidade =
-                parseInt(
-                    quantidadeElement.textContent
-                );
-
-
-            let estoque =
-                parseInt(
-                    linhaExistente.dataset.estoque
-                );
-
-
-            /*
-            * Verifica se ainda existe estoque.
-            */
-
-            if (
-                quantidade >= estoque
-            ) {
-
-                alert(
-                    "Não há mais unidades desse produto em estoque."
-                );
-
-                return;
-            }
-
-
-            /*
-            * Aumenta a quantidade.
-            */
-
-            quantidade++;
-
-
-            quantidadeElement.textContent =
-                quantidade;
-
-
-            /*
-            * Atualiza o total.
-            */
-
-            atualizarTotal();
-
-
-            return;
-        }
-
-
-
-        /* =====================================================
-        PRODUTO NOVO
-        ===================================================== */
-
-        let estoque =
-            parseInt(produto.estoque);
-
-
-        /*
-        * Se o produto estiver sem estoque,
-        * não adiciona.
-        */
-
-        if (
-            estoque <= 0
-        ) {
-
-            alert(
-                "Este produto está sem estoque."
-            );
-
-            return;
-        }
-
-
-        /*
-        * Cria a nova linha.
-        */
-
-        let linha =
-            document.createElement("tr");
-
-
-        /*
-        * Guarda informações importantes
-        * na própria linha.
-        */
-
-        linha.dataset.id =
-        produto.idProdutos ?? produto.idProduto;
 
     linha.dataset.codigo =
         produto.codigoDeBarras;
 
+
     linha.dataset.preco =
         preco;
+
 
     linha.dataset.estoque =
         estoque;
 
 
-            linha.innerHTML = `
 
-    <td>
-        ${produto.idProduto}
-    </td>
+    linha.innerHTML = `
 
-    <td>
-        ${produto.nome}
-    </td>
+        <td>
+            ${produto.idProduto}
+        </td>
 
-    <td>
-        ${produto.categoria}
-    </td>
+        <td>
+            ${produto.nome}
+        </td>
 
-    <td>
-        ${produto.Armazenamento}
-    </td>
+        <td>
+            ${produto.categoria ?? "-"}
+        </td>
 
-    <td>
-        ${produto.codigoDeBarras}
-    </td>
+        <td>
+            ${produto.Armazenamento ?? "-"}
+        </td>
 
-    <td>
-        R$ ${preco.toFixed(2)}
-    </td>
+        <td>
+            ${produto.codigoDeBarras}
+        </td>
 
-    <td>
-        ${produto.validade ?? "-"}
-    </td>
+        <td>
+            R$ ${preco.toFixed(2)}
+        </td>
 
-    <td class="estoque-atual">
-        ${estoque-1}
-    </td>
+        <td>
+            ${produto.validade || "-"}
+        </td>
 
-    <td>
+        <td class="estoque-atual">
+            ${estoque - 1}
+        </td>
 
-        <div class="d-flex align-items-center gap-2">
+        <td>
 
-            <button
-                type="button"
-                class="btn btn-danger btn-sm"
-                onclick="diminuirQuantidade(this)"
+            <div
+                class="d-flex align-items-center gap-2"
             >
-                <i class="bi bi-dash"></i>
-            </button>
 
-            <strong class="quantidade">
-                1
-            </strong>
+                <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    onclick="diminuirQuantidade(this)"
+                >
 
-            <button
-                type="button"
-                class="btn btn-success btn-sm"
-                onclick="aumentarQuantidade(this)"
-            >
-                <i class="bi bi-plus"></i>
-            </button>
+                    <i class="bi bi-dash"></i>
 
-        </div>
+                </button>
 
-    </td>
+
+                <strong class="quantidade">
+                    1
+                </strong>
+
+
+                <button
+                    type="button"
+                    class="btn btn-success btn-sm"
+                    onclick="aumentarQuantidade(this)"
+                >
+
+                    <i class="bi bi-plus"></i>
+
+                </button>
+
+            </div>
+
+        </td>
 
     `;
 
 
-        /*
-        * Coloca a linha na tabela.
-        */
+    lista.appendChild(linha);
 
-        lista.appendChild(
-            linha
+
+    atualizarTotal();
+
+}
+
+
+
+/* =========================================================
+   AUMENTAR QUANTIDADE
+========================================================= */
+
+function aumentarQuantidade(botao) {
+
+
+    const linha =
+        botao.closest("tr");
+
+
+    const quantidadeElement =
+        linha.querySelector(
+            ".quantidade"
         );
 
 
-        /*
-        * Atualiza o total.
-        */
+    const estoqueElement =
+        linha.querySelector(
+            ".estoque-atual"
+        );
 
-        atualizarTotal();
-
-    }
-
-
-
-    /* =========================================================
-    AUMENTAR QUANTIDADE
-    ========================================================= */
-
-    function aumentarQuantidade(botao) {
-
-    let linha =
-        botao.closest("tr");
-
-    let quantidadeElement =
-        linha.querySelector(".quantidade");
-
-    let estoqueElement =
-        linha.querySelector(".estoque-atual");
 
     let quantidade =
         parseInt(
             quantidadeElement.textContent
         );
 
-    let estoqueOriginal =
+
+    const estoqueOriginal =
         parseInt(
             linha.dataset.estoque
         );
 
 
-    // Verifica se ainda existe estoque
     if (quantidade >= estoqueOriginal) {
 
         alert(
@@ -997,10 +1404,10 @@
         );
 
         return;
+
     }
 
 
-    // Aumenta a quantidade
     quantidade++;
 
 
@@ -1008,60 +1415,71 @@
         quantidade;
 
 
-    // Diminui o estoque mostrado na tela
     estoqueElement.textContent =
         estoqueOriginal - quantidade;
 
 
-    // Atualiza o total
     atualizarTotal();
 
-    }
+}
 
 
 
-    /* =========================================================
-    DIMINUIR QUANTIDADE
-    ========================================================= */
+/* =========================================================
+   DIMINUIR QUANTIDADE
+========================================================= */
 
-    function diminuirQuantidade(botao) {
+function diminuirQuantidade(botao) {
 
-    let linha =
+
+    const linha =
         botao.closest("tr");
 
-    let quantidadeElement =
-        linha.querySelector(".quantidade");
 
-    let estoqueElement =
-        linha.querySelector(".estoque-atual");
+    const quantidadeElement =
+        linha.querySelector(
+            ".quantidade"
+        );
+
+
+    const estoqueElement =
+        linha.querySelector(
+            ".estoque-atual"
+        );
+
 
     let quantidade =
         parseInt(
             quantidadeElement.textContent
         );
 
-    let estoqueOriginal =
+
+    const estoqueOriginal =
         parseInt(
             linha.dataset.estoque
         );
 
 
-    // Diminui a quantidade
     quantidade--;
 
 
-    // Se chegar a zero, remove o produto
+    /*
+     * Se chegar a zero,
+     * remove o produto.
+     */
+
     if (quantidade <= 0) {
 
         linha.remove();
 
-    } else {
+    }
+
+    else {
 
         quantidadeElement.textContent =
             quantidade;
 
 
-        // Devolve a unidade ao estoque visual
         estoqueElement.textContent =
             estoqueOriginal - quantidade;
 
@@ -1070,117 +1488,92 @@
 
     atualizarTotal();
 
-    }
+}
 
 
 
-    /* =========================================================
-    ATUALIZAR TOTAL
-    ========================================================= */
+/* =========================================================
+   ATUALIZAR TOTAL
+========================================================= */
 
-    function atualizarTotal() {
-
-
-        total = 0;
+function atualizarTotal() {
 
 
-        /*
-        * Pega todas as linhas da tabela.
-        */
-
-        let linhas =
-            document.querySelectorAll(
-                "#lista tr"
-            );
+    total = 0;
 
 
-        /*
-        * Percorre cada produto.
-        */
-
-        linhas.forEach(linha => {
-
-
-            let preco =
-                parseFloat(
-                    linha.dataset.preco
-                );
-
-
-            let quantidade =
-                parseInt(
-                    linha.querySelector(
-                        ".quantidade"
-                    ).textContent
-                );
-
-
-            /*
-            * Preço × quantidade
-            */
-
-            total +=
-                preco * quantidade;
-
-        });
-
-
-        /*
-        * Mostra o total.
-
-        */
-
-        document.getElementById(
-            "total"
-        ).textContent =
-            total.toFixed(2);
-
-    }
-
-
-
-
-
-    /* =========================================================
-    ENTER
-    ========================================================= */
-
-    /*
-    * A pistola normalmente envia ENTER
-    * depois de ler o código.
-    */
-
-    document
-        .getElementById("codigo")
-        .addEventListener(
-            "keypress",
-            function(event) {
-
-                if (
-                    event.key === "Enter"
-                ) {
-
-                    event.preventDefault();
-
-                    buscarProduto();
-
-                }
-
-            }
+    const linhas =
+        document.querySelectorAll(
+            "#lista tr"
         );
 
 
-    /* =========================================================
-    MODAL DE PAGAMENTO
-    ========================================================= */
+    linhas.forEach(linha => {
 
-    function abrirPagamento() {
 
-    /*
-    * Não permite finalizar uma venda vazia.
-    */
+        const preco =
+            parseFloat(
+                linha.dataset.preco
+            );
 
-    let produtos =
+
+        const quantidade =
+            parseInt(
+                linha.querySelector(
+                    ".quantidade"
+                ).textContent
+            );
+
+
+        total +=
+            preco * quantidade;
+
+    });
+
+
+    document.getElementById(
+        "total"
+    ).textContent =
+        total.toFixed(2);
+
+}
+
+
+
+/* =========================================================
+   ENTER DO CÓDIGO DE BARRAS
+========================================================= */
+
+document
+    .getElementById("codigo")
+    .addEventListener(
+        "keypress",
+        function(event) {
+
+
+            if (
+                event.key === "Enter"
+            ) {
+
+                event.preventDefault();
+
+                buscarProduto();
+
+            }
+
+        }
+    );
+
+
+
+/* =========================================================
+   ABRIR PAGAMENTO
+========================================================= */
+
+function abrirPagamento() {
+
+
+    const produtos =
         document.querySelectorAll(
             "#lista tr"
         );
@@ -1193,21 +1586,16 @@
         );
 
         return;
+
     }
 
 
     /*
-    * Mostra o total no modal.
-    */
+     * Atualiza valores
+     */
 
     document.getElementById(
         "totalPagamento"
-    ).textContent =
-        total.toFixed(2);
-
-
-    document.getElementById(
-        "valorPix"
     ).textContent =
         total.toFixed(2);
 
@@ -1219,103 +1607,160 @@
 
 
     /*
-    * Mostra as opções principais.
-    */
+     * Mostra opções
+     */
 
     document.getElementById(
-        "opcoesPagamento"
-    ).style.display = "block";
-
-
-    document.getElementById(
-        "pagamentoPix"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "pagamentoCartao"
-    ).style.display = "none";
+        "pagamentoOpcoes"
+    ).style.display =
+        "block";
 
 
     /*
-    * Abre o modal.
-    */
+     * Esconde cartão
+     */
 
-    let modal =
+    document.getElementById(
+        "pagamentoCartao"
+    ).style.display =
+        "none";
+
+
+    /*
+     * Reseta cartão
+     */
+
+    tipoCartaoSelecionado = "";
+
+
+    document.getElementById(
+        "tipoCartaoSelecionado"
+    ).innerHTML =
+        "";
+
+
+    document.getElementById(
+        "confirmarCartao"
+    ).style.display =
+        "none";
+
+
+    /*
+     * Abre modal
+     */
+
+    const modalElement =
+        document.getElementById(
+            "modalPagamento"
+        );
+
+
+    const modal =
         new bootstrap.Modal(
-            document.getElementById(
-                "modalPagamento"
-            )
+            modalElement
         );
 
 
     modal.show();
 
-    }
+}
 
 
 
-    /* =========================================================
-    SELECIONAR PIX
-    ========================================================= */
+/* =========================================================
+   PIX
+========================================================= */
 
-    function selecionarPix() {
+function selecionarPix() {
+
+    confirmarPagamento("Pix");
+
+}
+
+
+
+/* =========================================================
+   DINHEIRO
+========================================================= */
+
+function selecionarDinheiro() {
+
+    confirmarPagamento("Dinheiro");
+
+}
+
+
+
+/* =========================================================
+   CREDIÁRIO
+========================================================= */
+
+function selecionarCrediario() {
+
+    confirmarPagamento("Crediario");
+
+}
+
+
+
+/* =========================================================
+   CARTÃO
+========================================================= */
+
+function selecionarCartao() {
+
 
     document.getElementById(
-        "opcoesPagamento"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "pagamentoPix"
-    ).style.display = "block";
-
-    }
-
-
-
-    /* =========================================================
-    SELECIONAR CARTÃO
-    ========================================================= */
-
-    function selecionarCartao() {
-
-    document.getElementById(
-        "opcoesPagamento"
-    ).style.display = "none";
+        "pagamentoOpcoes"
+    ).style.display =
+        "none";
 
 
     document.getElementById(
         "pagamentoCartao"
-    ).style.display = "block";
+    ).style.display =
+        "block";
 
 
     document.getElementById(
         "tipoCartaoSelecionado"
-    ).innerHTML = "";
+    ).innerHTML =
+        "";
 
 
     document.getElementById(
         "confirmarCartao"
-    ).style.display = "none";
-
-    }
-
+    ).style.display =
+        "none";
 
 
-    /* =========================================================
-    TIPO DE CARTÃO
-    ========================================================= */
+    tipoCartaoSelecionado = "";
 
-    function selecionarTipoCartao(tipo) {
+}
 
-tipoCartaoSelecionado = tipo;
 
-let nome =
-    tipo === "debito"
-        ? "Débito"
-        : "Crédito";
 
+/* =========================================================
+   SELECIONAR DÉBITO / CRÉDITO
+========================================================= */
+
+function selecionarTipoCartao(tipo) {
+
+tipoCartaoEscolhido = tipo;
+
+let nome = "";
+
+if (tipo === "Debito") {
+
+    nome = "Débito";
+
+}
+
+else if (tipo === "Credito") {
+
+    nome = "Crédito";
+
+}
 
 document.getElementById(
     "tipoCartaoSelecionado"
@@ -1333,358 +1778,586 @@ document.getElementById(
 
 `;
 
-
 document.getElementById(
     "confirmarCartao"
-).style.display = "inline-block";
-
+).style.display =
+    "inline-block";
 }
 
 
 
-    /* =========================================================
-    VOLTAR
-    ========================================================= */
+/* =========================================================
+   VOLTAR PARA FORMAS DE PAGAMENTO
+========================================================= */
 
-    function voltarPagamento() {
-
-    document.getElementById(
-        "pagamentoPix"
-    ).style.display = "none";
+function voltarPagamento() {
 
 
     document.getElementById(
         "pagamentoCartao"
-    ).style.display = "none";
+    ).style.display =
+        "none";
 
 
     document.getElementById(
-        "opcoesPagamento"
-    ).style.display = "block";
+        "pagamentoOpcoes"
+    ).style.display =
+        "block";
 
-    }
+}
 
 
 
-    /* =========================================================
-    CONFIRMAR PAGAMENTO
-    ========================================================= */
+/* =========================================================
+   CONFIRMAR PAGAMENTO
+========================================================= */
 
-    function confirmarPagamento(formaDePagamento) {
+function confirmarPagamento(
+    formaDePagamento
+) {
+
+
+    console.log(
+        "Forma escolhida:",
+        formaDePagamento
+    );
+
+
+    /*
+     * Verifica total
+     */
 
     if (total <= 0) {
 
-        alert("Não há produtos na venda.");
+        alert(
+            "Não há produtos na venda."
+        );
 
         return;
 
     }
 
+
+    /*
+     * Converte a forma escolhida
+     * para o ENUM do banco.
+     *
+     * Banco:
+     *
+     * Dinheiro
+     * Cartao
+     * Pix
+     * Crediario
+     */
+
     let formaBanco = "";
 
-if (formaDePagamento === "pix") {
 
-    formaBanco = "Pix";
+    if (
+        formaDePagamento === "Pix"
+    ) {
 
-} else if (formaDePagamento === "debito") {
+        formaBanco =
+            "Pix";
 
-    formaBanco = "Debito";
+    }
 
-} else if (formaDePagamento === "credito") {
+    else if (
+        formaDePagamento === "Dinheiro"
+    ) {
 
-    formaBanco = "Credito";
+        formaBanco =
+            "Dinheiro";
 
-} else {
+    }
 
-    alert("Forma de pagamento inválida.");
+    else if (
+        formaDePagamento === "Crediario"
+    ) {
 
-    return;
-}
+        formaBanco =
+            "Crediario";
+
+    }
+
+    else if (
+        formaDePagamento === "Debito"
+    ) {
+
+        /*
+         * Débito é salvo como Cartao
+         */
+
+        formaBanco =
+            "Cartao";
+
+    }
+
+    else if (
+        formaDePagamento === "Credito"
+    ) {
+
+        /*
+         * Crédito é salvo como Cartao
+         */
+
+        formaBanco =
+            "Cartao";
+
+    }
+
+    else {
+
+        alert(
+            "Forma de pagamento inválida: " +
+            formaDePagamento
+        );
+
+        return;
+
+    }
 
 
-    /* PEGAR PRODUTOS DO CARRINHO */
+
+    /* =========================================
+       PEGAR PRODUTOS
+    ========================================== */
 
     const linhas =
-        document.querySelectorAll("#lista tr");
+        document.querySelectorAll(
+            "#lista tr"
+        );
+
 
     const produtos = [];
 
 
-    linhas.forEach(linha => {
-
-        const id =
-            parseInt(linha.dataset.id);
-
-        const quantidade =
-            parseInt(
-                linha.querySelector(".quantidade").textContent
-            );
-
-        produtos.push({
-            id: id,
-            quantidade: quantidade
-        });
-
-    });
+    linhas.forEach(
+        linha => {
 
 
-    /* CONFIRMAR */
+            /*
+             * O banco usa idProduto
+             */
+
+            const id =
+                parseInt(
+                    linha.dataset.id
+                );
+
+
+            const quantidade =
+                parseInt(
+                    linha.querySelector(
+                        ".quantidade"
+                    ).textContent
+                );
+
+
+            if (
+                !isNaN(id) &&
+                quantidade > 0
+            ) {
+
+                produtos.push({
+
+                    id:
+                        id,
+
+                    quantidade:
+                        quantidade
+
+                });
+
+            }
+
+        }
+    );
+
+
+
+    /* =========================================
+       VERIFICA PRODUTOS
+    ========================================== */
+
+    if (
+        produtos.length === 0
+    ) {
+
+        alert(
+            "Nenhum produto válido foi encontrado no carrinho."
+        );
+
+        return;
+
+    }
+
+
+
+    /* =========================================
+       NOME DA FORMA DE PAGAMENTO
+    ========================================== */
+
+    let nomeForma =
+        formaDePagamento;
+
+
+    if (
+        formaDePagamento === "Crediario"
+    ) {
+
+        nomeForma =
+            "CREDIÁRIO";
+
+    }
+
+    else if (
+        formaDePagamento === "Debito"
+    ) {
+
+        nomeForma =
+            "DÉBITO";
+
+    }
+
+    else if (
+        formaDePagamento === "Credito"
+    ) {
+
+        nomeForma =
+            "CRÉDITO";
+
+    }
+
+    else {
+
+        nomeForma =
+            formaDePagamento.toUpperCase();
+
+    }
+
+
+
+    /* =========================================
+       CONFIRMAÇÃO
+    ========================================== */
 
     const confirmar =
         confirm(
+
             "Confirmar pagamento?\n\n" +
+
             "Forma: " +
-            formaDePagamento.toUpperCase() +
+            nomeForma +
+
             "\nValor: R$ " +
             total.toFixed(2)
+
         );
 
 
     if (!confirmar) {
+
         return;
+
     }
 
 
-    /* ENVIAR PARA O PHP */
 
-    fetch("finalizar_venda.php", {
+    /* =========================================
+       ENVIA PARA PHP
+    ========================================== */
 
-        method: "POST",
+    fetch(
+        "finalizar_venda.php",
+        {
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+            method: "POST",
 
-        body: JSON.stringify({
+            headers: {
 
-valor: total,
+                "Content-Type":
+                    "application/json"
 
-formaDePagamento: formaBanco,
+            },
 
-produtos: produtos
+            body: JSON.stringify({
+
+valor:
+    total,
+
+formaDePagamento:
+    formaBanco,
+
+produtos:
+    produtos
 
 })
 
-    })
-
-    /*
-    IMPORTANTE:
-    Aqui usamos text() temporariamente
-    para descobrir o erro real do PHP.
-    */
-
-    .then(response => {
-
-        return response.text();
-
-    })
-
-    .then(texto => {
-
-        console.log(
-            "Resposta do PHP:",
-            texto
-        );
+        }
+    )
 
 
-        let resultado;
+    /* =========================================
+       RESPOSTA
+    ========================================== */
+
+    .then(
+        response => {
+
+            return response.text();
+
+        }
+    )
 
 
-        try {
-
-    resultado = JSON.parse(texto);
-
-    } catch (erro) {
-
-    const caixa = document.createElement("div");
-
-    caixa.style.position = "fixed";
-    caixa.style.top = "20px";
-    caixa.style.left = "20px";
-    caixa.style.right = "20px";
-    caixa.style.bottom = "20px";
-    caixa.style.background = "white";
-    caixa.style.zIndex = "99999";
-    caixa.style.padding = "20px";
-    caixa.style.border = "3px solid red";
-    caixa.style.borderRadius = "10px";
-    caixa.style.boxShadow = "0 0 20px rgba(0,0,0,0.5)";
-
-    caixa.innerHTML = `
-        <h4 style="color:red;">
-            ERRO RETORNADO PELO PHP
-        </h4>
-
-        <textarea
-            id="erroPHP"
-            style="
-                width:100%;
-                height:calc(100% - 100px);
-                font-family:monospace;
-                font-size:14px;
-                resize:none;
-            "
-        ></textarea>
-
-        <button
-            id="copiarErro"
-            style="
-                margin-top:10px;
-                padding:10px 20px;
-                cursor:pointer;
-            "
-        >
-            Copiar erro
-        </button>
-
-        <button
-            id="fecharErro"
-            style="
-                margin-top:10px;
-                padding:10px 20px;
-                cursor:pointer;
-            "
-        >
-            Fechar
-        </button>
-    `;
+    .then(
+        texto => {
 
 
-    document.body.appendChild(caixa);
+            console.log(
+                "Resposta do PHP:",
+                texto
+            );
 
 
-    document.getElementById(
-        "erroPHP"
-    ).value = texto;
+            let resultado;
 
 
-    document.getElementById(
-        "copiarErro"
-    ).onclick = function() {
+            try {
 
-        const campo =
-            document.getElementById("erroPHP");
+                resultado =
+                    JSON.parse(texto);
 
-        campo.select();
+            }
 
-        document.execCommand("copy");
-
-        alert("Erro copiado!");
-
-    };
+            catch (erro) {
 
 
-    document.getElementById(
-        "fecharErro"
-    ).onclick = function() {
+                alert(
 
-        caixa.remove();
+                    "O servidor retornou uma resposta inválida:\n\n" +
+                    texto
 
-    };
-
-
-    return;
-
-    }
+                );
 
 
-        /* ERRO */
+                return;
 
-        if (!resultado.sucesso) {
+            }
+
+
+
+            /* =====================================
+               ERRO DO PHP
+            ====================================== */
+
+            if (
+                !resultado.sucesso
+            ) {
+
+                alert(
+
+                    "Erro ao finalizar venda:\n\n" +
+                    resultado.mensagem
+
+                );
+
+                return;
+
+            }
+
+
+
+            /* =====================================
+               SUCESSO
+            ====================================== */
 
             alert(
-                "Erro ao finalizar venda:\n\n" +
-                resultado.mensagem
+
+                "Venda realizada com sucesso!\n\n" +
+
+                "Venda Nº " +
+
+                resultado.idVenda
+
             );
 
-            return;
-
-        }
 
 
-        /* VENDA REALIZADA */
+            /* =====================================
+               LIMPA CARRINHO
+            ====================================== */
 
-        alert(
-            "Venda realizada com sucesso!\n\n" +
-            "Venda Nº " +
-            resultado.idVenda
-        );
-
-
-        /* LIMPAR CARRINHO */
-
-        document.getElementById(
-            "lista"
-        ).innerHTML = "";
-
-
-        total = 0;
-
-
-        document.getElementById(
-            "total"
-        ).textContent = "0.00";
-
-
-        /* FECHAR MODAL */
-
-        const modalElement =
             document.getElementById(
-                "modalPagamento"
+                "lista"
+            ).innerHTML =
+                "";
+
+
+            total =
+                0;
+
+
+            document.getElementById(
+                "total"
+            ).textContent =
+                "0.00";
+
+
+
+            /* =====================================
+               FECHA MODAL
+            ====================================== */
+
+            const modalElement =
+                document.getElementById(
+                    "modalPagamento"
+                );
+
+
+            const modal =
+                bootstrap.Modal.getInstance(
+                    modalElement
+                );
+
+
+            if (modal) {
+
+                modal.hide();
+
+            }
+
+
+
+            /* =====================================
+               LIMPA CÓDIGO
+            ====================================== */
+
+            document.getElementById(
+                "codigo"
+            ).value =
+                "";
+
+
+            document.getElementById(
+                "codigo"
+            ).focus();
+
+
+
+            /* =====================================
+               VOLTA AO DASHBOARD
+            ====================================== */
+
+            setTimeout(
+                function() {
+
+                    window.location.href =
+                        "index.php";
+
+                },
+                500
             );
-
-
-        const modal =
-            bootstrap.Modal.getInstance(
-                modalElement
-            );
-
-
-        if (modal) {
-
-            modal.hide();
 
         }
+    )
 
 
-        /* LIMPAR CAMPO DE BUSCA */
+    /* =========================================
+       ERRO DE COMUNICAÇÃO
+    ========================================== */
 
-        document.getElementById(
-            "codigo"
-        ).value = "";
-
-
-        document.getElementById(
-            "codigo"
-        ).focus();
+    .catch(
+        error => {
 
 
-        /* VOLTAR PARA O DASHBOARD */
+            console.error(
+                "Erro:",
+                error
+            );
 
-        setTimeout(function() {
 
-            window.location.href =
-                "index.php";
+            alert(
 
-        }, 500);
+                "Erro de comunicação com o servidor:\n\n" +
+                error.message
 
-    })
+            );
 
-    .catch(error => {
+        }
+    );
 
-        console.error(error);
+}
 
-        alert(
-            "Erro de comunicação com o servidor."
+</script>
+
+
+<script>
+
+    function alternarSidebar() {
+    
+        const sidebar =
+            document.querySelector(".sidebar");
+    
+        const conteudo =
+            document.querySelector(".conteudo-principal");
+    
+    
+        sidebar.classList.toggle("escondida");
+    
+        conteudo.classList.toggle("sidebar-fechada");
+    
+    
+        const fechada =
+            sidebar.classList.contains("escondida");
+    
+    
+        localStorage.setItem(
+            "sidebarFechada",
+            fechada
         );
-
-    });
-
+    
     }
-
+    
+    
+    /* =========================================
+       MANTER ESTADO AO TROCAR DE PÁGINA
+    ========================================= */
+    
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+    
+            const sidebar =
+                document.querySelector(".sidebar");
+    
+            const conteudo =
+                document.querySelector(".conteudo-principal");
+    
+    
+            const fechada =
+                localStorage.getItem(
+                    "sidebarFechada"
+                );
+    
+    
+            if (fechada === "true") {
+    
+                sidebar.classList.add(
+                    "escondida"
+                );
+    
+                conteudo.classList.add(
+                    "sidebar-fechada"
+                );
+    
+            }
+    
+        }
+    );
+    
     </script>
+</body>
 
-
-    </body>
-
-    </html>
+</html>

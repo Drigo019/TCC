@@ -39,6 +39,139 @@
     z-index: 1000;
 }
 
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.sidebar {
+
+width: 240px;
+
+height: 100vh;
+
+position: fixed;
+
+left: 0;
+
+top: 0;
+
+background: black;
+
+padding: 30px 20px;
+
+border-radius: 0 20px 20px 0;
+
+box-shadow: 5px 0 20px rgba(0,0,0,0.1);
+
+z-index: 1000;
+
+transition: transform 0.3s ease;
+
+}
+
+
+/* =========================================
+CONTEÚDO
+========================================= */
+
+.conteudo-principal {
+
+margin-left: 260px;
+
+transition: margin-left 0.3s ease;
+
+}
+
+
+/* =========================================
+BOTÃO DA SIDEBAR
+========================================= */
+
+.botao-sidebar {
+
+position: absolute;
+
+top: 20px;
+
+right: -18px;
+
+width: 36px;
+
+height: 36px;
+
+border: none;
+
+border-radius: 50%;
+
+background: #212529;
+
+color: white;
+
+display: flex;
+
+align-items: center;
+
+justify-content: center;
+
+cursor: pointer;
+
+box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+
+transition: 0.3s;
+
+z-index: 1001;
+
+}
+
+
+.botao-sidebar:hover {
+
+transform: scale(1.1);
+
+background: #343a40;
+
+}
+
+
+/* =========================================
+SIDEBAR FECHADA
+========================================= */
+
+.sidebar.escondida {
+
+transform: translateX(-100%);
+
+}
+
+
+/* =========================================
+CONTEÚDO SEM SIDEBAR
+========================================= */
+
+.conteudo-principal.sidebar-fechada {
+
+margin-left: 20px;
+
+}
+
+
+/* =========================================
+BOTÃO QUANDO FECHADA
+========================================= */
+
+.sidebar.escondida .botao-sidebar {
+
+right: -54px;
+
+}
+
+
+.sidebar.escondida .botao-sidebar i {
+
+transform: rotate(180deg);
+
+}
+
 
 /* LOGO */
 
@@ -175,5 +308,71 @@
 
 </div>
 <script src="js/script.js"></script>
+
+<script>
+
+    function alternarSidebar() {
+    
+        const sidebar =
+            document.querySelector(".sidebar");
+    
+        const conteudo =
+            document.querySelector(".conteudo-principal");
+    
+    
+        sidebar.classList.toggle("escondida");
+    
+        conteudo.classList.toggle("sidebar-fechada");
+    
+    
+        const fechada =
+            sidebar.classList.contains("escondida");
+    
+    
+        localStorage.setItem(
+            "sidebarFechada",
+            fechada
+        );
+    
+    }
+    
+    
+    /* =========================================
+       MANTER ESTADO AO TROCAR DE PÁGINA
+    ========================================= */
+    
+    document.addEventListener(
+        "DOMContentLoaded",
+        function() {
+    
+            const sidebar =
+                document.querySelector(".sidebar");
+    
+            const conteudo =
+                document.querySelector(".conteudo-principal");
+    
+    
+            const fechada =
+                localStorage.getItem(
+                    "sidebarFechada"
+                );
+    
+    
+            if (fechada === "true") {
+    
+                sidebar.classList.add(
+                    "escondida"
+                );
+    
+                conteudo.classList.add(
+                    "sidebar-fechada"
+                );
+    
+            }
+    
+        }
+    );
+    
+    </script>
 </body>
 </html>

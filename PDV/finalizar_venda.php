@@ -30,32 +30,112 @@ if (!$dados) {
 }
 
 
-$produtos = $dados['produtos'] ?? [];
-$valor = floatval($dados['valor'] ?? 0);
-$formaDePagamento = $dados['formaDePagamento'] ?? '';
+/* =====================================================
+   DADOS RECEBIDOS
+===================================================== */
 
+$produtos = $dados['produtos'] ?? [];
+
+$valor = floatval(
+    $dados['valor'] ?? 0
+);
+
+$formaDePagamento = trim(
+    $dados['formaDePagamento'] ?? ''
+);
+
+
+/* =====================================================
+   VALIDAR FORMA DE PAGAMENTO
+===================================================== */
+
+$formaRecebida = strtolower(
+    $formaDePagamento
+);
+
+
+switch ($formaRecebida) {
+
+    case 'dinheiro':
+
+        $formaPagamento = 'Dinheiro';
+
+        break;
+
+
+    case 'cartao':
+
+        $formaPagamento = 'Cartao';
+
+        break;
+
+
+    case 'pix':
+
+        $formaPagamento = 'Pix';
+
+        break;
+
+
+    case 'crediario':
+
+        $formaPagamento = 'Crediario';
+
+        break;
+
+
+    default:
+
+        echo json_encode([
+
+            "sucesso" => false,
+
+            "mensagem" =>
+                "Forma de pagamento inválida: " .
+                $formaDePagamento
+
+        ]);
+
+        exit;
+}
+
+
+/* =====================================================
+   VALIDAR PRODUTOS
+===================================================== */
 
 if (empty($produtos)) {
 
     echo json_encode([
+
         "sucesso" => false,
-        "mensagem" => "Nenhum produto foi informado."
+
+        "mensagem" =>
+            "Nenhum produto foi informado."
+
     ]);
 
     exit;
 }
 
+
+/* =====================================================
+   VALIDAR VALOR
+===================================================== */
 
 if ($valor <= 0) {
 
     echo json_encode([
+
         "sucesso" => false,
-        "mensagem" => "Valor da venda inválido."
+
+        "mensagem" =>
+            "Valor da venda inválido."
+
     ]);
 
     exit;
 }
-
 
 
 /* =====================================================
@@ -75,10 +155,14 @@ try {
     foreach ($produtos as $produto) {
 
         $idProduto =
-            intval($produto['id']);
+            intval(
+                $produto['id'] ?? 0
+            );
 
         $quantidade =
-            intval($produto['quantidade']);
+            intval(
+                $produto['quantidade'] ?? 0
+            );
 
 
         if ($idProduto <= 0) {
@@ -99,16 +183,16 @@ try {
         }
 
 
-        /*
-            Busca o estoque atual.
-        */
+        /* =============================================
+           BUSCAR ESTOQUE
+        ============================================= */
 
         $sqlEstoque = "
-            SELECT estoque
-            FROM produtos
-            WHERE idProduto = $idProduto
-            FOR UPDATE
-        ";
+    SELECT estoque
+    FROM produtos
+    WHERE idProduto = $idProduto
+    FOR UPDATE
+";
 
 
         $resultadoEstoque =
@@ -121,8 +205,10 @@ try {
         if (!$resultadoEstoque) {
 
             throw new Exception(
+
                 "Erro ao consultar estoque: " .
                 mysqli_error($conn)
+
             );
 
         }
@@ -137,9 +223,11 @@ try {
         if (!$produtoBanco) {
 
             throw new Exception(
+
                 "Produto ID " .
                 $idProduto .
                 " não encontrado."
+
             );
 
         }
@@ -151,9 +239,9 @@ try {
             );
 
 
-        /*
-            Verifica se existe estoque suficiente.
-        */
+        /* =============================================
+           VERIFICAR ESTOQUE SUFICIENTE
+        ============================================= */
 
         if ($quantidade > $estoqueAtual) {
 
@@ -177,7 +265,6 @@ try {
     }
 
 
-
     /* =================================================
        REGISTRAR VENDA
     ================================================= */
@@ -191,11 +278,26 @@ try {
         );
 
 
-        $sqlVenda = "
+    $formaPagamentoSql =
+        mysqli_real_escape_string(
+            $conn,
+            $formaPagamento
+        );
+
+
+    $sqlVenda = "
         INSERT INTO vendas
-        (valor, data, formaDePagamento)
+        (
+            valor,
+            data,
+            formaDePagamento
+        )
         VALUES
-        ($valorBanco, NOW(), '$formaDePagamento')
+        (
+            $valorBanco,
+            NOW(),
+            '$formaPagamentoSql'
+        )
     ";
 
 
@@ -209,20 +311,21 @@ try {
     if (!$resultadoVenda) {
 
         throw new Exception(
+
             "Erro ao registrar venda no banco:\n\n" .
             mysqli_error($conn)
+
         );
 
     }
 
 
-    /*
-        Pega o ID da venda recém-criada.
-    */
+    /* =================================================
+       PEGAR ID DA VENDA
+    ================================================= */
 
     $idVenda =
         mysqli_insert_id($conn);
-
 
 
     /* =================================================
@@ -232,13 +335,17 @@ try {
     foreach ($produtos as $produto) {
 
         $idProduto =
-            intval($produto['id']);
+            intval(
+                $produto['id']
+            );
 
         $quantidade =
-            intval($produto['quantidade']);
+            intval(
+                $produto['quantidade']
+            );
 
 
-        $sqlBaixa = "
+            $sqlBaixa = "
             UPDATE produtos
             SET estoque = estoque - $quantidade
             WHERE idProduto = $idProduto
@@ -255,16 +362,17 @@ try {
         if (!$resultadoBaixa) {
 
             throw new Exception(
+
                 "Erro ao baixar estoque do produto ID " .
                 $idProduto .
                 ":\n\n" .
                 mysqli_error($conn)
+
             );
 
         }
 
     }
-
 
 
     /* =================================================
@@ -289,7 +397,7 @@ try {
             $idVenda,
 
         "formaDePagamento" =>
-            $formaDePagamento
+            $formaPagamento
 
     ]);
 
@@ -298,7 +406,7 @@ try {
 
 
     /* =================================================
-       DESFAZER TUDO
+       DESFAZER TRANSAÇÃO
     ================================================= */
 
     mysqli_rollback($conn);
