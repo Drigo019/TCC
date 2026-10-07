@@ -582,14 +582,14 @@
                     <!-- INFORMAÇÕES DO RESPONSÁVEL -->
                     <div class="rodape-coluna">
                         <h3>Responsável</h3>
-                        <p><strong>Nome:</strong> NOME DO DONO</p>
-                        <p><strong>CNPJ:</strong> 00.000.000/0000-00</p>
+                        <p><strong>Nome:</strong> Eric Lima da Silva </p>
+                        <p><strong>CNPJ:</strong> 22.126.506/0001-84</p>
                     </div>
                     <!-- CONTATO -->
                     <div class="rodape-coluna">
                         <h3>Contato</h3>
                         <p>📱 (19) 99229-5270</p>
-                        <p>📧 contato@containerdoqueijo.com</p>
+                        <p>📧 86ericsilva@gmail.com</p>
                     </div>
                     <!-- ENDEREÇO -->
                     <div class="rodape-coluna">
