@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 25-Set-2026 às 15:18
+-- Tempo de geração: 09-Out-2026 às 15:18
 -- Versão do servidor: 5.7.36
 -- versão do PHP: 7.4.26
 
@@ -220,21 +220,19 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   `idVendas` int(11) NOT NULL AUTO_INCREMENT,
   `valor` float(10,2) DEFAULT NULL,
   `data` date DEFAULT NULL,
-  `formaDePagamento` enum('Dinheiro','Cartao','Debito','Credito','Pix','Crediario') COLLATE utf8mb4_unicode_ci NOT NULL,
+  `formaDePagamento` enum('Dinheiro','Debito','Credito','Pix','Crediario','Cartao') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Dinheiro',
   `idProduto` int(11) DEFAULT NULL,
   `idCliente` int(11) DEFAULT NULL,
   PRIMARY KEY (`idVendas`),
   KEY `idProduto` (`idProduto`),
   KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `vendas`
 --
 
 INSERT INTO `vendas` (`idVendas`, `valor`, `data`, `formaDePagamento`, `idProduto`, `idCliente`) VALUES
-(1, 79.99, '2026-09-20', 'Cartao', NULL, NULL),
-(2, 79.99, '2026-09-20', 'Cartao', NULL, NULL),
 (3, 79.99, '2026-09-20', 'Dinheiro', NULL, NULL),
 (4, 39.99, '2026-09-20', 'Crediario', NULL, NULL),
 (5, 39.99, '2026-09-20', 'Cartao', NULL, NULL),
@@ -243,16 +241,16 @@ INSERT INTO `vendas` (`idVendas`, `valor`, `data`, `formaDePagamento`, `idProdut
 (8, 99.90, '2026-09-23', 'Crediario', NULL, NULL),
 (9, 134.89, '2026-09-23', 'Pix', NULL, NULL),
 (10, 29.99, '2026-09-23', 'Pix', NULL, NULL),
-(11, 29.99, '2026-09-23', 'Cartao', NULL, NULL),
-(12, 29.99, '2026-09-23', 'Cartao', NULL, NULL),
-(13, 29.99, '2026-09-23', 'Cartao', NULL, NULL),
 (14, 29.99, '2026-09-23', 'Debito', NULL, NULL),
 (15, 29.99, '2026-09-23', 'Credito', NULL, NULL),
 (16, 59.98, '2026-09-23', 'Pix', NULL, NULL),
 (17, 200.00, '2026-09-25', 'Pix', NULL, NULL),
 (18, 200.00, '2026-09-25', 'Pix', NULL, NULL),
 (19, 24.99, '2026-09-25', 'Dinheiro', NULL, NULL),
-(20, 200.00, '2026-09-25', 'Debito', NULL, NULL);
+(20, 200.00, '2026-09-25', 'Debito', NULL, NULL),
+(22, 29.99, '2026-10-09', 'Pix', NULL, NULL),
+(23, 29.99, '2026-10-09', 'Debito', NULL, NULL),
+(24, 19.99, '2026-10-09', 'Credito', NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

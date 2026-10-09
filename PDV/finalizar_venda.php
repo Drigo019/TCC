@@ -63,11 +63,17 @@ switch ($formaRecebida) {
         break;
 
 
-    case 'cartao':
+    case 'debito':
 
-        $formaPagamento = 'Cartao';
+        $formaPagamento = 'Debito';
 
         break;
+
+        case 'credito':
+
+            $formaPagamento = 'Credito';
+    
+            break;
 
 
     case 'pix':
