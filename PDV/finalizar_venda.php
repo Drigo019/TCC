@@ -100,6 +100,8 @@ switch ($formaRecebida) {
 }
 
 
+
+
 /* =====================================================
    VALIDAR PRODUTOS
 ===================================================== */
@@ -285,47 +287,21 @@ try {
         );
 
 
-    $sqlVenda = "
-        INSERT INTO vendas
-        (
-            valor,
-            data,
-            formaDePagamento
-        )
-        VALUES
-        (
-            $valorBanco,
-            NOW(),
-            '$formaPagamentoSql'
-        )
-    ";
-
-
-    $resultadoVenda =
-        mysqli_query(
-            $conn,
-            $sqlVenda
-        );
-
-
-    if (!$resultadoVenda) {
-
+        $stmt = $conn->prepare("
+        INSERT INTO vendas (valor, data, formaDePagamento)
+        VALUES (?, NOW(), ?)
+    ");
+    
+    $stmt->bind_param("ds", $valor, $formaPagamento);
+    
+    if (!$stmt->execute()) {
         throw new Exception(
-
-            "Erro ao registrar venda no banco:\n\n" .
-            mysqli_error($conn)
-
+            "Erro ao registrar venda: " . $stmt->error
         );
-
     }
-
-
-    /* =================================================
-       PEGAR ID DA VENDA
-    ================================================= */
-
-    $idVenda =
-        mysqli_insert_id($conn);
+    
+    $idVenda = $conn->insert_id;
+    $stmt->close();
 
 
     /* =================================================

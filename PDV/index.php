@@ -100,6 +100,8 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       border-radius:0 20px 20px 0;
 
       box-shadow:5px 0 20px rgba(0,0,0,0.1);
+
+      transition: transform 0.3s ease;
     }
 
     .logo{
@@ -379,7 +381,6 @@ transform: rotate(180deg);
     <i class="bi bi-house"></i>
     Dashboard
 </a>
-
 <button
     type="button"
     class="botao-sidebar"
@@ -552,94 +553,45 @@ transform: rotate(180deg);
 
                 <td>
 
-                    <?php
+                <?php
+$forma = $venda['formaDePagamento'] ?? '';
 
-                    $forma =
-                        $venda['formaDePagamento'];
+switch ($forma) {
+    case 'Pix':
+        echo '<span class="badge bg-success">
+                <i class="bi bi-qr-code"></i> Pix
+              </span>';
+        break;
 
-                    switch ($forma) {
+    case 'Dinheiro':
+        echo '<span class="badge bg-warning text-dark">
+                <i class="bi bi-cash-stack"></i> Dinheiro
+              </span>';
+        break;
 
-                        case 'Pix':
+    case 'Crediario':
+        echo '<span class="badge bg-secondary">
+                <i class="bi bi-journal-text"></i> Crediário
+              </span>';
+        break;
 
-                            echo '
-                            <span class="badge bg-success">
-                                <i class="bi bi-qr-code"></i>
-                                Pix
-                            </span>';
+    case 'Debito':
+        echo '<span class="badge bg-primary">
+                <i class="bi bi-credit-card"></i> Débito
+              </span>';
+        break;
 
-                            break;
+    case 'Credito':
+        echo '<span class="badge bg-info text-dark">
+                <i class="bi bi-credit-card-2-front"></i> Crédito
+              </span>';
+        break;
 
-
-                        case 'Debito':
-
-                            echo '
-                            <span class="badge bg-primary">
-                                <i class="bi bi-credit-card"></i>
-                                Débito
-                            </span>';
-
-                            break;
-
-
-                        case 'Credito':
-
-                            echo '
-                            <span class="badge bg-info text-dark">
-                                <i class="bi bi-credit-card-2-front"></i>
-                                Crédito
-                            </span>';
-
-                            break;
-
-
-                        case 'Dinheiro':
-
-                            echo '
-                            <span class="badge bg-warning text-dark">
-                                <i class="bi bi-cash-coin"></i>
-                                Dinheiro
-                            </span>';
-
-                            break;
-
-
-                        case 'Crediario':
-
-                            echo '
-                            <span class="badge bg-secondary">
-                                <i class="bi bi-journal-text"></i>
-                                Crediário
-                            </span>';
-
-                            break;
-
-
-                        case 'Cartao':
-
-                            echo '
-                            <span class="badge bg-primary">
-                                <i class="bi bi-credit-card"></i>
-                                Cartão
-                            </span>';
-
-                            break;
-
-
-                        default:
-
-                            echo '
-                            <span class="badge bg-dark">
-                                <i class="bi bi-question-circle"></i>
-                                ' .
-                                htmlspecialchars($forma) .
-                                '
-                            </span>';
-
-                            break;
-
-                    }
-
-                    ?>
+    default:
+        echo htmlspecialchars($forma);
+        break;
+}
+?>
 
                 </td>
 

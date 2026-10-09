@@ -576,6 +576,14 @@ table {
 
     <h2>
         <img id="logo" src="../imagens/logo.jpeg" style="height: 100px; width: 180px; margin-left: 0px; margin-right: 0px; margin-top: -20px;">
+        <button
+    type="button"
+    class="botao-sidebar"
+    onclick="alternarSidebar()"
+    title="Ocultar menu"
+>
+    <i class="bi bi-chevron-left"></i>
+</button>
     </h2>
 
     <a href="index.php">

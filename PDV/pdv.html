@@ -388,9 +388,18 @@ transform: rotate(180deg);
                 margin-top:-20px;
             "
         >
-        
+        <button
+    type="button"
+    class="botao-sidebar"
+    onclick="alternarSidebar()"
+    title="Ocultar menu"
+>
+    <i class="bi bi-chevron-left"></i>
+</button>
 
     </h2>
+
+    
 
 
     <a href="index.php">
@@ -412,6 +421,7 @@ transform: rotate(180deg);
         PDV
 
     </a>
+    
 
 
     <a href="produtos.html">
@@ -442,6 +452,8 @@ transform: rotate(180deg);
 
 
 </div>
+
+
 
 
 
@@ -1880,31 +1892,12 @@ function confirmarPagamento(
 
     }
 
-    else if (
-        formaDePagamento === "Debito"
-    ) {
-
-        /*
-         * Débito é salvo como Cartao
-         */
-
-        formaBanco =
-            "Cartao";
-
-    }
-
-    else if (
-        formaDePagamento === "Credito"
-    ) {
-
-        /*
-         * Crédito é salvo como Cartao
-         */
-
-        formaBanco =
-            "Cartao";
-
-    }
+    else if (formaDePagamento === "Debito") {
+    formaBanco = "Debito";
+}
+else if (formaDePagamento === "Credito") {
+    formaBanco = "Credito";
+}
 
     else {
 
