@@ -601,11 +601,6 @@ table {
         Produtos
     </a>
 
-    <a href="funcionarios.html">
-        <i class="bi bi-people"></i>
-        Funcionários
-    </a>
-
     <a href="estoque.php" class='ativo'>
         <i class="bi bi-boxes"></i>
         Estoque

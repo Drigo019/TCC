@@ -405,11 +405,6 @@ transform: rotate(180deg);
         Produtos
     </a>
 
-    <a href="funcionarios.html">
-        <i class="bi bi-people"></i>
-        Funcionários
-    </a>
-
     <a href="estoque.php">
         <i class="bi bi-boxes"></i>
         Estoque
@@ -455,9 +450,22 @@ transform: rotate(180deg);
             required
             class="form-control"><br>    
             
-            <input type="text" name="nome" placeholder="🏷️Nome do Produto" required class="form-control"><br>
+            <input type="text" name="nome" placeholder="🏷️Nome do Produto" required class="form-control" id="nome"><br>
 
-            <input type="number" name="preco" step="0.01" placeholder="💲Preço" required class="form-control"><br>
+<div class="mb-3">
+    <div class="input-group">
+        <span class="input-group-text">R$</span>
+        <input
+            type="text"
+            id="preco"
+            name="preco"
+            class="form-control"
+            placeholder="0,00"
+            inputmode="numeric"
+            required
+        >
+    </div>
+</div>
 
             <input type="number" name="estoque" placeholder="📦 Estoque" required
         class="form-control"><br>
@@ -932,6 +940,74 @@ function novoProduto() {
     );
     
     </script>
+
+    
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+    
+        // Primeira letra do nome em maiúscula
+        const campoNome = document.getElementById("nome");
+    
+        if (campoNome) {
+            campoNome.addEventListener("input", function () {
+                const valor = this.value;
+    
+                if (valor.length > 0) {
+                    this.value =
+                        valor.charAt(0).toLocaleUpperCase("pt-BR") +
+                        valor.slice(1);
+                }
+            });
+        }
+    
+        // Formatação automática do preço em reais
+        const campoPreco = document.getElementById("preco");
+    
+        if (campoPreco) {
+            campoPreco.addEventListener("input", function () {
+    
+                // Mantém apenas os números digitados
+                let numeros = this.value.replace(/\D/g, "");
+    
+                // Impede que o campo fique vazio
+                if (numeros === "") {
+                    this.value = "";
+                    return;
+                }
+    
+                // Interpreta os números como centavos
+                let valor = parseInt(numeros, 10) / 100;
+    
+                // Formata no padrão brasileiro
+                this.value = valor.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            });
+        }
+    
+    });
+    </script>
+    
+<script>
+const campoPreco = document.getElementById("preco");
+
+campoPreco.addEventListener("input", function () {
+    // Mantém somente os números digitados
+    let numeros = this.value.replace(/\D/g, "");
+
+    if (numeros === "") {
+        this.value = "";
+        return;
+    }
+
+    // Converte os números para centavos
+    let valor = (parseInt(numeros, 10) / 100).toFixed(2);
+
+    // Formata no padrão brasileiro
+    this.value = valor.replace(".", ",");
+});
+</script>
 
         </body>
         </html>

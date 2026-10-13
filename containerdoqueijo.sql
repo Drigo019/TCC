@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 09-Out-2026 às 15:18
+-- Tempo de geração: 13-Out-2026 às 11:55
 -- Versão do servidor: 5.7.36
 -- versão do PHP: 7.4.26
 
@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `itens_venda` (
   `quantidade` int(11) NOT NULL,
   `valorUnitario` decimal(10,2) NOT NULL,
   PRIMARY KEY (`idItem`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Extraindo dados da tabela `itens_venda`
@@ -121,7 +121,8 @@ INSERT INTO `itens_venda` (`idItem`, `idVenda`, `idProduto`, `quantidade`, `valo
 (6, 8, 23, 1, '99.90'),
 (7, 9, 23, 1, '99.90'),
 (8, 9, 21, 1, '34.99'),
-(9, 19, 26, 1, '24.99');
+(9, 19, 26, 1, '24.99'),
+(10, 3, 26, 1, '24.99');
 
 -- --------------------------------------------------------
 
@@ -143,14 +144,14 @@ CREATE TABLE IF NOT EXISTS `produtos` (
   `idFornecedor` int(11) DEFAULT NULL,
   PRIMARY KEY (`idProduto`),
   KEY `idFornecedor` (`idFornecedor`)
-) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `produtos`
 --
 
 INSERT INTO `produtos` (`idProduto`, `nome`, `codigoDeBarras`, `valor`, `validade`, `estoque`, `Armazenamento`, `categoria`, `imagem`, `idFornecedor`) VALUES
-(26, 'Queijo Fresco 500g ', 8, 24.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa8618563462_21c80348-2feb-4477-aaba-2020e17f1a6e.jpeg', NULL),
+(26, 'Queijo Fresco 500g ', 8, 24.99, NULL, 9, 'Refrigerado', 'queijos', '../imagens/6aa8618563462_21c80348-2feb-4477-aaba-2020e17f1a6e.jpeg', NULL),
 (25, 'Requeijao de Colher ', 7, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86165dfb53_1e2aa7ce-3b63-447c-838b-890176620dc8.jpeg', NULL),
 (19, 'Queijo Recheado com requeijao ', 1, 29.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa86089a4e18_c875ebfe-7a67-4c5a-b9af-ba9724cc13ac.jpeg', NULL),
 (20, 'Requeijao Scala 400g', 2, 19.99, NULL, 10, 'Refrigerado', 'queijos', '../imagens/6aa860aa8a1e0_2aea2284-f65e-4234-95c2-f7e6cdc6aa57.jpeg', NULL),
@@ -226,31 +227,14 @@ CREATE TABLE IF NOT EXISTS `vendas` (
   PRIMARY KEY (`idVendas`),
   KEY `idProduto` (`idProduto`),
   KEY `idCliente` (`idCliente`)
-) ENGINE=MyISAM AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Extraindo dados da tabela `vendas`
 --
 
 INSERT INTO `vendas` (`idVendas`, `valor`, `data`, `formaDePagamento`, `idProduto`, `idCliente`) VALUES
-(3, 79.99, '2026-09-20', 'Dinheiro', NULL, NULL),
-(4, 39.99, '2026-09-20', 'Crediario', NULL, NULL),
-(5, 39.99, '2026-09-20', 'Cartao', NULL, NULL),
-(6, 99.90, '2026-09-21', 'Pix', NULL, NULL),
-(7, 79.99, '2026-09-22', 'Dinheiro', NULL, NULL),
-(8, 99.90, '2026-09-23', 'Crediario', NULL, NULL),
-(9, 134.89, '2026-09-23', 'Pix', NULL, NULL),
-(10, 29.99, '2026-09-23', 'Pix', NULL, NULL),
-(14, 29.99, '2026-09-23', 'Debito', NULL, NULL),
-(15, 29.99, '2026-09-23', 'Credito', NULL, NULL),
-(16, 59.98, '2026-09-23', 'Pix', NULL, NULL),
-(17, 200.00, '2026-09-25', 'Pix', NULL, NULL),
-(18, 200.00, '2026-09-25', 'Pix', NULL, NULL),
-(19, 24.99, '2026-09-25', 'Dinheiro', NULL, NULL),
-(20, 200.00, '2026-09-25', 'Debito', NULL, NULL),
-(22, 29.99, '2026-10-09', 'Pix', NULL, NULL),
-(23, 29.99, '2026-10-09', 'Debito', NULL, NULL),
-(24, 19.99, '2026-10-09', 'Credito', NULL, NULL);
+(3, 24.99, '2026-10-13', 'Pix', NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

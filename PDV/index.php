@@ -25,17 +25,6 @@ $result_produtos = mysqli_query($conn, $sql_produtos);
 $dados_produtos = mysqli_fetch_assoc($result_produtos);
 
 $total_produtos = $dados_produtos['total_produtos'];
-
-$sql_funcionarios = "
-SELECT COUNT(*) AS total_funcionarios
-FROM funcionarios
-";
-
-$result_funcionarios = mysqli_query($conn, $sql_funcionarios);
-
-$dados_funcionarios = mysqli_fetch_assoc($result_funcionarios);
-
-$total_funcionarios = $dados_funcionarios['total_funcionarios'];
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -199,6 +188,8 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       transition:0.3s;
 
       height:140px;
+
+      width: 100%;
     }
 
     .card-dashboard:hover{
@@ -250,8 +241,9 @@ $total_funcionarios = $dados_funcionarios['total_funcionarios'];
       border-radius:22px;
       padding:25px;
       margin-top:35px;
-
       box-shadow:0 10px 25px rgba(0,0,0,0.08);
+      width: 100%;
+    box-sizing: border-box;
     }
 
     .painel h4{
@@ -400,11 +392,6 @@ transform: rotate(180deg);
       Produtos
     </a>
 
-    <a href="funcionarios.html">
-      <i class="bi bi-people"></i>
-      Funcionários
-    </a>
-
     <a href="estoque.php">
   <i class="bi bi-boxes"></i>
   Estoque
@@ -423,7 +410,7 @@ transform: rotate(180deg);
 
     <div class="row g-4">
 
-      <div class="col-md-4">
+      <div class="col-md-6">
 
         <div class="card-dashboard">
 
@@ -442,7 +429,7 @@ transform: rotate(180deg);
 
       </div>
 
-      <div class="col-md-4">
+      <div class="col-md-6">
 
         <div class="card-dashboard">
 
@@ -457,26 +444,7 @@ transform: rotate(180deg);
 
         </div>
 
-      </div>
-
-      <div class="col-md-4">
-
-        <div class="card-dashboard">
-
-          <div>
-            <h6>Funcionários</h6>
-            <h3><?= $total_funcionarios ?></h3>
-          </div>
-
-          <div class="icon-card bg-funcionarios">
-            <i class="bi bi-people"></i>
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
+</div>
 
     <!-- PAINEL -->
 

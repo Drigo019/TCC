@@ -1,110 +1,117 @@
-<?php
+    <?php
 
-include 'conexao.php';
+    include 'conexao.php';
 
-header('Content-Type: application/json; charset=utf-8');
-
-
-// =====================================================
-// RECEBER DADOS DO FORMULÁRIO
-// =====================================================
-
-$nome = $_POST['nome'] ?? '';
-$valor = $_POST['preco'] ?? '';
-$estoque = $_POST['estoque'] ?? '';
-$codigo = $_POST['codigo_barras'] ?? '';
-$armazenamento = $_POST['armazenamento'] ?? '';
-$categoria = $_POST['categoria'] ?? '';
+    header('Content-Type: application/json; charset=utf-8');
 
 
-// =====================================================
-// VERIFICAR CAMPOS
-// =====================================================
+    // =====================================================
+    // RECEBER DADOS DO FORMULÁRIO
+    // =====================================================
 
-if (
-    $nome === '' ||
-    $valor === '' ||
-    $estoque === '' ||
-    $codigo === '' ||
-    $armazenamento === '' ||
-    $categoria === ''
-) {
+    $nome = $_POST['nome'] ?? '';
+    $precoRecebido = $_POST['preco'] ?? '0';
 
-    echo json_encode([
-        "sucesso" => false,
-        "mensagem" => "Preencha todos os campos do produto."
-    ]);
+    // Remove separadores de milhar e converte a vírgula decimal
+    $valor = str_replace(',', '.', str_replace('.', '', $precoRecebido));
 
-    exit;
-}
+    // Converte para número decimal
+    $valor = (float) $valor;
+    $estoque = $_POST['estoque'] ?? '';
+    $codigo = $_POST['codigo_barras'] ?? '';
+    $armazenamento = $_POST['armazenamento'] ?? '';
+    $categoria = $_POST['categoria'] ?? '';
 
 
-// =====================================================
-// VERIFICAR IMAGEM
-// =====================================================
+    // =====================================================
+    // VERIFICAR CAMPOS
+    // =====================================================
 
-if (
-    !isset($_FILES['arquivo']) ||
-    $_FILES['arquivo']['error'] !== UPLOAD_ERR_OK
-) {
-
-    echo json_encode([
-        "sucesso" => false,
-        "mensagem" => "Nenhuma imagem foi enviada."
-    ]);
-
-    exit;
-}
-
-
-$arquivo = $_FILES['arquivo'];
-
-
-// =====================================================
-// PASTA DE UPLOAD
-// =====================================================
-
-$pastaUpload = '../imagens/';
+    if (
+        trim($nome) === '' ||
+        $precoRecebido === '' ||
+        $valor <= 0 ||
+        $estoque === '' ||
+        $codigo === '' ||
+        $armazenamento === '' ||
+        $categoria === ''
+    ) {
+        echo json_encode([
+            "sucesso" => false,
+            "mensagem" => "Preencha todos os campos corretamente."
+        ]);
+    
+        exit;
+    }
 
 
-// =====================================================
-// CRIAR NOME ÚNICO PARA A IMAGEM
-// =====================================================
+    // =====================================================
+    // VERIFICAR IMAGEM
+    // =====================================================
 
-$nomeDoArquivo =
-    uniqid() . "_" . basename($arquivo['name']);
+    if (
+        !isset($_FILES['arquivo']) ||
+        $_FILES['arquivo']['error'] !== UPLOAD_ERR_OK
+    ) {
 
+        echo json_encode([
+            "sucesso" => false,
+            "mensagem" => "Nenhuma imagem foi enviada."
+        ]);
 
-// Caminho da imagem
-
-$imagem =
-    $pastaUpload . $nomeDoArquivo;
-
-
-// =====================================================
-// SALVAR IMAGEM
-// =====================================================
-
-if (
-    !move_uploaded_file(
-        $arquivo['tmp_name'],
-        $imagem
-    )
-) {
-
-    echo json_encode([
-        "sucesso" => false,
-        "mensagem" => "Erro ao salvar a imagem."
-    ]);
-
-    exit;
-}
+        exit;
+    }
 
 
-// =====================================================
-// CADASTRAR PRODUTO
-// =====================================================
+    $arquivo = $_FILES['arquivo'];
 
+
+    // =====================================================
+    // PASTA DE UPLOAD
+    // =====================================================
+
+    $pastaUpload = '../imagens/';
+
+
+    // =====================================================
+    // CRIAR NOME ÚNICO PARA A IMAGEM
+    // =====================================================
+
+    $nomeDoArquivo =
+        uniqid() . "_" . basename($arquivo['name']);
+
+
+    // Caminho da imagem
+
+    $imagem =
+        $pastaUpload . $nomeDoArquivo;
+
+
+    // =====================================================
+    // SALVAR IMAGEM
+    // =====================================================
+
+    if (
+        !move_uploaded_file(
+            $arquivo['tmp_name'],
+            $imagem
+        )
+    ) {
+
+        echo json_encode([
+            "sucesso" => false,
+            "mensagem" => "Erro ao salvar a imagem."
+        ]);
+
+        exit;
+    }
+
+
+    // =====================================================
+    // CADASTRAR PRODUTO
+    // =====================================================
+
+   
 $sql = "INSERT INTO produtos
 (
     nome,
@@ -115,82 +122,64 @@ $sql = "INSERT INTO produtos
     categoria,
     armazenamento
 )
-VALUES
-(
-    '$nome',
-    '$codigo',
-    '$valor',
-    '$estoque',
-    '$imagem',
-    '$categoria',
-    '$armazenamento'
-)";
+VALUES (?, ?, ?, ?, ?, ?, ?)";
 
+$stmt = $conn->prepare($sql);
 
-if ($conn->query($sql)) {
-
-
-    // =================================================
-    // SUCESSO
-    // =================================================
-
-    echo json_encode([
-
-        "sucesso" => true,
-
-        "mensagem" =>
-            "Produto cadastrado com sucesso!",
-
-        "produto" => [
-
-            "codigo" =>
-                $codigo,
-
-            "nome" =>
-                $nome,
-
-            "preco" =>
-                $valor,
-
-            "estoque" =>
-                $estoque,
-
-            "armazenamento" =>
-                $armazenamento,
-
-            "categoria" =>
-                $categoria
-
-        ]
-
-    ], JSON_UNESCAPED_UNICODE);
-
-
-} else {
-
-
-    // =================================================
-    // ERRO NO BANCO
-    // =================================================
-
-    // Remove a imagem caso o produto não seja salvo
+if (!$stmt) {
     if (file_exists($imagem)) {
         unlink($imagem);
     }
 
-
     echo json_encode([
-
         "sucesso" => false,
-
-        "mensagem" =>
-            "Erro ao cadastrar produto: " .
-            $conn->error
-
+        "mensagem" => "Erro ao preparar cadastro: " . $conn->error
     ], JSON_UNESCAPED_UNICODE);
 
+    exit;
 }
 
+$stmt->bind_param(
+    "ssdisss",
+    $nome,
+    $codigo,
+    $valor,
+    $estoque,
+    $imagem,
+    $categoria,
+    $armazenamento
+);
 
-exit;
-?>
+if ($stmt->execute()) {
+
+    echo json_encode([
+        "sucesso" => true,
+        "mensagem" => "Produto cadastrado com sucesso!",
+        "produto" => [
+            "codigo" => $codigo,
+            "nome" => $nome,
+            "preco" => $valor,
+            "estoque" => $estoque,
+            "armazenamento" => $armazenamento,
+            "categoria" => $categoria
+        ]
+    ], JSON_UNESCAPED_UNICODE);
+
+} else {
+
+    if (file_exists($imagem)) {
+        unlink($imagem);
+    }
+
+    echo json_encode([
+        "sucesso" => false,
+        "mensagem" => "Erro ao cadastrar produto: " . $stmt->error
+    ], JSON_UNESCAPED_UNICODE);
+}
+
+$stmt->close();
+
+
+
+    exit;
+    ?>
