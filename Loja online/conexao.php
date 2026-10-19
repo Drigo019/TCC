@@ -4,7 +4,7 @@ $usuario = "root";
 $senha = "";
 $banco = "containerdoqueijo";
 
-$conexao = mysqli_connect($host, $usuario, $senha, $banco, 3308);
+$conexao = mysqli_connect($host, $usuario, $senha, $banco);
 
 if (!$conexao) {
     die("Erro na conexão com o banco: " . mysqli_connect_error());

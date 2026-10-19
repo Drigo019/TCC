@@ -1,142 +1,121 @@
-    <?php
+        <?php
 
-    session_start();
+        session_start();
 
-    // =====================================================
-    // CONEXÃO COM O BANCO
-    // =====================================================
-    $conn = new mysqli("localhost","root","","containerdoqueijo", 3308);
-    if ($conn->connect_error) {
-        die("Erro na conexão com o banco: " . $conn->connect_error);
-    }
-    $conn->set_charset("utf8mb4");
-
-    // =====================================================
-    // PEGAR CATEGORIA DA URL
-    // =====================================================
-    $categoria = $_GET['categoria'] ?? '';
-
-    // =====================================================
-    // INICIALIZAR CARRINHO
-    // =====================================================
-    if (!isset($_SESSION['carrinho'])) {
-        $_SESSION['carrinho'] = [];
-    }
-
-    // =====================================================
-    // CONTADOR DO CARRINHO
-    // =====================================================
-    $quantidadeCarrinho = 0;
-
-    foreach ($_SESSION['carrinho'] as $produtoCarrinho) {
-        $quantidadeCarrinho += (int)$produtoCarrinho['quantidade'];
-    }
-
-
-    // =====================================================
-    // FUNÇÃO PARA VOLTAR À PÁGINA
-    // =====================================================
-
-    function voltarPagina($categoria = ''){
-        $url = "inicio.php";
-        if ($categoria !== '') {
-            $url .= "?categoria=" . urlencode($categoria);
+        // =====================================================
+        // CONEXÃO COM O BANCO
+        // =====================================================
+        $conn = new mysqli("localhost","root","","containerdoqueijo");
+        if ($conn->connect_error) {
+            die("Erro na conexão com o banco: " . $conn->connect_error);
         }
-        header("Location: $url");
-        exit;
-    }
+        $conn->set_charset("utf8mb4");
 
-    // =====================================================
-    // ADICIONAR PRODUTO AO CARRINHO
-    // =====================================================
-    if (isset($_GET['adicionar'])) {
+        // =====================================================
+        // PEGAR CATEGORIA DA URL
+        // =====================================================
+        $categoria = $_GET['categoria'] ?? '';
 
-        $idProduto = (int) $_GET['adicionar'];
-
-        $sql = "
-            SELECT idProduto, nome, valor, imagem, categoria, estoque
-            FROM produtos
-            WHERE idProduto = ?
-        ";
-
-        $stmt = $conn->prepare($sql);
-
-        if (!$stmt) {
-            die("Erro ao preparar produto: " . $conn->error);
+        // =====================================================
+        // INICIALIZAR CARRINHO
+        // =====================================================
+        if (!isset($_SESSION['carrinho'])) {
+            $_SESSION['carrinho'] = [];
         }
 
-        $stmt->bind_param("i", $idProduto);
-        $stmt->execute();
+        
+/* =====================================================
+   EXIGIR LOGIN ANTES DE ALTERAR O CARRINHO
+===================================================== */
 
-        $resultadoProduto = $stmt->get_result();
+if (
+    (isset($_GET['adicionar']) || isset($_GET['aumentar']))
+    && empty($_SESSION['cliente_id'])
+) {
+    $_SESSION['mensagem_login'] =
+        "Apenas usuários cadastrados podem realizar compras. Entre na sua conta ou cadastre-se.";
 
-        if ($produto = $resultadoProduto->fetch_assoc()) {
+    $_SESSION['abrir_login'] = true;
 
-            $estoque = (int) $produto['estoque'];
+    voltarPagina($categoria);
+}
 
-            // Quantidade que já está no carrinho
-            $quantidadeAtual = 0;
 
-            if (isset($_SESSION['carrinho'][$idProduto])) {
-                $quantidadeAtual =
-                    (int) $_SESSION['carrinho'][$idProduto]['quantidade'];
+        // =====================================================
+        // CONTADOR DO CARRINHO
+        // =====================================================
+        $quantidadeCarrinho = 0;
+
+        foreach ($_SESSION['carrinho'] as $produtoCarrinho) {
+            $quantidadeCarrinho += (int)$produtoCarrinho['quantidade'];
+        }
+
+
+        // =====================================================
+        // FUNÇÃO PARA VOLTAR À PÁGINA
+        // =====================================================
+
+        function voltarPagina($categoria = ''){
+            $url = "inicio.php";
+            if ($categoria !== '') {
+                $url .= "?categoria=" . urlencode($categoria);
             }
-
-            // Verificar estoque
-            if ($quantidadeAtual < $estoque) {
-
-                if ($quantidadeAtual > 0) {
-
-                    $_SESSION['carrinho'][$idProduto]['quantidade']++;
-
-                } else {
-
-                    $_SESSION['carrinho'][$idProduto] = [
-                        'quantidade' => 1,
-                        'nome' => $produto['nome'],
-                        'valor' => $produto['valor'],
-                        'imagem' => $produto['imagem']
-                    ];
-                }
-
-            } else {
-
-                $_SESSION['mensagem_estoque'] =
-                    "Você já adicionou todo o estoque disponível.";
-            }
+            header("Location: $url");
+            exit;
         }
 
-        voltarPagina($categoria);
-    }
-    // =====================================================
-    // AUMENTAR QUANTIDADE
-    // =====================================================
-    if (isset($_GET['aumentar'])) {
+        // =====================================================
+        // ADICIONAR PRODUTO AO CARRINHO
+        // =====================================================
+        if (isset($_GET['adicionar'])) {
 
-        $idProduto = (int) $_GET['aumentar'];
+            $idProduto = (int) $_GET['adicionar'];
 
-        if (isset($_SESSION['carrinho'][$idProduto])) {
-
-            // Buscar o estoque atual no banco
-            $sql = "SELECT estoque FROM produtos WHERE idProduto = ?";
+            $sql = "
+                SELECT idProduto, nome, valor, imagem, categoria, estoque
+                FROM produtos
+                WHERE idProduto = ?
+            ";
 
             $stmt = $conn->prepare($sql);
+
+            if (!$stmt) {
+                die("Erro ao preparar produto: " . $conn->error);
+            }
+
             $stmt->bind_param("i", $idProduto);
             $stmt->execute();
 
-            $resultadoEstoque = $stmt->get_result();
+            $resultadoProduto = $stmt->get_result();
 
-            if ($produtoEstoque = $resultadoEstoque->fetch_assoc()) {
+            if ($produto = $resultadoProduto->fetch_assoc()) {
 
-                $estoque = (int) $produtoEstoque['estoque'];
+                $estoque = (int) $produto['estoque'];
 
-                $quantidadeAtual =
-                    (int) $_SESSION['carrinho'][$idProduto]['quantidade'];
+                // Quantidade que já está no carrinho
+                $quantidadeAtual = 0;
 
-                // VERIFICA SE AINDA TEM ESTOQUE
+                if (isset($_SESSION['carrinho'][$idProduto])) {
+                    $quantidadeAtual =
+                        (int) $_SESSION['carrinho'][$idProduto]['quantidade'];
+                }
+
+                // Verificar estoque
                 if ($quantidadeAtual < $estoque) {
 
-                    $_SESSION['carrinho'][$idProduto]['quantidade']++;
+                    if ($quantidadeAtual > 0) {
+
+                        $_SESSION['carrinho'][$idProduto]['quantidade']++;
+
+                    } else {
+
+                        $_SESSION['carrinho'][$idProduto] = [
+                            'quantidade' => 1,
+                            'nome' => $produto['nome'],
+                            'valor' => $produto['valor'],
+                            'imagem' => $produto['imagem']
+                        ];
+                    }
 
                 } else {
 
@@ -144,824 +123,882 @@
                         "Você já adicionou todo o estoque disponível.";
                 }
             }
+
+            voltarPagina($categoria);
         }
-
-        voltarPagina($categoria);
-    }
-
-    // =====================================================
-    // DIMINUIR QUANTIDADE
-    // =====================================================
-    if (isset($_GET['diminuir'])) {
-        $idProduto = (int) $_GET['diminuir'];
-        if (isset($_SESSION['carrinho'][$idProduto])) {
-            $_SESSION['carrinho'][$idProduto]['quantidade']--;
-            // Se chegar a zero, remove
-            if ($_SESSION['carrinho'][$idProduto]['quantidade'] <= 0) {
-                unset($_SESSION['carrinho'][$idProduto]);
-            }
-        }
-        voltarPagina($categoria);
-    }
-
-    // =====================================================
-    // REMOVER PRODUTO
-    // =====================================================
-    if (isset($_GET['remover'])) {
-        $idProduto = (int) $_GET['remover'];
-        if (isset($_SESSION['carrinho'][$idProduto])) {
-            unset($_SESSION['carrinho'][$idProduto]);
-        }
-        voltarPagina($categoria);
-    }
-
-    // =====================================================
-    // LIMPAR CARRINHO
-    // =====================================================
-    if (isset($_GET['limpar'])) {
-        $_SESSION['carrinho'] = [];
-        voltarPagina($categoria);
-    }
-
-    // =====================================================
-    // BUSCAR PRODUTOS
-    // =====================================================
-    if ($categoria !== '') {
-        $sql = "
-            SELECT idProduto, nome, valor, imagem, categoria
-            FROM produtos
-            WHERE categoria = ?
-            ORDER BY nome ASC
-        ";
-        $stmt = $conn->prepare($sql);
-        if (!$stmt) {
-            die("Erro ao preparar consulta: " . $conn->error);
-        }
-        $stmt->bind_param("s", $categoria);
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-    } else {
-        $sql = "
-            SELECT idProduto, nome, valor, imagem, categoria
-            FROM produtos
-            ORDER BY nome ASC
-        ";
-        $resultado = $conn->query($sql);
-        if (!$resultado) {
-            die("Erro na consulta: " . $conn->error);
-        }
-    }
-
-    // =====================================================
-    // MONTAR ARRAY
-    // =====================================================
-    $itens = [];
-    while ($produto = $resultado->fetch_assoc()) {
-        $itens[$produto['idProduto']] = [
-            'nome' => $produto['nome'],
-            'valor' => $produto['valor'],
-            'imagem' => $produto['imagem'],
-            'categoria' => $produto['categoria']
-        ];
-    }
-    ?>
-    <!DOCTYPE html>
-    <html lang="pt-br">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Container do Queijo</title>
-        <link rel="stylesheet" href="style_carrosel.css">
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body class="fundo">
-        <?php if (isset($_SESSION['mensagem_estoque'])): ?>
-
-            <div class="mensagem-estoque">
-                <?php
-                echo htmlspecialchars($_SESSION['mensagem_estoque']);
-                unset($_SESSION['mensagem_estoque']);
-                ?>
-            </div>
-
-        <?php endif; ?>
-    <!-- =====================================================
-        TOPO
-    ===================================================== -->
-    <table class="topo">
-        <tr>
-            <td rowspan="2">
-                <img id="logo" src="../Imagens/Logo.jpeg" style="height: 80px; width: 160px; margin-left: 20px;">
-            </td>
-            <td>
-                <input type="text" id="pesquisa" name="pesquisa" class="barra_pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" autofocus>
-            </td>
-            <td rowspan="2">
-                <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
-                    <img id="icon_carrinho" src="../Imagens/Carrinho.png" style="height:40px; width:40px;">
-                    <span id="contador_carrinho">
-                        <?php echo $quantidadeCarrinho; ?>
-                    </span>
-                </button>
-            </td>
-            <td style="width:5%;" rowspan="2">
-                <button type="button" class="btn_topo" onclick="abrirPopuplogin() ">
-                    <img id="cliente" src="../Imagens/Cliente.png" style="height:40px;"> 
-                </button>
-            </td>
-        </tr>
-        <!-- =====================================================
-            CATEGORIAS
-        ===================================================== -->
-        <tr id="lista-categorias" >
-            <td style="border-left: 15px solid;">
-                <button type="button" onclick="alterarCategoria('')">
-                    Todos
-                </button>
-                <button type="button" onclick="alterarCategoria('Promoções')">
-                    Promoções
-                </button>
-                <button type="button" onclick="alterarCategoria('Queijos')">
-                    Queijos
-                </button>
-                <button type="button" onclick="alterarCategoria('Defumados')">
-                    Defumados
-                </button>
-                <button type="button" onclick="alterarCategoria('Doces')">
-                    Doces
-                </button>
-                <button type="button" onclick="alterarCategoria('Bebidas')">
-                    Bebidas
-                </button>
-            </td>
-        </tr>
-    </table>
-    <!-- =====================================================
-        Janela do Popup Login
-    ===================================================== -->
-    <div id="modalFundoLogin" class="modal-fundo">
-        <div class="modal popup-compra popup-login">
-        <button type="button" class="btn-fechar" onclick="fecharPopuplogin()">
-            ×
-        </button>
-        <h1>Entre na sua conta</h1>
-        <form action="verificacao_cadastro_cliente.php" method="post">
-            <div class="dados-compra">
-                <label for="cpf">CPF:</label>
-                <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
-                <label for="senha_tela_de_login">Senha:</label>
-                <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
-                <button type="submit" class="btn-finalizar-compra">
-                    Entrar
-                </button>
-                <button type="button" class="btn-cancelar-compra" onclick="abrirPopupcadastro()">
-                    Não possuo uma conta
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-</div>
-    </div>
-    <!-- =====================================================
-        Janela do Popup Login
-    ===================================================== -->
-    <div id="modalFundoCadastro" class="modal-fundo">
-        <div class="modal popup-compra popup-cadastro">
-            <button type="button" class="btn-fechar" onclick="fecharPopupcadastro()">
-                ×
-            </button>
-            <h1>Crie sua conta</h1>
-            <form action="cadastro_cliente.php" method="post">
-                <h2>Dados pessoais</h2>
-                <div class="dados-compra">
-                    <label for="nomeCadastro">Nome:</label>
-                    <input type="text" id="nomeCadastro" name="nome" placeholder="Digite seu nome" required>
-                    <label for="emailCadastro">E-mail:</label>
-                    <input type="email" id="emailCadastro" name="email" placeholder="Digite seu e-mail" required>
-                    <label for="cpfCadastro">CPF:</label>
-                    <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
-                    <label for="senhaCadastro">Senha:</label>
-                    <input type="password" id="senhaCadastro" name="senha" placeholder="Digite sua senha" required>
-                </div>
-                <h2>Endereço</h2>
-                <div class="dados-compra">
-                    <label for="cep">CEP:</label>
-                    <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" maxlength="9" oninput="mascaraCEP(this)" required>
-                    <label for="rua">Rua:</label>
-                    <input type="text" name="rua" id="rua" placeholder="Digite sua rua" required>
-                    <label for="numero">Número:</label>
-                    <input type="number" name="numero" id="numero" placeholder="Digite o número" required>
-                    <label for="bairro">Bairro:</label>
-                    <input type="text" name="bairro" id="bairro" placeholder="Digite seu bairro" required>
-                </div>
-                <div class="botoes-finalizacao">
-                    <button type="submit" class="btn-finalizar-compra" onclick="vazio()">
-                        Cadastrar
-                    </button>
-                    <button type="button" class="btn-cancelar-compra" onclick="fecharPopupcadastro()">
-                        Voltar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <!-- =====================================================
-        POPUP FINALIZAÇÃO DA COMPRA
-    ===================================================== -->
-    <div id="modalFundoFimCompra" class="modal-fundo">
-        <div class="modal popup-compra">
-            <!-- BOTÃO FECHAR -->
-            <button type="button" class="btn-fechar" onclick="fecharPopupFimCompra()">
-                ×
-            </button>
-            <h1>Finalizar Compra</h1>
-                <!-- =================================================
-                    RESUMO DOS PRODUTOS
-                ================================================= -->
-                <h2>Resumo do pedido</h2>
-                <div class="resumo-produtos">
-                    <?php if (!empty($_SESSION['carrinho'])): ?>
-                        <?php $totalFinal = 0; ?>
-                        <?php foreach ($_SESSION['carrinho'] as $key => $produto): ?>
-                            <?php $subtotalProduto = $produto['quantidade'] * $produto['valor']; $totalFinal += $subtotalProduto; ?>
-                            <div class="item-resumo">
-                                <!-- IMAGEM -->
-                                <img src="../Produtos/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>" class="imagem-resumo">
-                                <div class="info-resumo">
-                                    <strong>
-                                        <?php echo htmlspecialchars($produto['nome']); ?>
-                                    </strong>
-                                    <span>
-                                        Quantidade:
-                                        <?php echo $produto['quantidade']; ?>
-                                    </span>
-                                    <span>
-                                        Valor:
-                                        R$
-                                        <?php
-                                        echo number_format( $produto['valor'], 2, ',', '.');?>
-                                    </span>
-                                    <strong>
-                                        Subtotal:
-                                        R$
-                                        <?php echo number_format( $subtotalProduto, 2, ',', '.' ); ?>
-                                    </strong>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <p>Carrinho vazio.</p>
-                    <?php endif; ?>
-                </div>
-                <!-- =================================================
-                    TOTAL
-                ================================================= -->
-                <div class="total-final">
-                    <strong>
-                        Total da compra:
-                    </strong>
-                    <strong>
-                        R$
-                        <?php echo number_format( $totalFinal ?? 0, 2, ',', '.');?>
-                    </strong>
-                </div>
-                <!-- =================================================
-                    DADOS DO CLIENTE
-                ================================================= -->
-                <h2>Dados do cliente</h2>
-                <form method="post" action="finalizar_compra.php">
-            <div class="dados-compra">
-                <label for="nomeCliente">
-                    Nome:
-                </label>
-                <input type="text" id="nomeCliente" name="nome" placeholder="Digite seu nome" required>
-                <label for="telefoneCliente">
-                    Telefone:
-                </label>
-                <input type="text" name="telefone" id="telefone" maxlength="15" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" required>
-            </div>
-            <!-- =================================================
-                FORMA DE PAGAMENTO
-            ================================================= -->
-            <h2>Forma de pagamento</h2>
-            <div class="forma-pagamento">
-                <label for="form_pag">
-                    Escolha a forma de pagamento:
-                </label>
-                <select name="form_pag" id="form_pag" required>
-                    <option value="">
-                        Selecione uma opção
-                    </option>
-                    <option value="Dinheiro">
-                        💵 Dinheiro
-                    </option>
-                    <option value="Cartão">
-                        💳 Cartão
-                    </option>
-                    <option value="Pix">
-                        📱 Pix
-                    </option>
-                    <option value="Crediário">
-                        🧾 Crediário
-                    </option>
-                </select>
-            </div>
-            <!-- =================================================
-                CARRINHO EM JSON
-            ================================================= -->
-            <input type="hidden" name="carrinho" id="carrinhoFinal" value='
-                <?php
-                    echo htmlspecialchars(
-                        json_encode(
-                            array_map(
-                                function($id, $produto) {
-                                    return [
-                                        "idProduto" => (int)$id,
-                                        "quantidade" => (int)$produto["quantidade"]
-                                    ];
-                                },
-                                array_keys($_SESSION["carrinho"]),
-                                $_SESSION["carrinho"]
-                            ),
-                            JSON_UNESCAPED_UNICODE
-                        ),
-                        ENT_QUOTES,
-                        "UTF-8"
-                    );
-                ?>'
-            >
-            <!-- =================================================
-                BOTÕES
-            ================================================= -->
-            <div class="botoes-finalizacao">
-                <button type="submit" class="btn-finalizar-compra">
-                    Finalizar Compra
-                </button>
-                <button type="button" class="btn-cancelar-compra" onclick="fecharPopupFimCompra()">
-                    Voltar
-                </button>
-            </div>
-            </form>
-        </div>
-    </div>
-    <!-- =====================================================
-        ÁREA PRINCIPAL
-    ===================================================== -->
-    <div class="produtos_categorias_carrinho">
-    <!-- =================================================
-        PRODUTOS
-    ================================================= -->
-    <div class="produtos_categorias">
-    <!-- =================================================
-        CARROSSEL
-    ================================================= -->
-    <div id="centro">
-        <div class="slider">
-            <div class="slides">
-                <img src="../Imagens/FotosQueijos/f1.webp" alt="imagem 1" class="slide active accordion reajuste">
-                <img src="../Imagens/FotosQueijos/f2.webp" alt="imagem 2" class="slide reajuste">
-                <img src="../Imagens/FotosQueijos/f3.webp" alt="imagem 3" class="slide reajuste">
-            </div>
-            <div class="indicators">
-                <span class="dot active" data-index="0"></span>
-                <span class="dot" data-index="1"></span>
-                <span class="dot" data-index="2"></span>
-            </div>
-        </div>
-    </div>
-    <!-- =================================================
-        PRODUTOS
-    ================================================= -->
-            <div>
-                <div class="carrinho_container">
-                    <?php if (!empty($itens)): ?>
-                        <?php foreach ($itens as $key => $value): ?>
-                            <div class="produto" data-nome="<?php echo htmlspecialchars(strtolower($value['nome'])); ?>">
-                                <!-- IMAGEM -->
-                                <img src="../Produtos/<?php echo htmlspecialchars($value['imagem']); ?>" style="height:220px; width:220px;  object-fit:contain; " alt="<?php echo htmlspecialchars($value['nome']); ?>">
-                                <br>
-                                <!-- NOME -->
-                                <strong>
-                                    <?php echo htmlspecialchars($value['nome']); ?>
-                                </strong>
-                                <br>
-                                <!-- PREÇO -->
-                                R$
-                                <?php echo number_format((float)$value['valor'],2,',','.'); ?>
-                                <br>
-                                <!-- ADICIONAR -->
-                                <a
-                                    href="?adicionar=<?php echo $key; ?><?php
-                                        echo $categoria !== '' ? '&categoria=' . urlencode($categoria) : ''; ?>" >
-                                    Adicionar ao Carrinho
-                                </a>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div align="center" style="width:100%; padding:30px;" >
-                            <strong>
-                                Nenhum produto encontrado nesta categoria.
-                            </strong>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-            <!-- =====================================================
-                RODAPÉ
-            ===================================================== -->
-            <footer class="rodape">
-                <div class="rodape-container">
-                    <!-- INFORMAÇÕES DA LOJA -->
-                    <div class="rodape-coluna">
-                        <h3>Container do Queijo</h3>
-                        <p>
-                            Produtos selecionados para você degustar, descobrir e se apaixonar.
-                        </p>
-                    </div>
-                    <!-- INFORMAÇÕES DO RESPONSÁVEL -->
-                    <div class="rodape-coluna">
-                        <h3>Responsável</h3>
-                        <p><strong>Nome:</strong> Eric Lima da Silva </p>
-                        <p><strong>CNPJ:</strong> 22.126.506/0001-84</p>
-                    </div>
-                    <!-- CONTATO -->
-                    <div class="rodape-coluna">
-                        <h3>Contato</h3>
-                        <p>📱 (19) 99229-5270</p>
-                        <p>📧 86ericsilva@gmail.com</p>
-                    </div>
-                    <!-- ENDEREÇO -->
-                    <div class="rodape-coluna">
-                        <h3>Onde estamos</h3>
-                        <p>
-                            Rua Cel Diogo, nº 1149<br>
-                            Centro - Mococa/SP
-                        </p>
-                    </div>
-                </div>
-                <div class="rodape-inferior">
-                    <p>
-                        © <?php echo date('Y'); ?> Container do Queijo. Todos os direitos reservados.
-                    </p>
-                </div>
-            </footer>
-        </div>
-    <!-- =================================================
-        CARRINHO
-    ================================================= -->
-        <div align="right" class="local_carrinho" id="carrinho">
-            <div>
-                <div class="carrinho">
-    <!-- =================================================
-        LISTA DO CARRINHO
-    ================================================= -->
-                    <div>
-                        <h2 align="center">
-                            Carrinho:
-                        </h2>
-                        <?php if (!empty($_SESSION['carrinho'])): ?>
-                            <?php
-                            $total = 0;
-                            foreach ( $_SESSION['carrinho'] as $key => $value):
-                                $subtotal = $value['quantidade'] * $value['valor'];
-                                $total += $subtotal;
-                            ?>
-                                <div style=" padding:10px; margin:10px; border-bottom:1px solid #ccc; " align="center">
-                                    <strong>
-                                        <?php echo htmlspecialchars($value['nome']);?>
-                                    </strong>
-                                    <br>
-                                    Quantidade:
-                                    <!-- DIMINUIR -->
-                                    <button type="button" onclick="tirar1(<?php echo $key; ?>)">
-                                        -
-                                    </button>
-                                    <strong>
-                                        <?php echo $value['quantidade']; ?>
-                                    </strong>
-                                    <!-- AUMENTAR -->
-                                    <button type="button" onclick="adicionar1(<?php echo $key; ?>)">
-                                        +
-                                    </button>
-                                    <br>
-                                    Preço:
-                                    R$
-                                    <?php
-                                    echo number_format( $subtotal, 2, ',', '.');?>
-                                    <br><br>
-                                    <!-- REMOVER -->
-                                    <button type="button" onclick="apagaProduto(<?php echo $key; ?>)">
-                                        Retirar do carrinho
-                                    </button>
-                                </div>
-                            <?php endforeach; ?>
-                            <!-- =================================================
-                                LIMPAR
-                            ================================================= -->
-                            <div align="center">
-                                <button type="button" class="btn_carrinho" onclick="limparCarrinho()">
-                                    Limpar Carrinho
-                                </button>
-                            </div>
-                        <?php else: ?>
-                            <div align="center">
-                                Carrinho vazio.
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                    <!-- =================================================
-                        FIM DA COMPRA
-                    ================================================= -->
-                    <div style="width:28vw">
-                        <h2 align="center">
-                            Fim da compra
-                        </h2>
-                        <?php if (!empty($_SESSION['carrinho'])): ?>
-                            <?php
-                            $totalResumo = 0;
-                            foreach ($_SESSION['carrinho']as $value) {
-                                $subtotal = $value['quantidade'] * $value['valor'];
-                                $totalResumo += $subtotal;
-                            }
-                            ?>
-                            <div align="center">
-                                <h4>
-                                    Total:
-                                    R$
-                                    <?php echo number_format($totalResumo,2,',','.'); ?>
-                                </h4>
-                                <button type="button" onclick="abrirPopupFimCompra()" class="btn_carrinho">
-                                    Comprar
-                                </button>
-                            </div>
-                        <?php else: ?>
-                            <div align="center">
-                                Carrinho vazio.
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- =====================================================
-        JAVASCRIPT DO CARROSSEL
-    ===================================================== -->
-    <script src="script_carrosel.js"></script>
-    <script>
         // =====================================================
-        // ABRIR / FECHAR CARRINHO
+        // AUMENTAR QUANTIDADE
         // =====================================================
-        function alterar_div() {
-            const area = document.querySelector(
-                ".produtos_categorias_carrinho"
-            );
-            if (!area) {
-                return;
-            }
-            if (
-                area.classList.contains(
-                    "carrinho_aberto"
-                )
-            ) {
-                area.classList.remove(
-                    "carrinho_aberto"
-                );
-                localStorage.setItem(
-                    "carrinhoAberto",
-                    "false"
-                );
-            } else {
-                area.classList.add(
-                    "carrinho_aberto"
-                );
-                localStorage.setItem(
-                    "carrinhoAberto",
-                    "true"
-                );
-            }
-        }
+        if (isset($_GET['aumentar'])) {
 
-        // =====================================================
-        // MANTER ESTADO DO CARRINHO
-        // =====================================================
-        window.addEventListener(
-            "DOMContentLoaded",
-            function() {
-                const area =
-                    document.querySelector(".produtos_categorias_carrinho");
-                if (!area) {
-                    return;
-                }
-                const estado =
-                    localStorage.getItem("carrinhoAberto");
-                if (estado === "true") {
-                    area.classList.add("carrinho_aberto");
-                } else {
-                    area.classList.remove("carrinho_aberto");
+            $idProduto = (int) $_GET['aumentar'];
+
+            if (isset($_SESSION['carrinho'][$idProduto])) {
+
+                // Buscar o estoque atual no banco
+                $sql = "SELECT estoque FROM produtos WHERE idProduto = ?";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $idProduto);
+                $stmt->execute();
+
+                $resultadoEstoque = $stmt->get_result();
+
+                if ($produtoEstoque = $resultadoEstoque->fetch_assoc()) {
+
+                    $estoque = (int) $produtoEstoque['estoque'];
+
+                    $quantidadeAtual =
+                        (int) $_SESSION['carrinho'][$idProduto]['quantidade'];
+
+                    // VERIFICA SE AINDA TEM ESTOQUE
+                    if ($quantidadeAtual < $estoque) {
+
+                        $_SESSION['carrinho'][$idProduto]['quantidade']++;
+
+                    } else {
+
+                        $_SESSION['mensagem_estoque'] =
+                            "Você já adicionou todo o estoque disponível.";
+                    }
                 }
             }
-        );
+
+            voltarPagina($categoria);
+        }
+
+    
 
         // =====================================================
-        // ALTERAR CATEGORIA
+        // DIMINUIR QUANTIDADE
         // =====================================================
-        function alterarCategoria(categoria) {
-            if (categoria === "") {
-                window.location.href = "inicio.php";
-            } else {
-                window.location.href = "inicio.php?categoria=" + encodeURIComponent(categoria);
+        if (isset($_GET['diminuir'])) {
+            $idProduto = (int) $_GET['diminuir'];
+            if (isset($_SESSION['carrinho'][$idProduto])) {
+                $_SESSION['carrinho'][$idProduto]['quantidade']--;
+                // Se chegar a zero, remove
+                if ($_SESSION['carrinho'][$idProduto]['quantidade'] <= 0) {
+                    unset($_SESSION['carrinho'][$idProduto]);
+                }
             }
+            voltarPagina($categoria);
         }
 
         // =====================================================
         // REMOVER PRODUTO
         // =====================================================
-        function apagaProduto(id) {
-            let categoria =
-                "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
-            let url =
-                "?remover=" + id;
-            if (categoria !== "") {
-                url += "&categoria=" + encodeURIComponent(categoria);
+        if (isset($_GET['remover'])) {
+            $idProduto = (int) $_GET['remover'];
+            if (isset($_SESSION['carrinho'][$idProduto])) {
+                unset($_SESSION['carrinho'][$idProduto]);
             }
-            window.location.href = url;
+            voltarPagina($categoria);
         }
 
         // =====================================================
         // LIMPAR CARRINHO
         // =====================================================
-        function limparCarrinho() {
-            let categoria = "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
-            let url = "?limpar=1";
-            if (categoria !== "") {
-                url += "&categoria=" + encodeURIComponent(categoria);
-            }
-            window.location.href = url;
+        if (isset($_GET['limpar'])) {
+            $_SESSION['carrinho'] = [];
+            voltarPagina($categoria);
         }
 
         // =====================================================
-        // DIMINUIR QUANTIDADE
+        // BUSCAR PRODUTOS
         // =====================================================
-        function tirar1(id) {
-            let categoria = "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
-            let url = "?diminuir=" + id;
-            if (categoria !== "") {
-                url += "&categoria=" + encodeURIComponent(categoria);
+        if ($categoria !== '') {
+            $sql = "
+                SELECT idProduto, nome, valor, imagem, categoria
+                FROM produtos
+                WHERE categoria = ?
+                ORDER BY nome ASC
+            ";
+            $stmt = $conn->prepare($sql);
+            if (!$stmt) {
+                die("Erro ao preparar consulta: " . $conn->error);
             }
-            window.location.href = url;
-        }
-
-        // =====================================================
-        // AUMENTAR QUANTIDADE
-        // =====================================================
-        function adicionar1(id) {
-            let categoria = "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
-            let url = "?aumentar=" + id;
-            if (categoria !== "") {
-                url += "&categoria=" + encodeURIComponent(categoria);
-            }
-            window.location.href = url;
-        }
-
-        // =====================================================
-        // Popup login
-        // =====================================================
-        function abrirPopuplogin() {
-                document.getElementById("modalFundoLogin").style.display = "flex";
-            }
-        function fecharPopuplogin() {
-            document.getElementById("modalFundoLogin").style.display = "none";
-        }
-        // Fechar clicando no fundo escuro
-        document.getElementById("modalFundoLogin").addEventListener("click", function(event) {
-            if (event.target === this) {
-                fecharPopup();
-            }
-        });
-
-        // =====================================================
-        // Popup cadastro
-        // =====================================================
-        function abrirPopupcadastro() {
-                document.getElementById("modalFundoCadastro").style.display = "flex";
-            }
-        function fecharPopupcadastro() {
-            document.getElementById("modalFundoCadastro").style.display = "none";
-        }
-        // Fechar clicando no fundo escuro
-        document.getElementById("modalFundoCadastro").addEventListener("click", function(event) {
-            if (event.target === this) {
-                fecharPopup();
-            }
-        });
-
-        // =====================================================
-        // Popup fim de compra
-        // =====================================================
-        function abrirPopupFimCompra() {
-
-            // Fecha o carrinho
-            const areaCarrinho = document.querySelector(".produtos_categorias_carrinho");
-
-            if (areaCarrinho) {
-                areaCarrinho.classList.remove("carrinho_aberto");
-            }
-
-            // Abre o popup
-            const popup = document.getElementById("modalFundoFimCompra");
-
-            if (popup) {
-                popup.style.display = "flex";
-            }
-        }
-        function fecharPopupFimCompra() {
-            const popup = document.getElementById("modalFundoFimCompra");
-
-            if (popup) {
-                popup.style.display = "none";
+            $stmt->bind_param("s", $categoria);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+        } else {
+            $sql = "
+                SELECT idProduto, nome, valor, imagem, categoria
+                FROM produtos
+                ORDER BY nome ASC
+            ";
+            $resultado = $conn->query($sql);
+            if (!$resultado) {
+                die("Erro na consulta: " . $conn->error);
             }
         }
 
         // =====================================================
-        // PESQUISA DE PRODUTOS
+        // MONTAR ARRAY
         // =====================================================
-        const barraPesquisa = document.getElementById("pesquisa");
+        $itens = [];
+        while ($produto = $resultado->fetch_assoc()) {
+            $itens[$produto['idProduto']] = [
+                'nome' => $produto['nome'],
+                'valor' => $produto['valor'],
+                'imagem' => $produto['imagem'],
+                'categoria' => $produto['categoria']
+            ];
+        }
+        ?>
+        <!DOCTYPE html>
+        <html lang="pt-br">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Container do Queijo</title>
+            <link rel="stylesheet" href="style_carrosel.css">
+            <link rel="stylesheet" href="style.css">
+        </head>
+        <body class="fundo">
+            <?php if (isset($_SESSION['mensagem_estoque'])): ?>
 
-        barraPesquisa.addEventListener("input", function () {
-            const texto = this.value
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
-            const produtos = document.querySelectorAll(".produto");
-            produtos.forEach(function(produto) {
-                const nome = produto
-                    .getAttribute("data-nome")
+                <div class="mensagem-estoque">
+                    <?php
+                    echo htmlspecialchars($_SESSION['mensagem_estoque']);
+                    unset($_SESSION['mensagem_estoque']);
+                    ?>
+                </div>
+
+            <?php endif; ?>
+        <!-- =====================================================
+            TOPO
+        ===================================================== -->
+        <table class="topo">
+            <tr>
+                <td rowspan="2">
+                    <img id="logo" src="../Imagens/Logo.jpeg" style="height: 80px; width: 160px; margin-left: 20px;">
+                </td>
+                <td>
+                    <input type="text" id="pesquisa" name="pesquisa" class="barra_pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" autofocus>
+                </td>
+                <td rowspan="2">
+                    <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
+                        <img id="icon_carrinho" src="../Imagens/Carrinho.png" style="height:40px; width:40px;">
+                        <span id="contador_carrinho">
+                            <?php echo $quantidadeCarrinho; ?>
+                        </span>
+                    </button>
+                </td>
+                
+<td style="width:5%;" rowspan="2">
+    <button type="button" class="btn_cliente" onclick="abrirPopuplogin()">
+        <img id="cliente" src="../Imagens/Cliente.png" alt="Cliente">
+        <span>Cliente</span>
+    </button>
+</td>
+
+            </tr>
+            <!-- =====================================================
+                CATEGORIAS
+            ===================================================== -->
+            <tr id="lista-categorias" >
+                <td style="border-left: 15px solid;">
+                    <button type="button" onclick="alterarCategoria('')">
+                        Todos
+                    </button>
+                    <button type="button" onclick="alterarCategoria('Promoções')">
+                        Promoções
+                    </button>
+                    <button type="button" onclick="alterarCategoria('Queijos')">
+                        Queijos
+                    </button>
+                    <button type="button" onclick="alterarCategoria('Defumados')">
+                        Defumados
+                    </button>
+                    <button type="button" onclick="alterarCategoria('Doces')">
+                        Doces
+                    </button>
+                    <button type="button" onclick="alterarCategoria('Bebidas')">
+                        Bebidas
+                    </button>
+                </td>
+            </tr>
+        </table>
+        <!-- =====================================================
+            Janela do Popup Login
+        ===================================================== -->
+        <div id="modalFundoLogin" class="modal-fundo">
+            <div class="modal popup-compra popup-login">
+            <button type="button" class="btn-fechar" onclick="fecharPopuplogin()">
+                ×
+            </button>
+            <h1>Entre na sua conta</h1>
+            <?php if (isset($_SESSION['mensagem_login'])): ?>
+        <p style="color: #c0392b; text-align: center;">
+            <?= htmlspecialchars($_SESSION['mensagem_login']) ?>
+        </p>
+        <?php unset($_SESSION['mensagem_login']); ?>
+    <?php endif; ?>
+            <form action="verificacao_cadastro_cliente.php" method="post">
+                <div class="dados-compra">
+                    <label for="cpf">CPF:</label>
+                    <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
+                    <label for="senha_tela_de_login">Senha:</label>
+                    <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
+                    <button type="submit" class="btn-finalizar-compra">
+                        Entrar
+                    </button>
+                    <button type="button" class="btn-cancelar-compra" onclick="abrirPopupcadastro()">
+                        Não possuo uma conta
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </div>
+        </div>
+        <!-- =====================================================
+            Janela do Popup Login
+        ===================================================== -->
+        <div id="modalFundoCadastro" class="modal-fundo">
+            <div class="modal popup-compra popup-cadastro">
+                <button type="button" class="btn-fechar" onclick="fecharPopupcadastro()">
+                    ×
+                </button>
+                <h1>Crie sua conta</h1>
+                <form action="cadastro_cliente.php" method="post">
+                    <h2>Dados pessoais</h2>
+                    <div class="dados-compra">
+                        <label for="nomeCadastro">Nome:</label>
+                        <input type="text" id="nomeCadastro" name="nome" placeholder="Digite seu nome" required>
+                        <label for="emailCadastro">E-mail:</label>
+                        <input type="email" id="emailCadastro" name="email" placeholder="Digite seu e-mail" required>
+                        <label for="cpfCadastro">CPF:</label>
+                        <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
+                        <label for="senhaCadastro">Senha:</label>
+                        <input type="password" id="senhaCadastro" name="senha" placeholder="Digite sua senha" required>
+                    </div>
+                    <h2>Endereço</h2>
+                    <div class="dados-compra">
+                        <label for="cep">CEP:</label>
+                        <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" maxlength="9" oninput="mascaraCEP(this)" required>
+                        <label for="rua">Rua:</label>
+                        <input type="text" name="rua" id="rua" placeholder="Digite sua rua" required>
+                        <label for="numero">Número:</label>
+                        <input type="number" name="numero" id="numero" placeholder="Digite o número" required>
+                        <label for="bairro">Bairro:</label>
+                        <input type="text" name="bairro" id="bairro" placeholder="Digite seu bairro" required>
+                    </div>
+                    <div class="botoes-finalizacao">
+                        <button type="submit" class="btn-finalizar-compra" onclick="vazio()">
+                            Cadastrar
+                        </button>
+                        <button type="button" class="btn-cancelar-compra" onclick="fecharPopupcadastro()">
+                            Voltar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- =====================================================
+            POPUP FINALIZAÇÃO DA COMPRA
+        ===================================================== -->
+        <div id="modalFundoFimCompra" class="modal-fundo">
+            <div class="modal popup-compra">
+                <!-- BOTÃO FECHAR -->
+                <button type="button" class="btn-fechar" onclick="fecharPopupFimCompra()">
+                    ×
+                </button>
+                <h1>Finalizar Compra</h1>
+                    <!-- =================================================
+                        RESUMO DOS PRODUTOS
+                    ================================================= -->
+                    <h2>Resumo do pedido</h2>
+                    <div class="resumo-produtos">
+                        <?php if (!empty($_SESSION['carrinho'])): ?>
+                            <?php $totalFinal = 0; ?>
+                            <?php foreach ($_SESSION['carrinho'] as $key => $produto): ?>
+                                <?php $subtotalProduto = $produto['quantidade'] * $produto['valor']; $totalFinal += $subtotalProduto; ?>
+                                <div class="item-resumo">
+                                    <!-- IMAGEM -->
+                                    <img src="../Produtos/<?php echo htmlspecialchars($produto['imagem']); ?>" alt="<?php echo htmlspecialchars($produto['nome']); ?>" class="imagem-resumo">
+                                    <div class="info-resumo">
+                                        <strong>
+                                            <?php echo htmlspecialchars($produto['nome']); ?>
+                                        </strong>
+                                        <span>
+                                            Quantidade:
+                                            <?php echo $produto['quantidade']; ?>
+                                        </span>
+                                        <span>
+                                            Valor:
+                                            R$
+                                            <?php
+                                            echo number_format( $produto['valor'], 2, ',', '.');?>
+                                        </span>
+                                        <strong>
+                                            Subtotal:
+                                            R$
+                                            <?php echo number_format( $subtotalProduto, 2, ',', '.' ); ?>
+                                        </strong>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>Carrinho vazio.</p>
+                        <?php endif; ?>
+                    </div>
+                    <!-- =================================================
+                        TOTAL
+                    ================================================= -->
+                    <div class="total-final">
+                        <strong>
+                            Total da compra:
+                        </strong>
+                        <strong>
+                            R$
+                            <?php echo number_format( $totalFinal ?? 0, 2, ',', '.');?>
+                        </strong>
+                    </div>
+                    <!-- =================================================
+                        DADOS DO CLIENTE
+                    ================================================= -->
+                    <h2>Dados do cliente</h2>
+                    <form method="post" action="finalizar_compra.php">
+                <div class="dados-compra">
+                    <label for="nomeCliente">
+                        Nome:
+                    </label>
+                    <input type="text" id="nomeCliente" name="nome" placeholder="Digite seu nome" required>
+                    <label for="telefoneCliente">
+                        Telefone:
+                    </label>
+                    <input type="text" name="telefone" id="telefone" maxlength="15" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" required>
+                </div>
+                <!-- =================================================
+                    FORMA DE PAGAMENTO
+                ================================================= -->
+                <h2>Forma de pagamento</h2>
+                <div class="forma-pagamento">
+                    <label for="form_pag">
+                        Escolha a forma de pagamento:
+                    </label>
+                    <select name="form_pag" id="form_pag" required>
+                        <option value="">
+                            Selecione uma opção
+                        </option>
+                        <option value="Dinheiro">
+                            💵 Dinheiro
+                        </option>
+                        <option value="Cartão">
+                            💳 Cartão
+                        </option>
+                        <option value="Pix">
+                            📱 Pix
+                        </option>
+                        <option value="Crediário">
+                            🧾 Crediário
+                        </option>
+                    </select>
+                </div>
+                <!-- =================================================
+                    CARRINHO EM JSON
+                ================================================= -->
+                <input type="hidden" name="carrinho" id="carrinhoFinal" value='
+                    <?php
+                        echo htmlspecialchars(
+                            json_encode(
+                                array_map(
+                                    function($id, $produto) {
+                                        return [
+                                            "idProduto" => (int)$id,
+                                            "quantidade" => (int)$produto["quantidade"]
+                                        ];
+                                    },
+                                    array_keys($_SESSION["carrinho"]),
+                                    $_SESSION["carrinho"]
+                                ),
+                                JSON_UNESCAPED_UNICODE
+                            ),
+                            ENT_QUOTES,
+                            "UTF-8"
+                        );
+                    ?>'
+                >
+                <!-- =================================================
+                    BOTÕES
+                ================================================= -->
+                <div class="botoes-finalizacao">
+                    <button type="submit" class="btn-finalizar-compra">
+                        Finalizar Compra
+                    </button>
+                    <button type="button" class="btn-cancelar-compra" onclick="fecharPopupFimCompra()">
+                        Voltar
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+        <!-- =====================================================
+            ÁREA PRINCIPAL
+        ===================================================== -->
+        <div class="produtos_categorias_carrinho">
+        <!-- =================================================
+            PRODUTOS
+        ================================================= -->
+        <div class="produtos_categorias">
+        <!-- =================================================
+            CARROSSEL
+        ================================================= -->
+        <div id="centro">
+            <div class="slider">
+                <div class="slides">
+                    <img src="../Imagens/FotosQueijos/f1.webp" alt="imagem 1" class="slide active accordion reajuste">
+                    <img src="../Imagens/FotosQueijos/f2.webp" alt="imagem 2" class="slide reajuste">
+                    <img src="../Imagens/FotosQueijos/f3.webp" alt="imagem 3" class="slide reajuste">
+                </div>
+                <div class="indicators">
+                    <span class="dot active" data-index="0"></span>
+                    <span class="dot" data-index="1"></span>
+                    <span class="dot" data-index="2"></span>
+                </div>
+            </div>
+        </div>
+        <!-- =================================================
+            PRODUTOS
+        ================================================= -->
+                <div>
+                    <div class="carrinho_container">
+                        <?php if (!empty($itens)): ?>
+                            <?php foreach ($itens as $key => $value): ?>
+                                <div class="produto" data-nome="<?php echo htmlspecialchars(strtolower($value['nome'])); ?>">
+                                    <!-- IMAGEM -->
+                                    <img src="../Produtos/<?php echo htmlspecialchars($value['imagem']); ?>" style="height:220px; width:220px;  object-fit:contain; " alt="<?php echo htmlspecialchars($value['nome']); ?>">
+                                    <br>
+                                    <!-- NOME -->
+                                    <strong>
+                                        <?php echo htmlspecialchars($value['nome']); ?>
+                                    </strong>
+                                    <br>
+                                    <!-- PREÇO -->
+                                    R$
+                                    <?php echo number_format((float)$value['valor'],2,',','.'); ?>
+                                    <br>
+                                    <!-- ADICIONAR -->
+                                    <a
+                                        href="?adicionar=<?php echo $key; ?><?php
+                                            echo $categoria !== '' ? '&categoria=' . urlencode($categoria) : ''; ?>" >
+                                        Adicionar ao Carrinho
+                                    </a>
+                                </div>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div align="center" style="width:100%; padding:30px;" >
+                                <strong>
+                                    Nenhum produto encontrado nesta categoria.
+                                </strong>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <!-- =====================================================
+                    RODAPÉ
+                ===================================================== -->
+                <footer class="rodape">
+                    <div class="rodape-container">
+                        <!-- INFORMAÇÕES DA LOJA -->
+                        <div class="rodape-coluna">
+                            <h3>Container do Queijo</h3>
+                            <p>
+                                Produtos selecionados para você degustar, descobrir e se apaixonar.
+                            </p>
+                        </div>
+                        <!-- INFORMAÇÕES DO RESPONSÁVEL -->
+                        <div class="rodape-coluna">
+                            <h3>Responsável</h3>
+                            <p><strong>Nome:</strong> Eric Lima da Silva </p>
+                            <p><strong>CNPJ:</strong> 22.126.506/0001-84</p>
+                        </div>
+                        <!-- CONTATO -->
+                        <div class="rodape-coluna">
+                            <h3>Contato</h3>
+                            <p>📱 (19) 99229-5270</p>
+                            <p>📧 86ericsilva@gmail.com</p>
+                        </div>
+                        <!-- ENDEREÇO -->
+                        <div class="rodape-coluna">
+                            <h3>Onde estamos</h3>
+                            <p>
+                                Rua Cel Diogo, nº 1149<br>
+                                Centro - Mococa/SP
+                            </p>
+                        </div>
+                    </div>
+                    <div class="rodape-inferior">
+                        <p>
+                            © <?php echo date('Y'); ?> Container do Queijo. Todos os direitos reservados.
+                        </p>
+                    </div>
+                </footer>
+            </div>
+        <!-- =================================================
+            CARRINHO
+        ================================================= -->
+            <div align="right" class="local_carrinho" id="carrinho">
+                <div>
+                    <div class="carrinho">
+        <!-- =================================================
+            LISTA DO CARRINHO
+        ================================================= -->
+                        <div>
+                            <h2 align="center">
+                                Carrinho:
+                            </h2>
+                            <?php if (!empty($_SESSION['carrinho'])): ?>
+                                <?php
+                                $total = 0;
+                                foreach ( $_SESSION['carrinho'] as $key => $value):
+                                    $subtotal = $value['quantidade'] * $value['valor'];
+                                    $total += $subtotal;
+                                ?>
+                                    <div style=" padding:10px; margin:10px; border-bottom:1px solid #ccc; " align="center">
+                                        <strong>
+                                            <?php echo htmlspecialchars($value['nome']);?>
+                                        </strong>
+                                        <br>
+                                        Quantidade:
+                                        <!-- DIMINUIR -->
+                                        <button type="button" onclick="tirar1(<?php echo $key; ?>)">
+                                            -
+                                        </button>
+                                        <strong>
+                                            <?php echo $value['quantidade']; ?>
+                                        </strong>
+                                        <!-- AUMENTAR -->
+                                        <button type="button" onclick="adicionar1(<?php echo $key; ?>)">
+                                            +
+                                        </button>
+                                        <br>
+                                        Preço:
+                                        R$
+                                        <?php
+                                        echo number_format( $subtotal, 2, ',', '.');?>
+                                        <br><br>
+                                        <!-- REMOVER -->
+                                        <button type="button" onclick="apagaProduto(<?php echo $key; ?>)">
+                                            Retirar do carrinho
+                                        </button>
+                                    </div>
+                                <?php endforeach; ?>
+                                <!-- =================================================
+                                    LIMPAR
+                                ================================================= -->
+                                <div align="center">
+                                    <button type="button" class="btn_carrinho" onclick="limparCarrinho()">
+                                        Limpar Carrinho
+                                    </button>
+                                </div>
+                            <?php else: ?>
+                                <div align="center">
+                                    Carrinho vazio.
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        <!-- =================================================
+                            FIM DA COMPRA
+                        ================================================= -->
+                        <div style="width:28vw">
+                            <h2 align="center">
+                                Fim da compra
+                            </h2>
+                            <?php if (!empty($_SESSION['carrinho'])): ?>
+                                <?php
+                                $totalResumo = 0;
+                                foreach ($_SESSION['carrinho']as $value) {
+                                    $subtotal = $value['quantidade'] * $value['valor'];
+                                    $totalResumo += $subtotal;
+                                }
+                                ?>
+                                <div align="center">
+                                    <h4>
+                                        Total:
+                                        R$
+                                        <?php echo number_format($totalResumo,2,',','.'); ?>
+                                    </h4>
+                                    <button type="button" onclick="abrirPopupFimCompra()" class="btn_carrinho">
+                                        Comprar
+                                    </button>
+                                </div>
+                            <?php else: ?>
+                                <div align="center">
+                                    Carrinho vazio.
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- =====================================================
+            JAVASCRIPT DO CARROSSEL
+        ===================================================== -->
+        <script src="script_carrosel.js"></script>
+        <script>
+            // =====================================================
+            // ABRIR / FECHAR CARRINHO
+            // =====================================================
+            function alterar_div() {
+                const area = document.querySelector(
+                    ".produtos_categorias_carrinho"
+                );
+                if (!area) {
+                    return;
+                }
+                if (
+                    area.classList.contains(
+                        "carrinho_aberto"
+                    )
+                ) {
+                    area.classList.remove(
+                        "carrinho_aberto"
+                    );
+                    localStorage.setItem(
+                        "carrinhoAberto",
+                        "false"
+                    );
+                } else {
+                    area.classList.add(
+                        "carrinho_aberto"
+                    );
+                    localStorage.setItem(
+                        "carrinhoAberto",
+                        "true"
+                    );
+                }
+            }
+
+            // =====================================================
+            // MANTER ESTADO DO CARRINHO
+            // =====================================================
+            window.addEventListener(
+                "DOMContentLoaded",
+                function() {
+                    const area =
+                        document.querySelector(".produtos_categorias_carrinho");
+                    if (!area) {
+                        return;
+                    }
+                    const estado =
+                        localStorage.getItem("carrinhoAberto");
+                    if (estado === "true") {
+                        area.classList.add("carrinho_aberto");
+                    } else {
+                        area.classList.remove("carrinho_aberto");
+                    }
+                }
+            );
+
+            // =====================================================
+            // ALTERAR CATEGORIA
+            // =====================================================
+            function alterarCategoria(categoria) {
+                if (categoria === "") {
+                    window.location.href = "inicio.php";
+                } else {
+                    window.location.href = "inicio.php?categoria=" + encodeURIComponent(categoria);
+                }
+            }
+
+            // =====================================================
+            // REMOVER PRODUTO
+            // =====================================================
+            function apagaProduto(id) {
+                let categoria =
+                    "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
+                let url =
+                    "?remover=" + id;
+                if (categoria !== "") {
+                    url += "&categoria=" + encodeURIComponent(categoria);
+                }
+                window.location.href = url;
+            }
+
+            // =====================================================
+            // LIMPAR CARRINHO
+            // =====================================================
+            function limparCarrinho() {
+                let categoria = "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
+                let url = "?limpar=1";
+                if (categoria !== "") {
+                    url += "&categoria=" + encodeURIComponent(categoria);
+                }
+                window.location.href = url;
+            }
+
+            // =====================================================
+            // DIMINUIR QUANTIDADE
+            // =====================================================
+            function tirar1(id) {
+                let categoria = "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
+                let url = "?diminuir=" + id;
+                if (categoria !== "") {
+                    url += "&categoria=" + encodeURIComponent(categoria);
+                }
+                window.location.href = url;
+            }
+
+            // =====================================================
+            // AUMENTAR QUANTIDADE
+            // =====================================================
+            function adicionar1(id) {
+                let categoria = "<?php echo htmlspecialchars($categoria, ENT_QUOTES); ?>";
+                let url = "?aumentar=" + id;
+                if (categoria !== "") {
+                    url += "&categoria=" + encodeURIComponent(categoria);
+                }
+                window.location.href = url;
+            }
+
+            // =====================================================
+            // Popup login
+            // =====================================================
+            function abrirPopuplogin() {
+                    document.getElementById("modalFundoLogin").style.display = "flex";
+                }
+            function fecharPopuplogin() {
+                document.getElementById("modalFundoLogin").style.display = "none";
+            }
+            // Fechar clicando no fundo escuro
+            document.getElementById("modalFundoLogin").addEventListener("click", function(event) {
+                if (event.target === this) {
+                    fecharPopup();
+                }
+            });
+
+            // =====================================================
+            // Popup cadastro
+            // =====================================================
+            function abrirPopupcadastro() {
+                    document.getElementById("modalFundoCadastro").style.display = "flex";
+                }
+            function fecharPopupcadastro() {
+                document.getElementById("modalFundoCadastro").style.display = "none";
+            }
+            // Fechar clicando no fundo escuro
+            document.getElementById("modalFundoCadastro").addEventListener("click", function(event) {
+                if (event.target === this) {
+                    fecharPopup();
+                }
+            });
+
+            // =====================================================
+            // Popup fim de compra
+            // =====================================================
+           
+function abrirPopupFimCompra() {
+    const clienteLogado = <?php echo !empty($_SESSION['cliente_id']) ? 'true' : 'false'; ?>;
+
+    if (!clienteLogado) {
+        alert("Apenas usuários cadastrados podem realizar compras. Entre na sua conta ou cadastre-se.");
+        abrirPopuplogin();
+        return;
+    }
+
+    const areaCarrinho = document.querySelector(
+        ".produtos_categorias_carrinho"
+    );
+
+    if (areaCarrinho) {
+        areaCarrinho.classList.remove("carrinho_aberto");
+    }
+
+    const popup = document.getElementById("modalFundoFimCompra");
+
+    if (popup) {
+        popup.style.display = "flex";
+    }
+}
+
+
+            // =====================================================
+            // PESQUISA DE PRODUTOS
+            // =====================================================
+            const barraPesquisa = document.getElementById("pesquisa");
+
+            barraPesquisa.addEventListener("input", function () {
+                const texto = this.value
                     .toLowerCase()
                     .normalize("NFD")
                     .replace(/[\u0300-\u036f]/g, "");
-                if (nome.includes(texto)) {
-                    produto.style.display = "";
-                } else {
-                    produto.style.display = "none";
-                }
+                const produtos = document.querySelectorAll(".produto");
+                produtos.forEach(function(produto) {
+                    const nome = produto
+                        .getAttribute("data-nome")
+                        .toLowerCase()
+                        .normalize("NFD")
+                        .replace(/[\u0300-\u036f]/g, "");
+                    if (nome.includes(texto)) {
+                        produto.style.display = "";
+                    } else {
+                        produto.style.display = "none";
+                    }
+                });
             });
-        });
 
-        // =====================================================
-        // CONTADOR DO CARRINHO
-        // =====================================================
-        function atualizarContadorCarrinho() {
+            // =====================================================
+            // CONTADOR DO CARRINHO
+            // =====================================================
+            function atualizarContadorCarrinho() {
 
-        const contador = document.getElementById("contador_carrinho");
+            const contador = document.getElementById("contador_carrinho");
 
-        if (!contador) {
-            return;
-        }
-
-        const quantidade = parseInt(contador.textContent);
-
-        if (quantidade <= 0) {
-            contador.style.display = "none";
-        } else {
-            contador.style.display = "flex";
-        }
-        }
-        // =====================================================
-        // MASCARA DO CPF
-        // =====================================================
-        document.addEventListener("DOMContentLoaded", function() {
-            atualizarContadorCarrinho();
-            });
-        function mascaraCPF(input) {
-            let valor = input.value.replace(/\D/g, '');
-
-            valor = valor.substring(0, 11);
-
-            valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
-            valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
-            valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-
-            input.value = valor;
-        }
-
-        // =====================================================
-        // MASCARA DO CPF
-        // =====================================================
-        function mascaraTelefone(input) {
-            let valor = input.value.replace(/\D/g, '');
-
-            valor = valor.substring(0, 11);
-
-            if (valor.length <= 10) {
-                valor = valor.replace(/(\d{2})(\d)/, '($1) $2');
-                valor = valor.replace(/(\d{4})(\d)/, '$1-$2');
-            } else {
-                valor = valor.replace(/(\d{2})(\d)/, '($1) $2');
-                valor = valor.replace(/(\d{5})(\d)/, '$1-$2');
+            if (!contador) {
+                return;
             }
 
-            input.value = valor;
-        }
-</script>
+            const quantidade = parseInt(contador.textContent);
+
+            if (quantidade <= 0) {
+                contador.style.display = "none";
+            } else {
+                contador.style.display = "flex";
+            }
+            }
+            // =====================================================
+            // MASCARA DO CPF
+            // =====================================================
+            document.addEventListener("DOMContentLoaded", function() {
+                atualizarContadorCarrinho();
+                });
+            function mascaraCPF(input) {
+                let valor = input.value.replace(/\D/g, '');
+
+                valor = valor.substring(0, 11);
+
+                valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+                valor = valor.replace(/(\d{3})(\d)/, '$1.$2');
+                valor = valor.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+
+                input.value = valor;
+            }
+
+            // =====================================================
+            // MASCARA DO CPF
+            // =====================================================
+            function mascaraTelefone(input) {
+                let valor = input.value.replace(/\D/g, '');
+
+                valor = valor.substring(0, 11);
+
+                if (valor.length <= 10) {
+                    valor = valor.replace(/(\d{2})(\d)/, '($1) $2');
+                    valor = valor.replace(/(\d{4})(\d)/, '$1-$2');
+                } else {
+                    valor = valor.replace(/(\d{2})(\d)/, '($1) $2');
+                    valor = valor.replace(/(\d{5})(\d)/, '$1-$2');
+                }
+
+                input.value = valor;
+            }
+
+            <?php if (!empty($_SESSION['abrir_login'])): ?>
+        abrirPopuplogin();
+        <?php unset($_SESSION['abrir_login']); ?>
+    <?php endif; ?>
+    </script>

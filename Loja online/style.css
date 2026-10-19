@@ -1587,3 +1587,29 @@ button {
     }
 
 }
+
+
+/* Ícone de cliente no topo */
+.btn_cliente {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.btn_cliente img {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+}
+
+.btn_cliente span {
+    color: #FFD700;
+    font-size: 14px;
+    font-weight: bold;
+}
