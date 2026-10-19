@@ -1,16 +1,9 @@
 <?php
 
-$host = "localhost";
-$usuario = "root";
-$senha = "";
-$banco = "containerdoqueijo";
+$conn = new mysqli("127.0.0.1", "root", "", "containerdoqueijo", 3308);
 
-$conexao = mysqli_connect($host, $usuario, $senha, $banco);
-
-if (!$conexao) {
-    die("Erro na conexão com o banco: " . mysqli_connect_error());
+if ($conn->connect_error){
+    die("Erro: " . $conn->connect_error);
 }
-
-mysqli_set_charset($conexao, "utf8mb4");
 
 ?>
