@@ -22,7 +22,16 @@
         if (!isset($_SESSION['carrinho'])) {
             $_SESSION['carrinho'] = [];
         }
+function voltarPagina($categoria = '') {
+    $url = "inicio.php";
 
+    if ($categoria !== '') {
+        $url .= "?categoria=" . urlencode($categoria);
+    }
+
+    header("Location: " . $url);
+    exit;
+}
         
 /* =====================================================
    EXIGIR LOGIN ANTES DE ALTERAR O CARRINHO
@@ -54,15 +63,6 @@ if (
         // =====================================================
         // FUNÇÃO PARA VOLTAR À PÁGINA
         // =====================================================
-
-        function voltarPagina($categoria = ''){
-            $url = "inicio.php";
-            if ($categoria !== '') {
-                $url .= "?categoria=" . urlencode($categoria);
-            }
-            header("Location: $url");
-            exit;
-        }
 
         // =====================================================
         // ADICIONAR PRODUTO AO CARRINHO
@@ -285,12 +285,47 @@ if (
                     </button>
                 </td>
                 
+
+
 <td style="width:5%;" rowspan="2">
-    <button type="button" class="btn_cliente" onclick="abrirPopuplogin()">
-        <img id="cliente" src="../Imagens/Cliente.png" alt="Cliente">
-        <span>Cliente</span>
-    </button>
+    <?php if (!empty($_SESSION['cliente_id'])): ?>
+
+        <button type="button"
+                class="btn_cliente"
+                onclick="confirmarLogout()">
+
+            <img id="cliente"
+                 src="../Imagens/Cliente.png"
+                 alt="Cliente">
+
+            <span>
+                <?= htmlspecialchars(
+                    $_SESSION['nome_usuario'] ?? 'Cliente',
+                    ENT_QUOTES,
+                    'UTF-8'
+                ) ?>
+            </span>
+
+        </button>
+
+    <?php else: ?>
+
+        <button type="button"
+                class="btn_cliente"
+                onclick="abrirPopuplogin()">
+
+            <img id="cliente"
+                 src="../Imagens/Cliente.png"
+                 alt="Cliente">
+
+            <span>Cliente</span>
+
+        </button>
+
+    <?php endif; ?>
 </td>
+
+
 
             </tr>
             <!-- =====================================================
@@ -977,6 +1012,18 @@ function abrirPopupFimCompra() {
 
                 input.value = valor;
             }
+
+            
+function confirmarLogout() {
+    const desejaSair = confirm(
+        "Deseja realmente sair da sua conta?"
+    );
+
+    if (desejaSair) {
+        window.location.href = "logout.php";
+    }
+}
+
 
             // =====================================================
             // MASCARA DO CPF

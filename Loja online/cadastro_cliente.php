@@ -5,62 +5,76 @@ session_start();
 
 require_once __DIR__ . "/conexao.php";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+    exit("Acesso inválido.");
+}
 
-    $nome  = trim($_POST["nome"] ?? "");
-    $email = trim($_POST["email"] ?? "");
-    $senha = $_POST["senha"] ?? "";
-    $cpf   = trim($_POST["cpf"] ?? "");
+$nome  = trim($_POST["nome"] ?? "");
+$email = trim($_POST["email"] ?? "");
+$senha = $_POST["senha"] ?? "";
+$cpf   = trim($_POST["cpf"] ?? "");
 
-    // Criptografa a senha
-    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+// Validar campos obrigatórios
+if ($nome === "" || $email === "" || $senha === "" || $cpf === "") {
+    echo "<script>
+        alert('Preencha todos os campos obrigatórios!');
+        history.back();
+    </script>";
+    exit;
+}
 
-    $sql = "INSERT INTO usuarios (nome, email, cpf, senha)
-            VALUES (?, ?, ?, ?)";
+// Criptografar a senha
+$senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-    $stmt = mysqli_prepare($conexao, $sql);
+$sql = "INSERT INTO usuarios (nome, email, cpf, senha)
+        VALUES (?, ?, ?, ?)";
 
-    if (!$stmt) {
-        die("Erro ao preparar SQL: " . mysqli_error($conexao));
+$stmt = mysqli_prepare($conexao, $sql);
+
+if (!$stmt) {
+    die("Erro ao preparar SQL: " . mysqli_error($conexao));
+}
+
+mysqli_stmt_bind_param(
+    $stmt,
+    "ssss",
+    $nome,
+    $email,
+    $cpf,
+    $senhaHash
+);
+
+if (!mysqli_stmt_execute($stmt)) {
+    if (mysqli_stmt_errno($stmt) === 1062) {
+        $stmt->close();
+
+        echo "<script>
+            alert('Este CPF ou e-mail já está cadastrado!');
+            history.back();
+        </script>";
+        exit;
     }
 
-    mysqli_stmt_bind_param(
-        $stmt,
-        "ssss",
-        $nome,
-        $email,
-        $cpf,
-        $senhaHash
-    );
+    die("Erro ao cadastrar usuário: " . mysqli_stmt_error($stmt));
+}
 
-    if (!mysqli_stmt_execute($stmt)) {
-        die("Erro ao cadastrar usuário: " . mysqli_stmt_error($stmt));
-    }
+// Recuperar o ID do usuário recém-cadastrado
+$idUsuario = mysqli_insert_id($conexao);
 
-    session_regenerate_id(true);
+// Criar a sessão de login
+session_regenerate_id(true);
 
-$_SESSION['cliente_id'] = mysqli_insert_id($conexao);
+$_SESSION['cliente_id'] = $idUsuario;
 $_SESSION['nome_usuario'] = $nome;
 $_SESSION['email_usuario'] = $email;
 $_SESSION['cpf_usuario'] = $cpf;
 $_SESSION['logado'] = true;
 $_SESSION['acessoPDV'] = false;
 
-    // Recupera o ID do usuário que acabou de ser cadastrado
-    $idUsuario = mysqli_insert_id($conexao);
+$stmt->close();
 
-    // Cria a sessão de login
-    session_regenerate_id(true);
+// Redirecionar para a loja com o cliente já logado
+header("Location: inicio.php");
+exit;
 
-    $_SESSION["cliente_id"] = $idUsuario;
-    $_SESSION["nome_usuario"] = $nome;
-    $_SESSION["email_usuario"] = $email;
-    $_SESSION["cpf_usuario"] = $cpf;
-
-    mysqli_stmt_close($stmt);
-
-    // Redireciona o cliente já autenticado
-    header("Location: inicio.php");
-    exit;
-}
 ?>
