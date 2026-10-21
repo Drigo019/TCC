@@ -28,6 +28,8 @@ if (!empty($_SESSION['cliente_id'])) {
 // RECEBER DADOS DO PEDIDO
 // ======================================================
 
+$nomeCliente = trim($_POST['nome'] ?? '');
+
 $formaPagamento = trim($_POST['form_pag'] ?? '');
 $carrinhoRecebido = $_POST['carrinho'] ?? '';
 
@@ -45,6 +47,8 @@ if (is_array($carrinhoRecebido)) {
 $formasPermitidas = [
     'Dinheiro',
     'Cartao',
+    'Debito',
+    'Credito',
     'Pix',
     'Crediario'
 ];
@@ -54,6 +58,10 @@ $mapaPagamento = [
     'Dinheiro'  => 'Dinheiro',
     'Cartão'    => 'Cartao',
     'Cartao'    => 'Cartao',
+    'Debito'    => 'Debito',
+    'Débito'    => 'Debito',
+    'Credito'   => 'Credito',
+    'Crédito'   => 'Credito',
     'Pix'       => 'Pix',
     'Crediário' => 'Crediario',
     'Crediario' => 'Crediario'
@@ -204,66 +212,65 @@ try {
     }
 
     // ==================================================
-    // REGISTRAR VENDA
-    // ==================================================
+// REGISTRAR VENDA
+// ==================================================
 
-    if ($idCliente !== null) {
+if ($idCliente !== null) {
 
-        $sqlVenda = "
-            INSERT INTO vendas
-                (idCliente, valor, data, formaDePagamento)
-            VALUES (?, ?, CURDATE(), ?)
-        ";
+    $sqlVenda = "
+        INSERT INTO vendas
+            (idCliente, nomeCliente, valor, data, formaDePagamento)
+        VALUES (?, ?, ?, CURDATE(), ?)
+    ";
 
-        $stmtVenda = $conexao->prepare($sqlVenda);
+    $stmtVenda = $conexao->prepare($sqlVenda);
 
-        if (!$stmtVenda) {
-            throw new Exception(
-                "Erro ao preparar venda: " .
-                $conexao->error
-            );
-        }
-
-        $stmtVenda->bind_param(
-            "ids",
-            $idCliente,
-            $valorFinal,
-            $formaPagamento
-        );
-
-    } else {
-
-        $sqlVenda = "
-            INSERT INTO vendas
-                (idCliente, valor, data, formaDePagamento)
-            VALUES (NULL, ?, CURDATE(), ?)
-        ";
-
-        $stmtVenda = $conexao->prepare($sqlVenda);
-
-        if (!$stmtVenda) {
-            throw new Exception(
-                "Erro ao preparar venda: " .
-                $conexao->error
-            );
-        }
-
-        $stmtVenda->bind_param(
-            "ds",
-            $valorFinal,
-            $formaPagamento
-        );
-    }
-
-    if (!$stmtVenda->execute()) {
+    if (!$stmtVenda) {
         throw new Exception(
-            "Erro ao registrar venda: " .
-            $stmtVenda->error
+            "Erro ao preparar venda: " . $conexao->error
         );
     }
 
-    $idVenda = $conexao->insert_id;
-    $stmtVenda->close();
+    $stmtVenda->bind_param(
+        "isds",
+        $idCliente,
+        $nomeCliente,
+        $valorFinal,
+        $formaPagamento
+    );
+
+} else {
+
+    $sqlVenda = "
+        INSERT INTO vendas
+            (idCliente, nomeCliente, valor, data, formaDePagamento)
+        VALUES (NULL, ?, ?, CURDATE(), ?)
+    ";
+
+    $stmtVenda = $conexao->prepare($sqlVenda);
+
+    if (!$stmtVenda) {
+        throw new Exception(
+            "Erro ao preparar venda: " . $conexao->error
+        );
+    }
+
+    $stmtVenda->bind_param(
+        "sds",
+        $nomeCliente,
+        $valorFinal,
+        $formaPagamento
+    );
+}
+
+if (!$stmtVenda->execute()) {
+    throw new Exception(
+        "Erro ao registrar venda: " . $stmtVenda->error
+    );
+}
+
+$idVenda = $conexao->insert_id;
+$stmtVenda->close();
 
     // ==================================================
     // PREPARAR INSERÇÃO EM vendaprodutos
@@ -372,43 +379,29 @@ try {
     // Limpar o carrinho somente após o sucesso.
     $_SESSION['carrinho'] = [];
 
+    
     // ==================================================
-    // MOSTRAR CONFIRMAÇÃO
+    // REDIRECIONAR PARA A TELA COM NOTIFICAÇÃO PERSONALIZADA
     // ==================================================
 
-    $valorFormatado = number_format(
-        $valorFinal,
-        2,
-        ',',
-        '.'
-    );
+    $_SESSION['notificacao'] = [
+        'tipo' => 'sucesso',
+        'titulo' => 'Compra realizada com sucesso!',
+        'mensagem' => 'Seu pedido foi confirmado. Obrigado por comprar conosco!',
+        'detalhes' => [
+            'Número do pedido' => $idVenda,
+            'Valor total' => 'R$ ' . number_format(
+                $valorFinal,
+                2,
+                ',',
+                '.'
+            )
+        ]
+    ];
 
-    $mensagem = "Compra finalizada com sucesso!\n\n" .
-                "Número da venda: " . $idVenda . "\n" .
-                "Valor: R$ " . $valorFormatado;
+    header('Location: inicio.php');
+    exit;
 
-    echo "<!DOCTYPE html>
-    <html lang='pt-BR'>
-    <head>
-        <meta charset='UTF-8'>
-        <title>Compra finalizada</title>
-    </head>
-    <body>
-        <script>
-            alert(" .
-            json_encode(
-                $mensagem,
-                JSON_UNESCAPED_UNICODE |
-                JSON_HEX_TAG |
-                JSON_HEX_APOS |
-                JSON_HEX_QUOT |
-                JSON_HEX_AMP
-            ) .
-            ");
-            window.location.href = 'inicio.php';
-        </script>
-    </body>
-    </html>";
 
 } catch (Throwable $e) {
 

@@ -369,6 +369,181 @@ right: -54px;
 transform: rotate(180deg);
 
 }
+
+/* =========================================
+   POP-UP DE CÓDIGO DE BARRAS DUPLICADO
+========================================= */
+
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    background: rgba(10, 15, 25, 0.65);
+    backdrop-filter: blur(5px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.popup-overlay.ativo {
+    opacity: 1;
+    visibility: visible;
+}
+
+.popup-card {
+    width: 100%;
+    max-width: 430px;
+
+    padding: 35px 30px;
+
+    background: #ffffff;
+    border-radius: 24px;
+
+    text-align: center;
+
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+
+    transform: translateY(20px) scale(0.95);
+
+    transition: transform 0.25s ease;
+}
+
+.popup-overlay.ativo .popup-card {
+    transform: translateY(0) scale(1);
+}
+
+/* Ícone de alerta */
+
+.popup-icone {
+    width: 82px;
+    height: 82px;
+
+    margin: 0 auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #fff0e5;
+    color: #f08c00;
+
+    font-size: 38px;
+
+    box-shadow: 0 0 0 9px #fff8f0;
+}
+
+/* Título */
+
+.popup-card h2 {
+    margin-bottom: 12px;
+
+    color: #202938;
+
+    font-size: 25px;
+    font-weight: 800;
+}
+
+/* Mensagem */
+
+.popup-card > p {
+    color: #687386;
+
+    font-size: 15px;
+    line-height: 1.6;
+
+    margin-bottom: 18px;
+}
+
+/* Código duplicado */
+
+.popup-codigo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    padding: 15px;
+
+    margin: 20px 0;
+
+    background: #fff7ed;
+
+    border: 1px solid #fed7aa;
+    border-radius: 14px;
+
+    color: #c2410c;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    overflow-wrap: anywhere;
+    word-break: break-word;
+}
+
+.popup-codigo i {
+    font-size: 23px;
+    flex-shrink: 0;
+}
+
+/* Dica */
+
+.popup-card .popup-dica {
+    font-size: 13px;
+    color: #8992a2;
+
+    margin-bottom: 25px;
+}
+
+/* Botão */
+
+.popup-botao {
+    width: 100%;
+
+    padding: 14px 20px;
+
+    border: none;
+    border-radius: 13px;
+
+    background: #f08c00;
+    color: white;
+
+    font-size: 16px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 14px rgba(240, 140, 0, 0.22);
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.popup-botao:hover {
+    background: #d97706;
+    transform: translateY(-2px);
+}
+
+.popup-botao:active {
+    transform: scale(0.98);
+}
+
+.popup-botao i {
+    margin-right: 7px;
+}
                 
                 </style>
         </head>
@@ -481,7 +656,7 @@ transform: rotate(180deg);
             required>
             <option value="" selected disabled>Selecione...</option>    
                 <option value="Refrigerado">🔵 Refrigerado</option>
-                <option value="Normal">🟡 Não Refrigerado</option>
+                <option value="Não Refrigerado">🟡 Não Refrigerado</option>
             </select>
         </div>
 
@@ -732,19 +907,34 @@ document
 
             if (!resultado.sucesso) {
 
-                alert(
-                    resultado.mensagem ||
-                    "Erro ao cadastrar o produto."
-                );
+    const mensagem = resultado.mensagem || "";
 
-                botao.disabled = false;
+    // Verifica se o erro é de código de barras duplicado
+    const codigoDuplicado =
+        /código de barras/i.test(mensagem) &&
+        /(já existe|já pertence|já cadastrado)/i.test(mensagem);
 
-                botao.innerHTML =
-                    "Salvar Produto";
+    if (codigoDuplicado) {
 
-                return;
+        mostrarPopupCodigoDuplicado(mensagem);
 
-            }
+    } else {
+
+        // Mantém o comportamento para os outros erros
+        alert(
+            mensagem ||
+            "Erro ao cadastrar o produto."
+        );
+
+    }
+
+    botao.disabled = false;
+
+    botao.innerHTML = "Salvar Produto";
+
+    return;
+
+}
 
 
             /* =====================================
@@ -839,39 +1029,37 @@ document
    CADASTRAR OUTRO PRODUTO
 ========================================= */
 
+
 function novoProduto() {
+    const formulario = document.getElementById("formProduto");
+    const mensagemSucesso = document.getElementById("mensagemSucesso");
+    const previewImagem = document.getElementById("previewImagem");
+    const botao = formulario.querySelector(".btnSalvar");
 
-    document.getElementById(
-        "mensagemSucesso"
-    ).style.display = "none";
+    // Esconde a tela de sucesso
+    mensagemSucesso.style.display = "none";
 
+    // Limpa os campos do formulário
+    formulario.reset();
 
-    document.getElementById(
-        "formProduto"
-    ).style.display = "block";
+    // Restaura a imagem de pré-visualização
+    previewImagem.style.display = "none";
+    previewImagem.src = "";
 
+    // Restaura o botão de salvar
+    botao.disabled = false;
+    botao.innerHTML = "Salvar Produto";
 
-    document.getElementById(
-        "formProduto"
-    ).reset();
+    // Exibe novamente o formulário
+    formulario.style.display = "block";
 
-
-    document.getElementById(
-        "previewImagem"
-    ).style.display = "none";
-
-
-    document.getElementById(
-        "previewImagem"
-    ).src = "";
-
-
+    // Volta para o topo da página
     window.scrollTo({
         top: 0,
         behavior: "smooth"
     });
-
 }
+
 
 </script>
 
@@ -988,26 +1176,112 @@ function novoProduto() {
     
     });
     </script>
-    
+
+<!-- =========================================
+     POP-UP: CÓDIGO DE BARRAS DUPLICADO
+========================================= -->
+
+<div id="popupCodigoDuplicado" class="popup-overlay">
+
+    <div class="popup-card">
+
+        <div class="popup-icone">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+
+        <h2>Código já cadastrado!</h2>
+
+        <p>
+            Já existe um produto registrado com este número
+            de código de barras.
+        </p>
+
+        <div class="popup-codigo">
+            <i class="bi bi-upc-scan"></i>
+            <span id="popupNumeroCodigo"></span>
+        </div>
+
+        <p class="popup-dica">
+            Verifique o número digitado e tente novamente
+            com um código diferente.
+        </p>
+
+        <button
+            type="button"
+            class="popup-botao"
+            onclick="fecharPopupCodigoDuplicado()"
+        >
+            <i class="bi bi-check2-circle"></i>
+            Entendi
+        </button>
+
+    </div>
+
+</div>
+
 <script>
-const campoPreco = document.getElementById("preco");
+    function mostrarPopupCodigoDuplicado(mensagem) {
 
-campoPreco.addEventListener("input", function () {
-    // Mantém somente os números digitados
-    let numeros = this.value.replace(/\D/g, "");
+        const popup = document.getElementById(
+            "popupCodigoDuplicado"
+        );
 
-    if (numeros === "") {
-        this.value = "";
-        return;
+        const campoCodigo = document.querySelector(
+            '[name="codigo_barras"]'
+        );
+
+        const numeroCodigo = document.getElementById(
+            "popupNumeroCodigo"
+        );
+
+        // Mostra o código digitado no formulário
+        numeroCodigo.textContent = campoCodigo.value.trim();
+
+        // Abre o pop-up
+        popup.classList.add("ativo");
     }
 
-    // Converte os números para centavos
-    let valor = (parseInt(numeros, 10) / 100).toFixed(2);
+    function fecharPopupCodigoDuplicado() {
 
-    // Formata no padrão brasileiro
-    this.value = valor.replace(".", ",");
-});
+        const popup = document.getElementById(
+            "popupCodigoDuplicado"
+        );
+
+        popup.classList.remove("ativo");
+
+        // Mantém o foco no campo de código de barras
+        const campoCodigo = document.querySelector(
+            '[name="codigo_barras"]'
+        );
+
+        campoCodigo.focus();
+        campoCodigo.select();
+    }
+
+    // Fecha ao clicar fora do cartão
+    document.getElementById(
+        "popupCodigoDuplicado"
+    ).addEventListener("click", function(event) {
+
+        if (event.target === this) {
+            fecharPopupCodigoDuplicado();
+        }
+
+    });
+
+    // Fecha ao pressionar Esc
+    document.addEventListener("keydown", function(event) {
+
+        if (
+            event.key === "Escape" &&
+            document.getElementById(
+                "popupCodigoDuplicado"
+            ).classList.contains("ativo")
+        ) {
+            fecharPopupCodigoDuplicado();
+        }
+
+    });
 </script>
-
         </body>
         </html>

@@ -2,10 +2,17 @@
 
         session_start();
 
+        // Recuperar a posição da tela após atualizar o carrinho.
+$posicaoRolagem = $_SESSION['posicao_rolagem'] ?? null;
+unset($_SESSION['posicao_rolagem']);
+
+        $notificacaoCompra = $_SESSION['notificacao'] ?? null;
+unset($_SESSION['notificacao']);
+
         // =====================================================
         // CONEXÃO COM O BANCO
         // =====================================================
-        $conn = new mysqli("localhost","root","","containerdoqueijo", 3308);
+        $conn = new mysqli("localhost","root","","containerdoqueijo");
         if ($conn->connect_error) {
             die("Erro na conexão com o banco: " . $conn->connect_error);
         }
@@ -22,6 +29,9 @@
         if (!isset($_SESSION['carrinho'])) {
             $_SESSION['carrinho'] = [];
         }
+
+
+
 function voltarPagina($categoria = '') {
     $url = "inicio.php";
 
@@ -29,9 +39,17 @@ function voltarPagina($categoria = '') {
         $url .= "?categoria=" . urlencode($categoria);
     }
 
+    if (isset($_GET['adicionar'])) {
+        $url .= (strpos($url, '?') !== false ? '&' : '?')
+              . 'restaurar_rolagem=1';
+    }
+
     header("Location: " . $url);
     exit;
 }
+
+
+
         
 /* =====================================================
    EXIGIR LOGIN ANTES DE ALTERAR O CARRINHO
@@ -253,6 +271,175 @@ if (
             <title>Container do Queijo</title>
             <link rel="stylesheet" href="style_carrosel.css">
             <link rel="stylesheet" href="style.css">
+
+            
+<style>
+/* ===== JANELA PERSONALIZADA ===== */
+.modal-notificacao {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(5px);
+    z-index: 99999;
+    padding: 20px;
+    animation: aparecerFundo .25s ease;
+}
+
+.caixa-notificacao {
+    background: #fff;
+    width: 100%;
+    max-width: 420px;
+    border-radius: 22px;
+    padding: 32px 28px;
+    text-align: center;
+    box-shadow: 0 20px 70px rgba(0,0,0,.3);
+    animation: aparecerCaixa .3s ease;
+}
+
+.icone-notificacao {
+    width: 76px;
+    height: 76px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 38px;
+    font-weight: bold;
+}
+
+.icone-sucesso {
+    background: #e0f7e9;
+    color: #168447;
+}
+
+.icone-erro {
+    background: #fde8e7;
+    color: #c0392b;
+}
+
+.icone-aviso {
+    background: #fff3cd;
+    color: #a66a00;
+}
+
+.icone-info {
+    background: #e5f1ff;
+    color: #1769aa;
+}
+
+.caixa-notificacao h2 {
+    color: #222;
+    font-size: 24px;
+    margin: 0 0 12px;
+}
+
+.caixa-notificacao p {
+    color: #666;
+    font-size: 15px;
+    line-height: 1.6;
+    margin: 0 0 25px;
+    white-space: pre-line;
+}
+
+.botoes-notificacao {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.botao-notificacao {
+    border: none;
+    border-radius: 12px;
+    padding: 13px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.botao-notificacao:hover {
+    transform: translateY(-2px);
+    filter: brightness(.96);
+}
+
+.botao-principal {
+    background: #f2c230;
+    color: #29220d;
+}
+
+.botao-secundario {
+    background: #eee;
+    color: #444;
+}
+
+
+/* Botão Adicionar ao Carrinho — estilo original */
+.produto .adicionar-ao-carrinho {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #e0b52f;
+    text-decoration: none;
+    border-radius: 5px;
+    color: #000000;
+    border: 1px solid #aaa;
+    font-size: 17px;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+/* Efeito original ao passar o mouse */
+.produto .adicionar-ao-carrinho:hover {
+    background: #333;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Aparência durante o carregamento */
+.produto .adicionar-ao-carrinho:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+}
+
+
+@keyframes aparecerFundo {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes aparecerCaixa {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .caixa-notificacao {
+        padding: 26px 20px;
+    }
+
+    .botoes-notificacao {
+        flex-direction: column;
+    }
+
+    .botao-notificacao {
+        width: 100%;
+    }
+}
+</style>
+
         </head>
         <body class="fundo">
             <?php if (isset($_SESSION['mensagem_estoque'])): ?>
@@ -268,13 +455,17 @@ if (
         <!-- =====================================================
             TOPO
         ===================================================== -->
+
+        
         <table class="topo">
             <tr>
                 <td rowspan="2">
                     <img id="logo" src="../Imagens/Logo.jpeg" style="height: 80px; width: 160px; margin-left: 20px;">
                 </td>
                 <td>
-                    <input type="text" id="pesquisa" name="pesquisa" class="barra_pesquisa" placeholder="Queijos, Doces, Defumados e Iguarias" autofocus>
+                  <input type="text" id="pesquisa" name="pesquisa"
+       class="barra_pesquisa"
+       placeholder="Queijos, Doces, Defumados e Iguarias">
                 </td>
                 <td rowspan="2">
                     <button type="button" class="btn_topo" onclick="alterar_div()" id="btn_carrinho">
@@ -445,7 +636,7 @@ if (
                         RESUMO DOS PRODUTOS
                     ================================================= -->
                     <h2>Resumo do pedido</h2>
-                    <div class="resumo-produtos">
+                  <div class="resumo-produtos" id="resumo-produtos-dinamico">
                         <?php if (!empty($_SESSION['carrinho'])): ?>
                             <?php $totalFinal = 0; ?>
                             <?php foreach ($_SESSION['carrinho'] as $key => $produto): ?>
@@ -482,7 +673,7 @@ if (
                     <!-- =================================================
                         TOTAL
                     ================================================= -->
-                    <div class="total-final">
+                   <div class="total-final" id="total-final-dinamico">
                         <strong>
                             Total da compra:
                         </strong>
@@ -510,28 +701,35 @@ if (
                     FORMA DE PAGAMENTO
                 ================================================= -->
                 <h2>Forma de pagamento</h2>
-                <div class="forma-pagamento">
-                    <label for="form_pag">
-                        Escolha a forma de pagamento:
-                    </label>
-                    <select name="form_pag" id="form_pag" required>
-                        <option value="">
-                            Selecione uma opção
-                        </option>
-                        <option value="Dinheiro">
-                            💵 Dinheiro
-                        </option>
-                        <option value="Cartão">
-                            💳 Cartão
-                        </option>
-                        <option value="Pix">
-                            📱 Pix
-                        </option>
-                        <option value="Crediário">
-                            🧾 Crediário
-                        </option>
-                    </select>
-                </div>
+                
+<div class="forma-pagamento">
+    <label for="form_pag_base">
+        Escolha a forma de pagamento:
+    </label>
+
+    <select id="form_pag_base" required>
+        <option value="">Selecione uma opção</option>
+        <option value="Dinheiro">💵 Dinheiro</option>
+        <option value="Cartão">💳 Cartão</option>
+        <option value="Pix">📱 Pix</option>
+        <option value="Crediário">🧾 Crediário</option>
+    </select>
+
+    <!-- Aparece somente quando Cartão for selecionado -->
+    <div id="opcoesCartao" style="display: none; margin-top: 12px;">
+        <label for="tipoCartao">Tipo de cartão:</label>
+
+        <select id="tipoCartao">
+            <option value="">Selecione Débito ou Crédito</option>
+            <option value="Debito">Débito</option>
+            <option value="Credito">Crédito</option>
+        </select>
+    </div>
+
+    <!-- Valor que será enviado ao finalizar_compra.php -->
+    <input type="hidden" name="form_pag" id="form_pag" value="">
+</div>
+
                 <!-- =================================================
                     CARRINHO EM JSON
                 ================================================= -->
@@ -616,11 +814,12 @@ if (
                                     <?php echo number_format((float)$value['valor'],2,',','.'); ?>
                                     <br>
                                     <!-- ADICIONAR -->
-                                    <a
-                                        href="?adicionar=<?php echo $key; ?><?php
-                                            echo $categoria !== '' ? '&categoria=' . urlencode($categoria) : ''; ?>" >
-                                        Adicionar ao Carrinho
-                                    </a>
+                                    <button
+    type="button"
+    class="adicionar-ao-carrinho"
+    data-id="<?php echo (int)$key; ?>">
+    Adicionar ao Carrinho
+</button>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -681,10 +880,10 @@ if (
         <!-- =================================================
             LISTA DO CARRINHO
         ================================================= -->
-                        <div>
-                            <h2 align="center">
-                                Carrinho:
-                            </h2>
+                        <div id="lista-carrinho-dinamica">
+    <h2 align="center">
+        Carrinho:
+    </h2>
                             <?php if (!empty($_SESSION['carrinho'])): ?>
                                 <?php
                                 $total = 0;
@@ -738,7 +937,7 @@ if (
                         <!-- =================================================
                             FIM DA COMPRA
                         ================================================= -->
-                        <div style="width:28vw">
+                        <div style="width:28vw" id="resumo-carrinho-dinamico">
                             <h2 align="center">
                                 Fim da compra
                             </h2>
@@ -770,6 +969,29 @@ if (
                 </div>
             </div>
         </div>
+        
+<!-- JANELA DE NOTIFICAÇÕES PERSONALIZADAS -->
+<div id="modalNotificacao" class="modal-notificacao"
+     role="dialog" aria-modal="true"
+     aria-labelledby="tituloNotificacao">
+
+    <div class="caixa-notificacao">
+
+        <div id="iconeNotificacao"
+             class="icone-notificacao icone-info">i</div>
+
+        <h2 id="tituloNotificacao">Atenção</h2>
+
+        <p id="textoNotificacao">
+            Confira as informações.
+        </p>
+
+        <div id="botoesNotificacao"
+             class="botoes-notificacao"></div>
+
+    </div>
+</div>
+
         <!-- =====================================================
             JAVASCRIPT DO CARROSSEL
         ===================================================== -->
@@ -929,11 +1151,29 @@ if (
 function abrirPopupFimCompra() {
     const clienteLogado = <?php echo !empty($_SESSION['cliente_id']) ? 'true' : 'false'; ?>;
 
-    if (!clienteLogado) {
-        alert("Apenas usuários cadastrados podem realizar compras. Entre na sua conta ou cadastre-se.");
-        abrirPopuplogin();
-        return;
-    }
+    
+if (!clienteLogado) {
+    mostrarNotificacao(
+        "aviso",
+        "Entre na sua conta",
+        "Apenas usuários cadastrados podem realizar compras. Entre na sua conta ou cadastre-se.",
+        [
+            {
+                texto: "Agora não",
+                principal: false
+            },
+            {
+                texto: "Fazer login",
+                principal: true,
+                acao: function() {
+                    abrirPopuplogin();
+                }
+            }
+        ]
+    );
+    return;
+}
+
 
     const areaCarrinho = document.querySelector(
         ".produtos_categorias_carrinho"
@@ -1013,16 +1253,104 @@ function abrirPopupFimCompra() {
                 input.value = valor;
             }
 
-            
-function confirmarLogout() {
-    const desejaSair = confirm(
-        "Deseja realmente sair da sua conta?"
-    );
+     
+function mostrarNotificacao(tipo, titulo, mensagem, botoes) {
+    const modal = document.getElementById("modalNotificacao");
+    const icone = document.getElementById("iconeNotificacao");
+    const tituloElemento = document.getElementById("tituloNotificacao");
+    const texto = document.getElementById("textoNotificacao");
+    const areaBotoes = document.getElementById("botoesNotificacao");
 
-    if (desejaSair) {
-        window.location.href = "logout.php";
+    const estilos = {
+        sucesso: { classe: "icone-sucesso", simbolo: "✓" },
+        erro:    { classe: "icone-erro", simbolo: "×" },
+        aviso:   { classe: "icone-aviso", simbolo: "!" },
+        info:    { classe: "icone-info", simbolo: "i" }
+    };
+
+    const estilo = estilos[tipo] || estilos.info;
+
+    icone.className = "icone-notificacao " + estilo.classe;
+    icone.textContent = estilo.simbolo;
+
+    tituloElemento.textContent = titulo;
+    texto.textContent = mensagem;
+    areaBotoes.replaceChildren();
+
+    botoes.forEach(function(botao) {
+        const elemento = document.createElement("button");
+
+        elemento.type = "button";
+        elemento.className =
+            "botao-notificacao " +
+            (botao.principal
+                ? "botao-principal"
+                : "botao-secundario");
+
+        elemento.textContent = botao.texto;
+
+        elemento.addEventListener("click", function() {
+            modal.style.display = "none";
+
+            if (botao.acao) {
+                botao.acao();
+            }
+        });
+
+        areaBotoes.appendChild(elemento);
+    });
+
+    modal.style.display = "flex";
+
+    const primeiroBotao = areaBotoes.querySelector("button");
+    if (primeiroBotao) {
+        primeiroBotao.focus();
     }
 }
+
+function fecharNotificacao() {
+    document.getElementById("modalNotificacao").style.display = "none";
+}
+
+// Fechar clicando fora da caixa.
+document.getElementById("modalNotificacao")
+    .addEventListener("click", function(event) {
+        if (event.target === this) {
+            fecharNotificacao();
+        }
+    });
+
+// Fechar com a tecla Escape.
+document.addEventListener("keydown", function(event) {
+    const modal = document.getElementById("modalNotificacao");
+
+    if (event.key === "Escape" && modal.style.display === "flex") {
+        fecharNotificacao();
+    }
+});
+               
+
+function confirmarLogout() {
+    mostrarNotificacao(
+        "aviso",
+        "Sair da sua conta?",
+        "Tem certeza de que deseja sair do Container do Queijo?",
+        [
+            {
+                texto: "Continuar conectado",
+                principal: false
+            },
+            {
+                texto: "Sim, sair",
+                principal: true,
+                acao: function() {
+                    window.location.href = "logout.php";
+                }
+            }
+        ]
+    );
+}
+
 
 
             // =====================================================
@@ -1048,4 +1376,396 @@ function confirmarLogout() {
         abrirPopuplogin();
         <?php unset($_SESSION['abrir_login']); ?>
     <?php endif; ?>
-    </script>
+
+    
+const formaPagamentoBase = document.getElementById("form_pag_base");
+const opcoesCartao = document.getElementById("opcoesCartao");
+const tipoCartao = document.getElementById("tipoCartao");
+const formaPagamentoFinal = document.getElementById("form_pag");
+
+function atualizarFormaPagamento() {
+    const selecionouCartao = formaPagamentoBase.value === "Cartão";
+
+    opcoesCartao.style.display = selecionouCartao ? "block" : "none";
+    tipoCartao.required = selecionouCartao;
+
+    if (selecionouCartao) {
+        formaPagamentoFinal.value = tipoCartao.value;
+    } else {
+        tipoCartao.value = "";
+        formaPagamentoFinal.value = formaPagamentoBase.value;
+    }
+}
+
+formaPagamentoBase.addEventListener("change", atualizarFormaPagamento);
+tipoCartao.addEventListener("change", atualizarFormaPagamento);
+
+// Garantir que o valor correto seja enviado ao formulário.
+document.querySelector(
+    '#modalFundoFimCompra form[action="finalizar_compra.php"]'
+).addEventListener("submit", function(event) {
+    atualizarFormaPagamento();
+
+    if (!formaPagamentoFinal.value) {
+    event.preventDefault();
+
+    mostrarNotificacao(
+        "aviso",
+        "Forma de pagamento",
+        "Selecione uma forma de pagamento para continuar.",
+        [
+            {
+                texto: "Entendi",
+                principal: true
+            }
+        ]
+    );
+
+    return;
+}
+
+    if (
+    formaPagamentoBase.value === "Cartão" &&
+    !tipoCartao.value
+) {
+    event.preventDefault();
+
+    mostrarNotificacao(
+        "aviso",
+        "Escolha o tipo de cartão",
+        "Selecione Débito ou Crédito para continuar.",
+        [
+            {
+                texto: "Entendi",
+                principal: true
+            }
+        ]
+    );
+}
+}); 
+
+
+const notificacaoCompra = <?php
+    echo json_encode(
+        $notificacaoCompra,
+        JSON_UNESCAPED_UNICODE |
+        JSON_HEX_TAG |
+        JSON_HEX_APOS |
+        JSON_HEX_QUOT |
+        JSON_HEX_AMP
+    );
+?>;
+
+if (notificacaoCompra) {
+    if (notificacaoCompra.tipo === "sucesso") {
+        mostrarNotificacao(
+            "sucesso",
+            notificacaoCompra.titulo,
+            notificacaoCompra.mensagem,
+            [
+                {
+                    texto: "Continuar",
+                    principal: true
+                }
+            ]
+        );
+    }
+}
+
+
+
+
+
+
+
+(function () {
+    const chave = 'posicaoRolagem';
+    const params = new URLSearchParams(window.location.search);
+    const restaurar = params.get('restaurar_rolagem') === '1';
+
+    window.addEventListener('scroll', function () {
+        sessionStorage.setItem(chave, String(window.scrollY));
+    }, { passive: true });
+
+    if (restaurar) {
+        const valorSalvo = sessionStorage.getItem(chave);
+        const posicao = valorSalvo === null ? 0 : Number(valorSalvo);
+
+        if ('scrollRestoration' in history) {
+            history.scrollRestoration = 'manual';
+        }
+
+        function aplicarRolagem() {
+            window.scrollTo(0, posicao);
+        }
+
+        window.addEventListener('load', function () {
+            aplicarRolagem();
+
+            requestAnimationFrame(function () {
+                aplicarRolagem();
+                setTimeout(aplicarRolagem, 100);
+                setTimeout(aplicarRolagem, 300);
+            });
+        }, { once: true });
+
+        if (document.readyState === 'complete') {
+            aplicarRolagem();
+            requestAnimationFrame(aplicarRolagem);
+        }
+
+        params.delete('restaurar_rolagem');
+
+        history.replaceState(
+            null,
+            '',
+            window.location.pathname +
+            (params.toString() ? '?' + params.toString() : '') +
+            window.location.hash
+        );
+    }
+})();
+
+
+
+
+
+
+
+
+
+
+
+
+
+// =====================================================
+// ATUALIZAR VISUALMENTE O CARRINHO SEM RECARREGAR
+// =====================================================
+
+function escaparHTML(valor) {
+    return String(valor ?? '').replace(/[&<>"']/g, function(caractere) {
+        return {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        }[caractere];
+    });
+}
+
+function formatarMoeda(valor) {
+    return Number(valor).toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+async function atualizarCarrinhoVisual() {
+    try {
+        const resposta = await fetch('obter_carrinho.php', {
+            cache: 'no-store'
+        });
+
+        if (!resposta.ok) {
+            throw new Error('Não foi possível consultar o carrinho.');
+        }
+
+        const dados = await resposta.json();
+
+        if (!dados.sucesso) {
+            throw new Error('Não foi possível atualizar o carrinho.');
+        }
+
+        const itens = dados.itens;
+        const total = Number(dados.total);
+        const lista = document.getElementById('lista-carrinho-dinamica');
+        const resumo = document.getElementById('resumo-produtos-dinamico');
+        const totalFinal = document.getElementById('total-final-dinamico');
+        const contador = document.getElementById('contador_carrinho');
+        const resumoCompra = document.getElementById('resumo-carrinho-dinamico');
+        const carrinhoFinal = document.getElementById('carrinhoFinal');
+
+        // Atualizar contador do topo
+        if (contador) {
+            contador.textContent = dados.quantidade;
+            contador.style.display =
+                dados.quantidade > 0 ? 'flex' : 'none';
+        }
+
+        // Atualizar lista do carrinho lateral
+        if (lista) {
+            let html = '<h2 align="center">Carrinho:</h2>';
+
+            if (itens.length === 0) {
+                html += '<div align="center">Carrinho vazio.</div>';
+            } else {
+                itens.forEach(function(item) {
+                    html += `
+                        <div style="padding:10px; margin:10px; border-bottom:1px solid #ccc;" align="center">
+                            <strong>${escaparHTML(item.nome)}</strong>
+                            <br>
+                            Quantidade:
+                            <button type="button" onclick="tirar1(${Number(item.id)})">-</button>
+                            <strong>${Number(item.quantidade)}</strong>
+                            <button type="button" onclick="adicionar1(${Number(item.id)})">+</button>
+                            <br>
+                            Preço: R$ ${formatarMoeda(item.subtotal)}
+                            <br><br>
+                            <button type="button" onclick="apagaProduto(${Number(item.id)})">
+                                Retirar do carrinho
+                            </button>
+                        </div>
+                    `;
+                });
+
+                html += `
+                    <div align="center">
+                        <button type="button" class="btn_carrinho" onclick="limparCarrinho()">
+                            Limpar Carrinho
+                        </button>
+                    </div>
+                `;
+            }
+
+            lista.innerHTML = html;
+        }
+
+        // Atualizar bloco "Fim da compra"
+        if (resumoCompra) {
+            if (itens.length === 0) {
+                resumoCompra.innerHTML = `
+                    <h2 align="center">Fim da compra</h2>
+                    <div align="center">Carrinho vazio.</div>
+                `;
+            } else {
+                resumoCompra.innerHTML = `
+                    <h2 align="center">Fim da compra</h2>
+                    <div align="center">
+                        <h4>Total: R$ ${formatarMoeda(total)}</h4>
+                        <button type="button"
+                                onclick="abrirPopupFimCompra()"
+                                class="btn_carrinho">
+                            Comprar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Atualizar resumo dentro do popup de finalização
+        if (resumo) {
+            if (itens.length === 0) {
+                resumo.innerHTML = '<p>Carrinho vazio.</p>';
+            } else {
+                resumo.innerHTML = itens.map(function(item) {
+                    return `
+                        <div class="item-resumo">
+                            <img
+                                src="../Produtos/${escaparHTML(item.imagem)}"
+                                alt="${escaparHTML(item.nome)}"
+                                class="imagem-resumo">
+
+                            <div class="info-resumo">
+                                <strong>${escaparHTML(item.nome)}</strong>
+                                <span>Quantidade: ${Number(item.quantidade)}</span>
+                                <span>Valor: R$ ${formatarMoeda(item.valor)}</span>
+                                <strong>Subtotal: R$ ${formatarMoeda(item.subtotal)}</strong>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        // Atualizar total no popup
+        if (totalFinal) {
+            totalFinal.innerHTML = `
+                <strong>Total da compra:</strong>
+                <strong>R$ ${formatarMoeda(total)}</strong>
+            `;
+        }
+
+        // Atualizar os produtos enviados ao finalizar a compra
+        if (carrinhoFinal) {
+            carrinhoFinal.value = JSON.stringify(
+                itens.map(function(item) {
+                    return {
+                        idProduto: Number(item.id),
+                        quantidade: Number(item.quantidade)
+                    };
+                })
+            );
+        }
+
+    } catch (erro) {
+        console.error('Erro ao atualizar o carrinho:', erro);
+    }
+}
+
+// =====================================================
+// ADICIONAR PRODUTO SEM RECARREGAR A PÁGINA
+// =====================================================
+
+document.querySelectorAll('.adicionar-ao-carrinho').forEach(function(botao) {
+    botao.addEventListener('click', async function() {
+        const idProduto = this.dataset.id;
+        const botaoAtual = this;
+        const textoOriginal = botaoAtual.textContent;
+
+        botaoAtual.disabled = true;
+        botaoAtual.textContent = 'Adicionando...';
+
+        try {
+            const dados = new URLSearchParams();
+            dados.set('idProduto', idProduto);
+
+            const resposta = await fetch('adicionar_carrinho.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: dados.toString()
+            });
+
+            const resultado = await resposta.json();
+
+            if (!resultado.sucesso) {
+                mostrarNotificacao(
+                    'aviso',
+                    'Não foi possível adicionar',
+                    resultado.mensagem,
+                    [{ texto: 'Entendi', principal: true }]
+                );
+                return;
+            }
+
+            // Atualizar todos os elementos do carrinho imediatamente
+            await atualizarCarrinhoVisual();
+
+            mostrarNotificacao(
+                'sucesso',
+                'Produto adicionado!',
+                resultado.mensagem,
+                [{ texto: 'Continuar comprando', principal: true }]
+            );
+
+        } catch (erro) {
+            console.error(erro);
+
+            mostrarNotificacao(
+                'erro',
+                'Erro ao adicionar',
+                'Não foi possível adicionar o produto. Verifique sua conexão e tente novamente.',
+                [{ texto: 'Entendi', principal: true }]
+            );
+        } finally {
+            botaoAtual.disabled = false;
+            botaoAtual.textContent = textoOriginal;
+        }
+    });
+});
+
+</script>
+</body>
+</html>

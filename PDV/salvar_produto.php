@@ -1,128 +1,160 @@
-    <?php
 
-    include 'conexao.php';
+<?php
 
-    header('Content-Type: application/json; charset=utf-8');
+include 'conexao.php';
 
+header('Content-Type: application/json; charset=utf-8');
 
-    // =====================================================
-    // RECEBER DADOS DO FORMULÁRIO
-    // =====================================================
+function responder($sucesso, $mensagem, $produto = null) {
+    echo json_encode([
+        "sucesso" => $sucesso,
+        "mensagem" => $mensagem,
+        "produto" => $produto
+    ], JSON_UNESCAPED_UNICODE);
 
-    $nome = $_POST['nome'] ?? '';
-    $precoRecebido = $_POST['preco'] ?? '0';
+    exit;
+}
 
-    // Remove separadores de milhar e converte a vírgula decimal
-    $valor = str_replace(',', '.', str_replace('.', '', $precoRecebido));
+// =====================================================
+// RECEBER DADOS DO FORMULÁRIO
+// =====================================================
 
-    // Converte para número decimal
-    $valor = (float) $valor;
-    $estoque = $_POST['estoque'] ?? '';
-    $codigo = $_POST['codigo_barras'] ?? '';
-    $armazenamento = $_POST['armazenamento'] ?? '';
-    $categoria = $_POST['categoria'] ?? '';
+$nome = trim($_POST['nome'] ?? '');
+$precoRecebido = trim($_POST['preco'] ?? '');
+$estoqueRecebido = $_POST['estoque'] ?? '';
+$codigo = trim($_POST['codigo_barras'] ?? '');
+$armazenamento = $_POST['armazenamento'] ?? '';
+$categoria = $_POST['categoria'] ?? '';
 
+// Converte o preço no formato brasileiro para número.
+// Exemplo: 1.234,56 -> 1234.56
+$valor = str_replace(
+    ',',
+    '.',
+    str_replace('.', '', $precoRecebido)
+);
 
-    // =====================================================
-    // VERIFICAR CAMPOS
-    // =====================================================
+$valor = (float) $valor;
 
-    if (
-        trim($nome) === '' ||
-        $precoRecebido === '' ||
-        $valor <= 0 ||
-        $estoque === '' ||
-        $codigo === '' ||
-        $armazenamento === '' ||
-        $categoria === ''
-    ) {
-        echo json_encode([
-            "sucesso" => false,
-            "mensagem" => "Preencha todos os campos corretamente."
-        ]);
-    
-        exit;
-    }
+// =====================================================
+// VALIDAR CAMPOS
+// =====================================================
 
+if (
+    $nome === '' ||
+    $precoRecebido === '' ||
+    $valor <= 0 ||
+    $estoqueRecebido === '' ||
+    !is_numeric($estoqueRecebido) ||
+    (float)$estoqueRecebido < 0 ||
+    (float)$estoqueRecebido != (int)$estoqueRecebido ||
+    $codigo === '' ||
+    $armazenamento === '' ||
+    $categoria === ''
+) {
+    responder(
+        false,
+        "Preencha todos os campos corretamente."
+    );
+}
 
-    // =====================================================
-    // VERIFICAR IMAGEM
-    // =====================================================
+$estoque = (int) $estoqueRecebido;
 
-    if (
-        !isset($_FILES['arquivo']) ||
-        $_FILES['arquivo']['error'] !== UPLOAD_ERR_OK
-    ) {
+// =====================================================
+// VERIFICAR SE O CÓDIGO JÁ ESTÁ CADASTRADO
+// =====================================================
 
-        echo json_encode([
-            "sucesso" => false,
-            "mensagem" => "Nenhuma imagem foi enviada."
-        ]);
+$sqlVerificar = "
+    SELECT idProduto
+    FROM produtos
+    WHERE codigoDeBarras = ?
+    LIMIT 1
+";
 
-        exit;
-    }
+$stmtVerificar = $conn->prepare($sqlVerificar);
 
+if (!$stmtVerificar) {
+    responder(
+        false,
+        "Não foi possível verificar o código de barras."
+    );
+}
 
-    $arquivo = $_FILES['arquivo'];
+$stmtVerificar->bind_param("s", $codigo);
+$stmtVerificar->execute();
+$stmtVerificar->store_result();
 
+if ($stmtVerificar->num_rows > 0) {
+    $stmtVerificar->close();
 
-    // =====================================================
-    // PASTA DE UPLOAD
-    // =====================================================
+    responder(
+        false,
+        "Já existe um produto cadastrado com o código de barras \""
+        . $codigo .
+        "\". Verifique o código e tente novamente."
+    );
+}
 
-    $pastaUpload = '../imagens/';
+$stmtVerificar->close();
 
+// =====================================================
+// VERIFICAR IMAGEM
+// =====================================================
 
-    // =====================================================
-    // CRIAR NOME ÚNICO PARA A IMAGEM
-    // =====================================================
+if (
+    !isset($_FILES['arquivo']) ||
+    $_FILES['arquivo']['error'] !== UPLOAD_ERR_OK
+) {
+    responder(
+        false,
+        "Selecione uma imagem válida para o produto."
+    );
+}
 
-    $nomeDoArquivo =
-        uniqid() . "_" . basename($arquivo['name']);
+$arquivo = $_FILES['arquivo'];
 
+// =====================================================
+// SALVAR IMAGEM
+// =====================================================
 
-    // Caminho da imagem
+$pastaUpload = '../imagens/';
 
-    $imagem =
-        $pastaUpload . $nomeDoArquivo;
+if (!is_dir($pastaUpload) || !is_writable($pastaUpload)) {
+    responder(
+        false,
+        "A pasta de imagens não existe ou não permite gravação."
+    );
+}
 
+$nomeDoArquivo =
+    uniqid('', true) . "_" . basename($arquivo['name']);
 
-    // =====================================================
-    // SALVAR IMAGEM
-    // =====================================================
+$imagem = $pastaUpload . $nomeDoArquivo;
 
-    if (
-        !move_uploaded_file(
-            $arquivo['tmp_name'],
-            $imagem
-        )
-    ) {
+if (!move_uploaded_file($arquivo['tmp_name'], $imagem)) {
+    responder(
+        false,
+        "Erro ao salvar a imagem do produto."
+    );
+}
 
-        echo json_encode([
-            "sucesso" => false,
-            "mensagem" => "Erro ao salvar a imagem."
-        ]);
+// =====================================================
+// CADASTRAR PRODUTO
+// =====================================================
 
-        exit;
-    }
-
-
-    // =====================================================
-    // CADASTRAR PRODUTO
-    // =====================================================
-
-   
-$sql = "INSERT INTO produtos
-(
-    nome,
-    codigoDeBarras,
-    valor,
-    estoque,
-    imagem,
-    categoria,
-    armazenamento
-)
-VALUES (?, ?, ?, ?, ?, ?, ?)";
+$sql = "
+    INSERT INTO produtos
+    (
+        nome,
+        codigoDeBarras,
+        valor,
+        estoque,
+        imagem,
+        categoria,
+        armazenamento
+    )
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+";
 
 $stmt = $conn->prepare($sql);
 
@@ -131,12 +163,10 @@ if (!$stmt) {
         unlink($imagem);
     }
 
-    echo json_encode([
-        "sucesso" => false,
-        "mensagem" => "Erro ao preparar cadastro: " . $conn->error
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
+    responder(
+        false,
+        "Não foi possível preparar o cadastro do produto."
+    );
 }
 
 $stmt->bind_param(
@@ -152,34 +182,46 @@ $stmt->bind_param(
 
 if ($stmt->execute()) {
 
-    echo json_encode([
-        "sucesso" => true,
-        "mensagem" => "Produto cadastrado com sucesso!",
-        "produto" => [
-            "codigo" => $codigo,
-            "nome" => $nome,
-            "preco" => $valor,
-            "estoque" => $estoque,
-            "armazenamento" => $armazenamento,
-            "categoria" => $categoria
-        ]
-    ], JSON_UNESCAPED_UNICODE);
+    $produto = [
+        "codigo" => $codigo,
+        "nome" => $nome,
+        "preco" => $valor,
+        "estoque" => $estoque,
+        "armazenamento" => $armazenamento,
+        "categoria" => $categoria
+    ];
+
+    $stmt->close();
+
+    responder(
+        true,
+        "Produto cadastrado com sucesso!",
+        $produto
+    );
 
 } else {
 
+    // Código 1062: o MySQL detectou um valor duplicado
+    $codigoDuplicado = ($stmt->errno === 1062);
+
+    $stmt->close();
+
+    // Remove a imagem caso o produto não tenha sido cadastrado
     if (file_exists($imagem)) {
         unlink($imagem);
     }
 
-    echo json_encode([
-        "sucesso" => false,
-        "mensagem" => "Erro ao cadastrar produto: " . $stmt->error
-    ], JSON_UNESCAPED_UNICODE);
+    if ($codigoDuplicado) {
+        responder(
+            false,
+            "Este código de barras já pertence a outro produto. "
+            . "Informe um código diferente."
+        );
+    }
+
+    responder(
+        false,
+        "Erro ao cadastrar produto. Verifique os dados e tente novamente."
+    );
 }
-
-$stmt->close();
-
-
-
-    exit;
-    ?>
+?>

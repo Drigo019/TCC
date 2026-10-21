@@ -187,10 +187,8 @@ transform: translateX(-100%);
 CONTEÚDO SEM SIDEBAR
 ========================================= */
 
-.conteudo-principal.sidebar-fechada {
-
-margin-left: 20px;
-
+.content.sidebar-fechada {
+    margin-left: 20px;
 }
 
 
@@ -562,6 +560,153 @@ table {
 
 }
 
+
+/* =========================================
+   POP-UPS PERSONALIZADOS DO ESTOQUE
+========================================= */
+
+.notificacao-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(12, 16, 20, 0.65);
+    backdrop-filter: blur(5px);
+}
+
+.notificacao-overlay.visivel {
+    display: flex;
+    animation: aparecerOverlayEstoque 0.2s ease;
+}
+
+.notificacao-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 28px;
+    border-radius: 24px;
+    background: #fff;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    animation: subirNotificacaoEstoque 0.3s ease;
+}
+
+.notificacao-icone {
+    width: 78px;
+    height: 78px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 38px;
+}
+
+.notificacao-icone.sucesso {
+    color: #198754;
+    background: #d9f8e6;
+}
+
+.notificacao-icone.erro {
+    color: #dc3545;
+    background: #ffe1e4;
+}
+
+.notificacao-icone.confirmacao {
+    color: #b8860b;
+    background: #fff1c2;
+}
+
+.notificacao-icone.info {
+    color: #0d6efd;
+    background: #dceaff;
+}
+
+.notificacao-titulo {
+    margin-bottom: 12px;
+    color: #212529;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.notificacao-mensagem {
+    margin-bottom: 26px;
+    color: #6c757d;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.notificacao-acoes {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.notificacao-botao {
+    min-height: 46px;
+    padding: 11px 22px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: transform 0.2s, filter 0.2s;
+}
+
+.notificacao-botao:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.96);
+}
+
+.notificacao-botao.principal {
+    color: #29230d;
+    background: #f5c542;
+}
+
+.notificacao-botao.secundario {
+    color: #495057;
+    background: #e9ecef;
+}
+
+.notificacao-botao:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+}
+
+@keyframes aparecerOverlayEstoque {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes subirNotificacaoEstoque {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .notificacao-card {
+        padding: 26px 20px;
+    }
+
+    .notificacao-acoes {
+        flex-direction: column-reverse;
+    }
+
+    .notificacao-botao {
+        width: 100%;
+    }
+}
+
+
 </style>
 
 </head>
@@ -797,6 +942,55 @@ table {
 </div>
 
 
+<!-- =========================================
+     POP-UP PERSONALIZADO DO ESTOQUE
+========================================= -->
+
+<div
+    id="notificacaoOverlay"
+    class="notificacao-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="notificacaoTitulo"
+    aria-describedby="notificacaoMensagem"
+>
+    <div class="notificacao-card">
+
+        <div id="notificacaoIcone" class="notificacao-icone info">
+            <i class="bi bi-info-circle-fill"></i>
+        </div>
+
+        <h3 id="notificacaoTitulo" class="notificacao-titulo">
+            Informação
+        </h3>
+
+        <p id="notificacaoMensagem" class="notificacao-mensagem"></p>
+
+        <div class="notificacao-acoes">
+
+            <button
+                type="button"
+                id="notificacaoCancelar"
+                class="notificacao-botao secundario"
+                style="display:none;"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="notificacaoConfirmar"
+                class="notificacao-botao principal"
+            >
+                Continuar
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+
 <script>
 
 function filtrarProdutos() {
@@ -834,391 +1028,426 @@ function filtrarProdutos() {
 }
 
 
-function adicionarEstoque(idProduto, botao) {
 
-    const linha =
-        botao.closest("tr");
+// =========================================
+// SISTEMA DE NOTIFICAÇÕES
+// =========================================
 
+let resolverNotificacaoEstoque = null;
+let acaoNotificacaoEstoque = null;
 
-    const campo =
-        linha.querySelector(
-            ".quantidade-adicionar"
-        );
+function mostrarNotificacaoEstoque(
+    tipo,
+    titulo,
+    mensagem,
+    textoBotao = "Continuar",
+    aoContinuar = null
+) {
+    const overlay = document.getElementById("notificacaoOverlay");
+    const icone = document.getElementById("notificacaoIcone");
+    const tituloEl = document.getElementById("notificacaoTitulo");
+    const mensagemEl = document.getElementById("notificacaoMensagem");
+    const confirmar = document.getElementById("notificacaoConfirmar");
+    const cancelar = document.getElementById("notificacaoCancelar");
 
-
-    const quantidade =
-        parseInt(campo.value);
-
-
-    if (!quantidade || quantidade <= 0) {
-
-        alert(
-            "Digite uma quantidade válida."
-        );
-
-        campo.focus();
-
-        return;
-
+    if (resolverNotificacaoEstoque) {
+        const resolverAnterior = resolverNotificacaoEstoque;
+        resolverNotificacaoEstoque = null;
+        resolverAnterior(false);
     }
 
+    const configuracoes = {
+        sucesso: ["sucesso", "bi-check-circle-fill"],
+        erro: ["erro", "bi-exclamation-triangle-fill"],
+        confirmacao: ["confirmacao", "bi-question-circle-fill"],
+        info: ["info", "bi-info-circle-fill"]
+    };
 
-    const confirmar =
-        confirm(
-            "Adicionar " +
-            quantidade +
-            " unidade(s) ao estoque?"
-        );
+    const config = configuracoes[tipo] || configuracoes.info;
 
+    icone.className = "notificacao-icone " + config[0];
+    icone.replaceChildren();
 
-    if (!confirmar) {
+    const i = document.createElement("i");
+    i.className = "bi " + config[1];
+    icone.appendChild(i);
 
+    tituloEl.textContent = titulo;
+    mensagemEl.textContent = mensagem;
+    confirmar.textContent = textoBotao;
+    cancelar.style.display = "none";
+    confirmar.dataset.confirmacao = "false";
+
+    confirmar.disabled = false;
+    cancelar.disabled = false;
+
+    acaoNotificacaoEstoque = aoContinuar;
+    overlay.classList.add("visivel");
+    confirmar.focus();
+}
+
+function fecharNotificacaoEstoque() {
+    const overlay = document.getElementById("notificacaoOverlay");
+
+    if (resolverNotificacaoEstoque) {
+        const resolver = resolverNotificacaoEstoque;
+        resolverNotificacaoEstoque = null;
+
+        limparNotificacaoEstoque();
+        overlay.classList.remove("visivel");
+        resolver(false);
         return;
-
     }
 
+    const acao = acaoNotificacaoEstoque;
+    acaoNotificacaoEstoque = null;
 
-    fetch("atualizar_estoque.php", {
+    limparNotificacaoEstoque();
+    overlay.classList.remove("visivel");
 
-        method: "POST",
+    if (typeof acao === "function") {
+        acao();
+    }
+}
 
-        headers: {
+function limparNotificacaoEstoque() {
+    const confirmar = document.getElementById("notificacaoConfirmar");
+    const cancelar = document.getElementById("notificacaoCancelar");
 
-            "Content-Type":
-                "application/json"
+    confirmar.onclick = null;
+    cancelar.onclick = null;
 
-        },
+    confirmar.dataset.confirmacao = "false";
+    confirmar.disabled = false;
+    cancelar.disabled = false;
+    cancelar.style.display = "none";
+}
 
-        body: JSON.stringify({
+function confirmarNotificacaoEstoque(titulo, mensagem) {
+    return new Promise(resolve => {
+        const overlay = document.getElementById("notificacaoOverlay");
+        const icone = document.getElementById("notificacaoIcone");
+        const tituloEl = document.getElementById("notificacaoTitulo");
+        const mensagemEl = document.getElementById("notificacaoMensagem");
+        const confirmar = document.getElementById("notificacaoConfirmar");
+        const cancelar = document.getElementById("notificacaoCancelar");
 
-            idProduto: idProduto,
-
-            quantidade: quantidade
-
-        })
-
-    })
-
-    .then(response => response.json())
-
-    .then(resultado => {
-
-        if (!resultado.sucesso) {
-
-            alert(
-                "Erro: " +
-                resultado.mensagem
-            );
-
-            return;
-
+        if (resolverNotificacaoEstoque) {
+            const resolverAnterior = resolverNotificacaoEstoque;
+            resolverNotificacaoEstoque = null;
+            resolverAnterior(false);
         }
 
+        acaoNotificacaoEstoque = null;
 
-        const estoque =
-            linha.querySelector(
-                "td:nth-child(4) span"
-            );
+        icone.className = "notificacao-icone confirmacao";
+        icone.replaceChildren();
 
+        const i = document.createElement("i");
+        i.className = "bi bi-question-circle-fill";
+        icone.appendChild(i);
 
-        estoque.textContent =
-            resultado.estoque;
+        tituloEl.textContent = titulo;
+        mensagemEl.textContent = mensagem;
 
+        confirmar.textContent = "Confirmar";
+        cancelar.textContent = "Cancelar";
+        cancelar.style.display = "inline-block";
 
-        if (resultado.estoque <= 5) {
+        confirmar.dataset.confirmacao = "true";
+        confirmar.disabled = false;
+        cancelar.disabled = false;
 
-            estoque.className =
-                "estoque-baixo";
+        resolverNotificacaoEstoque = resolve;
 
-        } else {
+        function concluir(resposta) {
+            if (!resolverNotificacaoEstoque) return;
 
-            estoque.className =
-                "estoque-normal";
+            const resolver = resolverNotificacaoEstoque;
+            resolverNotificacaoEstoque = null;
 
+            limparNotificacaoEstoque();
+            overlay.classList.remove("visivel");
+
+            resolver(resposta);
         }
 
+        confirmar.onclick = () => concluir(true);
+        cancelar.onclick = () => concluir(false);
 
-        campo.value = "";
+        overlay.classList.add("visivel");
+        confirmar.focus();
+    });
+}
 
-
-        alert(
-            "Estoque atualizado com sucesso!"
-        );
-
-    })
-
-    .catch(error => {
-
-        console.error(error);
-
-        alert(
-            "Erro de comunicação com o servidor."
-        );
-
+document.getElementById("notificacaoConfirmar")
+    .addEventListener("click", function () {
+        if (this.dataset.confirmacao === "true") return;
+        fecharNotificacaoEstoque();
     });
 
-}
+document.getElementById("notificacaoCancelar")
+    .addEventListener("click", function () {
+        if (resolverNotificacaoEstoque) {
+            const confirmar = document.getElementById("notificacaoConfirmar");
+            confirmar.disabled = false;
+            this.disabled = false;
+        }
+    });
 
-function retirarEstoque(idProduto, botao) {
+document.getElementById("notificacaoOverlay")
+    .addEventListener("click", function (event) {
+        if (event.target !== this) return;
 
-const linha =
-    botao.closest("tr");
+        if (resolverNotificacaoEstoque) {
+            document.getElementById("notificacaoCancelar").click();
 
+            // Garante o cancelamento da confirmação.
+            if (resolverNotificacaoEstoque) {
+                const resolver = resolverNotificacaoEstoque;
+                resolverNotificacaoEstoque = null;
+                limparNotificacaoEstoque();
+                this.classList.remove("visivel");
+                resolver(false);
+            }
+        } else {
+            fecharNotificacaoEstoque();
+        }
+    });
 
-const campo =
-    linha.querySelector(
-        ".quantidade-adicionar"
-    );
+document.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape") return;
 
+    const overlay = document.getElementById("notificacaoOverlay");
+    if (!overlay.classList.contains("visivel")) return;
 
-const quantidade =
-    parseInt(campo.value);
+    event.preventDefault();
 
+    if (resolverNotificacaoEstoque) {
+        const resolver = resolverNotificacaoEstoque;
+        resolverNotificacaoEstoque = null;
 
-/* ================================
-   VALIDA QUANTIDADE
-================================= */
-
-if (!quantidade || quantidade <= 0) {
-
-    alert(
-        "Digite uma quantidade válida."
-    );
-
-    campo.focus();
-
-    return;
-}
-
-
-/* ================================
-   PEGA O ESTOQUE ATUAL
-================================= */
-
-const estoqueElement =
-    linha.querySelector(
-        "td:nth-child(4) span"
-    );
-
-
-const estoqueAtual =
-    parseInt(
-        estoqueElement.textContent
-    );
-
-
-/* ================================
-   VERIFICA ESTOQUE
-================================= */
-
-if (quantidade > estoqueAtual) {
-
-    alert(
-        "Não é possível retirar " +
-        quantidade +
-        " unidade(s).\n\n" +
-        "Estoque disponível: " +
-        estoqueAtual
-    );
-
-    campo.focus();
-
-    return;
-}
-
-
-/* ================================
-   CONFIRMAÇÃO
-================================= */
-
-const confirmar =
-    confirm(
-        "Retirar " +
-        quantidade +
-        " unidade(s) do estoque?"
-    );
-
-
-if (!confirmar) {
-
-    return;
-
-}
-
-
-/* ================================
-   ENVIA PARA O PHP
-================================= */
-
-fetch(
-    "retirar_estoque.php",
-    {
-
-        method: "POST",
-
-        headers: {
-
-            "Content-Type":
-                "application/json"
-
-        },
-
-        body: JSON.stringify({
-
-            idProduto: idProduto,
-
-            quantidade: quantidade
-
-        })
-
+        limparNotificacaoEstoque();
+        overlay.classList.remove("visivel");
+        resolver(false);
+    } else {
+        fecharNotificacaoEstoque();
     }
-)
+});
 
 
-.then(
-    response =>
-        response.json()
-)
+// =========================================
+// ATUALIZA VISUAL DO ESTOQUE
+// =========================================
+
+function atualizarVisualEstoque(linha, quantidade) {
+    const estoque = linha.querySelector("td:nth-child(4) span");
+
+    estoque.textContent = quantidade;
+    estoque.className = quantidade <= 5
+        ? "estoque-baixo"
+        : "estoque-normal";
+}
 
 
-.then(resultado => {
+// =========================================
+// ADICIONAR ESTOQUE
+// =========================================
 
+async function adicionarEstoque(idProduto, botao) {
+    const linha = botao.closest("tr");
+    const campo = linha.querySelector(".quantidade-adicionar");
+    const quantidade = parseInt(campo.value, 10);
 
-    /* ================================
-       ERRO
-    ================================= */
-
-    if (!resultado.sucesso) {
-
-        alert(
-            "Erro: " +
-            resultado.mensagem
+    if (!Number.isInteger(quantidade) || quantidade <= 0) {
+        mostrarNotificacaoEstoque(
+            "info",
+            "Quantidade inválida",
+            "Digite uma quantidade inteira maior que zero."
         );
-
+        campo.focus();
         return;
     }
 
-
-    /* ================================
-       ATUALIZA ESTOQUE NA TELA
-    ================================= */
-
-    estoqueElement.textContent =
-        resultado.estoque;
-
-
-    /* ================================
-       ATUALIZA A COR
-    ================================= */
-
-    if (
-        resultado.estoque <= 5
-    ) {
-
-        estoqueElement.className =
-            "estoque-baixo";
-
-    } else {
-
-        estoqueElement.className =
-            "estoque-normal";
-
-    }
-
-
-    /* ================================
-       LIMPA CAMPO
-    ================================= */
-
-    campo.value = "";
-
-
-    alert(
-        "Estoque retirado com sucesso!"
+    const confirmado = await confirmarNotificacaoEstoque(
+        "Adicionar ao estoque?",
+        "Você está prestes a adicionar " + quantidade +
+        " unidade(s) deste produto ao estoque.\n\nDeseja continuar?"
     );
 
-})
+    if (!confirmado) return;
 
+    botao.disabled = true;
 
-.catch(error => {
+    try {
+        const response = await fetch("atualizar_estoque.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idProduto: idProduto,
+                quantidade: quantidade
+            })
+        });
 
-    console.error(error);
+        const resultado = await response.json();
 
-    alert(
-        "Erro de comunicação com o servidor."
-    );
-
-});
-
-}
-
-</script>
-
-<script>
-
-function alternarSidebar() {
-
-    const sidebar =
-        document.querySelector(".sidebar");
-
-    const conteudo =
-        document.querySelector(".conteudo-principal");
-
-
-    sidebar.classList.toggle("escondida");
-
-    conteudo.classList.toggle("sidebar-fechada");
-
-
-    const fechada =
-        sidebar.classList.contains("escondida");
-
-
-    localStorage.setItem(
-        "sidebarFechada",
-        fechada
-    );
-
-}
-
-
-/* =========================================
-   MANTER ESTADO AO TROCAR DE PÁGINA
-========================================= */
-
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
-
-        const sidebar =
-            document.querySelector(".sidebar");
-
-        const conteudo =
-            document.querySelector(".conteudo-principal");
-
-
-        const fechada =
-            localStorage.getItem(
-                "sidebarFechada"
+        if (!response.ok || !resultado.sucesso) {
+            mostrarNotificacaoEstoque(
+                "erro",
+                "Não foi possível atualizar",
+                resultado.mensagem || "O estoque não foi atualizado."
             );
-
-
-        if (fechada === "true") {
-
-            sidebar.classList.add(
-                "escondida"
-            );
-
-            conteudo.classList.add(
-                "sidebar-fechada"
-            );
-
+            return;
         }
 
+        atualizarVisualEstoque(linha, resultado.estoque);
+        campo.value = "";
+
+        mostrarNotificacaoEstoque(
+            "sucesso",
+            "Estoque atualizado!",
+            "Foram adicionadas " + quantidade +
+            " unidade(s) ao estoque.\n\n" +
+            "Nova quantidade em estoque: " + resultado.estoque + "."
+        );
+
+    } catch (error) {
+        console.error("Erro ao adicionar estoque:", error);
+
+        mostrarNotificacaoEstoque(
+            "erro",
+            "Erro de comunicação",
+            "Não foi possível atualizar o estoque. Verifique o servidor e tente novamente."
+        );
+    } finally {
+        botao.disabled = false;
     }
-);
+}
+
+
+// =========================================
+// RETIRAR ESTOQUE
+// =========================================
+
+async function retirarEstoque(idProduto, botao) {
+    const linha = botao.closest("tr");
+    const campo = linha.querySelector(".quantidade-adicionar");
+    const quantidade = parseInt(campo.value, 10);
+
+    if (!Number.isInteger(quantidade) || quantidade <= 0) {
+        mostrarNotificacaoEstoque(
+            "info",
+            "Quantidade inválida",
+            "Digite uma quantidade inteira maior que zero."
+        );
+        campo.focus();
+        return;
+    }
+
+    const estoqueElement = linha.querySelector("td:nth-child(4) span");
+    const estoqueAtual = parseInt(estoqueElement.textContent, 10);
+
+    if (quantidade > estoqueAtual) {
+        mostrarNotificacaoEstoque(
+            "erro",
+            "Estoque insuficiente",
+            "Não é possível retirar " + quantidade +
+            " unidade(s).\n\nEstoque disponível: " + estoqueAtual + "."
+        );
+        campo.focus();
+        return;
+    }
+
+    const confirmado = await confirmarNotificacaoEstoque(
+        "Retirar do estoque?",
+        "Você está prestes a retirar " + quantidade +
+        " unidade(s) deste produto.\n\nDeseja continuar?"
+    );
+
+    if (!confirmado) return;
+
+    botao.disabled = true;
+
+    try {
+        const response = await fetch("retirar_estoque.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                idProduto: idProduto,
+                quantidade: quantidade
+            })
+        });
+
+        const resultado = await response.json();
+
+        if (!response.ok || !resultado.sucesso) {
+            mostrarNotificacaoEstoque(
+                "erro",
+                "Não foi possível retirar",
+                resultado.mensagem || "O estoque não foi atualizado."
+            );
+            return;
+        }
+
+        atualizarVisualEstoque(linha, resultado.estoque);
+        campo.value = "";
+
+        mostrarNotificacaoEstoque(
+            "sucesso",
+            "Estoque atualizado!",
+            "Foram retiradas " + quantidade +
+            " unidade(s) do estoque.\n\n" +
+            "Quantidade restante: " + resultado.estoque + "."
+        );
+
+    } catch (error) {
+        console.error("Erro ao retirar estoque:", error);
+
+        mostrarNotificacaoEstoque(
+            "erro",
+            "Erro de comunicação",
+            "Não foi possível atualizar o estoque. Verifique o servidor e tente novamente."
+        );
+    } finally {
+        botao.disabled = false;
+    }
+}
+
+
+
 
 </script>
+
+
+<script>
+function alternarSidebar() {
+    const sidebar = document.querySelector(".sidebar");
+    const conteudo = document.querySelector(".content");
+
+    sidebar.classList.toggle("escondida");
+    conteudo.classList.toggle("sidebar-fechada");
+
+    const fechada = sidebar.classList.contains("escondida");
+    localStorage.setItem("sidebarFechada", fechada);
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    const sidebar = document.querySelector(".sidebar");
+    const conteudo = document.querySelector(".content");
+    const fechada = localStorage.getItem("sidebarFechada");
+
+    if (fechada === "true") {
+        sidebar.classList.add("escondida");
+        conteudo.classList.add("sidebar-fechada");
+    }
+});
+</script>
+</body>
+</html>
 
 </body>
 

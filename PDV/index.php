@@ -505,8 +505,12 @@ transform: rotate(180deg);
                 </td>
 
                 <td>
-                    Cliente não registrado
-                </td>
+    <?= htmlspecialchars(
+        $venda['nomeCliente'] ?: 'Cliente não registrado',
+        ENT_QUOTES,
+        'UTF-8'
+    ) ?>
+</td>
 
                 <td>
                     R$

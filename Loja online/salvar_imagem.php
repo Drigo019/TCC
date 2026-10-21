@@ -1,5 +1,5 @@
 <?php
-$pdo = new PDO('mysql:host=localhost;dbname=containerdoqueijo', 'root', '', 3308);
+$pdo = new PDO('mysql:host=localhost;dbname=containerdoqueijo', 'root', '');
 
 if(isset($_FILES['arquivo'])){
     $arquivo = $_FILES['arquivo'];

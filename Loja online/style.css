@@ -1186,22 +1186,15 @@ button {
         word-break: break-word !important;
     }
 
-    .produto button {
-
-        width: 100% !important;
-
-        max-width: 180px !important;
-
-        min-height: 34px !important;
-
-        height: auto !important;
-
-        padding: 6px 4px !important;
-
-        font-size: 10px !important;
-
-        margin-top: auto !important;
-    }
+    .produto .adicionar-ao-carrinho {
+    width: 100% !important;
+    max-width: 180px !important;
+    min-height: 34px !important;
+    height: auto !important;
+    padding: 6px 4px !important;
+    font-size: 10px !important;
+    margin-top: auto !important;
+}
 
 
     /* =========================
@@ -1613,3 +1606,4 @@ button {
     font-size: 14px;
     font-weight: bold;
 }
+

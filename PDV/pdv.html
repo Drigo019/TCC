@@ -360,6 +360,146 @@ transform: rotate(180deg);
 
 }
 
+
+/* =========================================
+   NOTIFICAÇÕES PERSONALIZADAS DO PDV
+========================================= */
+
+.notificacao-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(12, 16, 20, 0.65);
+    backdrop-filter: blur(5px);
+}
+
+.notificacao-overlay.visivel {
+    display: flex;
+    animation: aparecerOverlay 0.2s ease;
+}
+
+.notificacao-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 32px 28px;
+    border-radius: 24px;
+    background: #fff;
+    text-align: center;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+    animation: subirNotificacao 0.3s ease;
+}
+
+.notificacao-icone {
+    width: 78px;
+    height: 78px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 38px;
+}
+
+.notificacao-icone.sucesso {
+    color: #198754;
+    background: #d9f8e6;
+}
+
+.notificacao-icone.erro {
+    color: #dc3545;
+    background: #ffe1e4;
+}
+
+.notificacao-icone.confirmacao {
+    color: #b8860b;
+    background: #fff1c2;
+}
+
+.notificacao-icone.info {
+    color: #0d6efd;
+    background: #dceaff;
+}
+
+.notificacao-titulo {
+    margin-bottom: 12px;
+    color: #212529;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.notificacao-mensagem {
+    margin-bottom: 26px;
+    color: #6c757d;
+    font-size: 15px;
+    line-height: 1.7;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+}
+
+.notificacao-acoes {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.notificacao-botao {
+    min-height: 46px;
+    padding: 11px 22px;
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: transform 0.2s, filter 0.2s;
+}
+
+.notificacao-botao:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.96);
+}
+
+.notificacao-botao.principal {
+    color: #29230d;
+    background: #f5c542;
+}
+
+.notificacao-botao.secundario {
+    color: #495057;
+    background: #e9ecef;
+}
+
+@keyframes aparecerOverlay {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes subirNotificacao {
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .notificacao-card {
+        padding: 26px 20px;
+    }
+
+    .notificacao-acoes {
+        flex-direction: column-reverse;
+    }
+
+    .notificacao-botao {
+        width: 100%;
+    }
+}
+
     </style>
 
 </head>
@@ -1030,6 +1170,49 @@ transform: rotate(180deg);
 
 </div>
 
+<div
+    id="notificacaoOverlay"
+    class="notificacao-overlay"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="notificacaoTitulo"
+    aria-describedby="notificacaoMensagem"
+>
+    <div class="notificacao-card">
+
+        <div id="notificacaoIcone" class="notificacao-icone info">
+            <i class="bi bi-info-circle"></i>
+        </div>
+
+        <h3 id="notificacaoTitulo" class="notificacao-titulo">
+            Informação
+        </h3>
+
+        <p id="notificacaoMensagem" class="notificacao-mensagem"></p>
+
+        <div class="notificacao-acoes">
+
+            <button
+                type="button"
+                id="notificacaoCancelar"
+                class="notificacao-botao secundario"
+                style="display:none;"
+            >
+                Cancelar
+            </button>
+
+            <button
+                type="button"
+                id="notificacaoConfirmar"
+                class="notificacao-botao principal"
+            >
+                Continuar
+            </button>
+
+        </div>
+    </div>
+</div>
+
 
 
 <!-- =====================================================
@@ -1050,8 +1233,214 @@ transform: rotate(180deg);
 ========================================================= */
 
 let total = 0;
-
 let tipoCartaoEscolhido = "";
+
+
+
+/* =========================================
+   SISTEMA DE NOTIFICAÇÕES DO PDV
+========================================= */
+
+let acaoNotificacao = null;
+let resolverConfirmacao = null;
+
+function mostrarNotificacao(
+    tipo,
+    titulo,
+    mensagem,
+    textoBotao = "Continuar",
+    aoContinuar = null
+) {
+    const overlay = document.getElementById("notificacaoOverlay");
+    const icone = document.getElementById("notificacaoIcone");
+    const tituloElemento = document.getElementById("notificacaoTitulo");
+    const mensagemElemento = document.getElementById("notificacaoMensagem");
+    const botaoConfirmar = document.getElementById("notificacaoConfirmar");
+    const botaoCancelar = document.getElementById("notificacaoCancelar");
+
+    if (!overlay || !icone || !tituloElemento || !mensagemElemento ||
+        !botaoConfirmar || !botaoCancelar) {
+        console.error("Elementos da notificação não encontrados.");
+        return;
+    }
+
+    // Fecha uma confirmação anterior, se houver.
+    if (resolverConfirmacao) {
+        resolverConfirmacao(false);
+        resolverConfirmacao = null;
+    }
+
+    const configuracoes = {
+        sucesso: {
+            classe: "sucesso",
+            icone: "bi-check-circle-fill"
+        },
+        erro: {
+            classe: "erro",
+            icone: "bi-exclamation-triangle-fill"
+        },
+        confirmacao: {
+            classe: "confirmacao",
+            icone: "bi-question-circle-fill"
+        },
+        info: {
+            classe: "info",
+            icone: "bi-info-circle-fill"
+        }
+    };
+
+    const config = configuracoes[tipo] || configuracoes.info;
+
+    icone.className = "notificacao-icone " + config.classe;
+    icone.replaceChildren();
+
+    const elementoIcone = document.createElement("i");
+    elementoIcone.className = "bi " + config.icone;
+    icone.appendChild(elementoIcone);
+
+    tituloElemento.textContent = titulo;
+    mensagemElemento.textContent = mensagem;
+
+    botaoConfirmar.textContent = textoBotao;
+    botaoCancelar.style.display = "none";
+    botaoConfirmar.dataset.confirmacao = "false";
+
+    acaoNotificacao = aoContinuar;
+
+    overlay.classList.add("visivel");
+    botaoConfirmar.focus();
+}
+
+function fecharNotificacao() {
+    const overlay = document.getElementById("notificacaoOverlay");
+
+    // Se for uma confirmação, fechar significa cancelar.
+    if (resolverConfirmacao) {
+        const resolver = resolverConfirmacao;
+        resolverConfirmacao = null;
+
+        overlay.classList.remove("visivel");
+        limparEstadoNotificacao();
+
+        resolver(false);
+        return;
+    }
+
+    const acao = acaoNotificacao;
+    acaoNotificacao = null;
+
+    overlay.classList.remove("visivel");
+    limparEstadoNotificacao();
+
+    if (typeof acao === "function") {
+        acao();
+    }
+}
+
+function limparEstadoNotificacao() {
+    const botaoConfirmar = document.getElementById("notificacaoConfirmar");
+    const botaoCancelar = document.getElementById("notificacaoCancelar");
+
+    botaoConfirmar.onclick = null;
+    botaoCancelar.onclick = null;
+
+    botaoCancelar.style.display = "none";
+    botaoConfirmar.dataset.confirmacao = "false";
+}
+
+function confirmarNotificacao(titulo, mensagem) {
+    return new Promise((resolve) => {
+        const overlay = document.getElementById("notificacaoOverlay");
+        const icone = document.getElementById("notificacaoIcone");
+        const tituloElemento = document.getElementById("notificacaoTitulo");
+        const mensagemElemento = document.getElementById("notificacaoMensagem");
+        const botaoConfirmar = document.getElementById("notificacaoConfirmar");
+        const botaoCancelar = document.getElementById("notificacaoCancelar");
+
+        // Impede que uma confirmação anterior fique pendente.
+        if (resolverConfirmacao) {
+            const resolverAnterior = resolverConfirmacao;
+            resolverConfirmacao = null;
+            resolverAnterior(false);
+        }
+
+        acaoNotificacao = null;
+
+        icone.className = "notificacao-icone confirmacao";
+        icone.replaceChildren();
+
+        const elementoIcone = document.createElement("i");
+        elementoIcone.className = "bi bi-question-circle-fill";
+        icone.appendChild(elementoIcone);
+
+        tituloElemento.textContent = titulo;
+        mensagemElemento.textContent = mensagem;
+
+        botaoConfirmar.textContent = "Confirmar";
+        botaoCancelar.textContent = "Cancelar";
+        botaoCancelar.style.display = "inline-block";
+        botaoConfirmar.dataset.confirmacao = "true";
+
+        resolverConfirmacao = resolve;
+
+        function concluir(resposta) {
+            const resolver = resolverConfirmacao;
+
+            if (!resolver) return;
+
+            resolverConfirmacao = null;
+
+            overlay.classList.remove("visivel");
+            limparEstadoNotificacao();
+
+            resolver(resposta);
+        }
+
+        botaoConfirmar.onclick = () => concluir(true);
+        botaoCancelar.onclick = () => concluir(false);
+
+        overlay.classList.add("visivel");
+        botaoConfirmar.focus();
+    });
+}
+
+/* Botão principal das notificações comuns. */
+document.getElementById("notificacaoConfirmar")
+    .addEventListener("click", function () {
+        if (this.dataset.confirmacao === "true") return;
+
+        fecharNotificacao();
+    });
+
+/* Clique fora da caixa fecha o aviso ou cancela a confirmação. */
+document.getElementById("notificacaoOverlay")
+    .addEventListener("click", function (event) {
+        if (event.target !== this) return;
+
+        if (resolverConfirmacao) {
+            document.getElementById("notificacaoCancelar").click();
+        } else {
+            fecharNotificacao();
+        }
+    });
+
+/* Escape fecha o aviso ou cancela a confirmação. */
+document.addEventListener("keydown", function (event) {
+    if (event.key !== "Escape") return;
+
+    const overlay = document.getElementById("notificacaoOverlay");
+
+    if (!overlay.classList.contains("visivel")) return;
+
+    event.preventDefault();
+
+    if (resolverConfirmacao) {
+        document.getElementById("notificacaoCancelar").click();
+    } else {
+        fecharNotificacao();
+    }
+});
+
 
 
 
@@ -1072,9 +1461,11 @@ function buscarProduto() {
 
     if (codigo === "") {
 
-        alert(
-            "Digite ou leia o código de barras!"
-        );
+        mostrarNotificacao(
+    "info",
+    "Código de barras obrigatório",
+    "Digite ou leia o código de barras."
+);
 
         campo.focus();
 
@@ -1111,10 +1502,7 @@ function buscarProduto() {
 
         if (produto.erro) {
 
-            alert(
-                produto.mensagem ||
-                "Produto não encontrado!"
-            );
+            mostrarNotificacao("erro", "Produto não encontrado", produto.mensagem || "Verifique o código de barras e tente novamente.");
 
             campo.select();
 
@@ -1140,9 +1528,7 @@ function buscarProduto() {
         console.error(error);
 
 
-        alert(
-            "Erro ao buscar o produto."
-        );
+        mostrarNotificacao("erro", "Erro na busca", "Não foi possível buscar o produto. Tente novamente.");
 
     });
 
@@ -1203,9 +1589,7 @@ function adicionarProduto(produto) {
 
         if (quantidade >= estoque) {
 
-            alert(
-                "Não há mais unidades desse produto em estoque."
-            );
+            mostrarNotificacao("info", "Estoque insuficiente", "Não há mais unidades desse produto em estoque.");
 
             return;
 
@@ -1248,9 +1632,7 @@ function adicionarProduto(produto) {
 
     if (estoque <= 0) {
 
-        alert(
-            "Este produto está sem estoque."
-        );
+        mostrarNotificacao("erro", "Produto indisponível", "Este produto está sem estoque.");
 
         return;
 
@@ -1403,9 +1785,11 @@ function aumentarQuantidade(botao) {
 
     if (quantidade >= estoqueOriginal) {
 
-        alert(
-            "Não há mais unidades desse produto em estoque."
-        );
+      mostrarNotificacao(
+    "info",
+    "Limite de estoque atingido",
+    "Você já adicionou todas as unidades disponíveis deste produto."
+);
 
         return;
 
@@ -1585,9 +1969,7 @@ function abrirPagamento() {
 
     if (produtos.length === 0) {
 
-        alert(
-            "Adicione pelo menos um produto antes de finalizar a compra."
-        );
+        mostrarNotificacao("info", "Carrinho vazio", "Adicione pelo menos um produto antes de finalizar a compra.");
 
         return;
 
@@ -1634,7 +2016,7 @@ function abrirPagamento() {
      * Reseta cartão
      */
 
-    tipoCartaoSelecionado = "";
+   tipoCartaoEscolhido = "";
 
 
     document.getElementById(
@@ -1738,7 +2120,7 @@ function selecionarCartao() {
         "none";
 
 
-    tipoCartaoSelecionado = "";
+   tipoCartaoEscolhido = "";
 
 }
 
@@ -1816,464 +2198,145 @@ function voltarPagamento() {
    CONFIRMAR PAGAMENTO
 ========================================================= */
 
-function confirmarPagamento(
-    formaDePagamento
-) {
 
-
-    console.log(
-        "Forma escolhida:",
-        formaDePagamento
-    );
-
-
-    /*
-     * Verifica total
-     */
+async function confirmarPagamento(formaDePagamento) {
 
     if (total <= 0) {
-
-        alert(
+        mostrarNotificacao(
+            "info",
+            "Venda sem valor",
             "Não há produtos na venda."
         );
-
         return;
-
     }
 
+    const formasValidas = [
+        "Pix",
+        "Dinheiro",
+        "Crediario",
+        "Debito",
+        "Credito"
+    ];
 
-    /*
-     * Converte a forma escolhida
-     * para o ENUM do banco.
-     *
-     * Banco:
-     *
-     * Dinheiro
-     * Cartao
-     * Pix
-     * Crediario
-     */
-
-    let formaBanco = "";
-
-
-    if (
-        formaDePagamento === "Pix"
-    ) {
-
-        formaBanco =
-            "Pix";
-
-    }
-
-    else if (
-        formaDePagamento === "Dinheiro"
-    ) {
-
-        formaBanco =
-            "Dinheiro";
-
-    }
-
-    else if (
-        formaDePagamento === "Crediario"
-    ) {
-
-        formaBanco =
-            "Crediario";
-
-    }
-
-    else if (formaDePagamento === "Debito") {
-    formaBanco = "Debito";
-}
-else if (formaDePagamento === "Credito") {
-    formaBanco = "Credito";
-}
-
-    else {
-
-        alert(
-            "Forma de pagamento inválida: " +
-            formaDePagamento
+    if (!formasValidas.includes(formaDePagamento)) {
+        mostrarNotificacao(
+            "erro",
+            "Pagamento inválido",
+            "A forma de pagamento selecionada não é válida."
         );
-
         return;
-
     }
 
-
-
-    /* =========================================
-       PEGAR PRODUTOS
-    ========================================== */
-
-    const linhas =
-        document.querySelectorAll(
-            "#lista tr"
-        );
-
-
+    const linhas = document.querySelectorAll("#lista tr");
     const produtos = [];
 
+    linhas.forEach(linha => {
+        const id = parseInt(linha.dataset.id);
+        const quantidade = parseInt(
+            linha.querySelector(".quantidade").textContent
+        );
 
-    linhas.forEach(
-        linha => {
-
-
-            /*
-             * O banco usa idProduto
-             */
-
-            const id =
-                parseInt(
-                    linha.dataset.id
-                );
-
-
-            const quantidade =
-                parseInt(
-                    linha.querySelector(
-                        ".quantidade"
-                    ).textContent
-                );
-
-
-            if (
-                !isNaN(id) &&
-                quantidade > 0
-            ) {
-
-                produtos.push({
-
-                    id:
-                        id,
-
-                    quantidade:
-                        quantidade
-
-                });
-
-            }
-
+        if (!isNaN(id) && quantidade > 0) {
+            produtos.push({ id, quantidade });
         }
-    );
+    });
 
-
-
-    /* =========================================
-       VERIFICA PRODUTOS
-    ========================================== */
-
-    if (
-        produtos.length === 0
-    ) {
-
-        alert(
+    if (produtos.length === 0) {
+        mostrarNotificacao(
+            "erro",
+            "Carrinho inválido",
             "Nenhum produto válido foi encontrado no carrinho."
         );
-
         return;
-
     }
 
-
-
-    /* =========================================
-       NOME DA FORMA DE PAGAMENTO
-    ========================================== */
-
-    let nomeForma =
-        formaDePagamento;
-
-
-    if (
-        formaDePagamento === "Crediario"
-    ) {
-
-        nomeForma =
-            "CREDIÁRIO";
-
-    }
-
-    else if (
-        formaDePagamento === "Debito"
-    ) {
-
-        nomeForma =
-            "DÉBITO";
-
-    }
-
-    else if (
-        formaDePagamento === "Credito"
-    ) {
-
-        nomeForma =
-            "CRÉDITO";
-
-    }
-
-    else {
-
-        nomeForma =
-            formaDePagamento.toUpperCase();
-
-    }
-
-
-
-    /* =========================================
-       CONFIRMAÇÃO
-    ========================================== */
-
-    const confirmar =
-        confirm(
-
-            "Confirmar pagamento?\n\n" +
-
-            "Forma: " +
-            nomeForma +
-
-            "\nValor: R$ " +
-            total.toFixed(2)
-
-        );
-
-
-    if (!confirmar) {
-
-        return;
-
-    }
-
-
-
-    /* =========================================
-       ENVIA PARA PHP
-    ========================================== */
-
-    fetch(
-        "finalizar_venda.php",
-        {
-
-            method: "POST",
-
-            headers: {
-
-                "Content-Type":
-                    "application/json"
-
-            },
-
-            body: JSON.stringify({
-
-valor:
-    total,
-
-formaDePagamento:
-    formaBanco,
-
-produtos:
-    produtos
-
-})
-
-        }
-    )
-
-
-    /* =========================================
-       RESPOSTA
-    ========================================== */
-
-    .then(
-        response => {
-
-            return response.text();
-
-        }
-    )
-
-
-    .then(
-        texto => {
-
-
-            console.log(
-                "Resposta do PHP:",
-                texto
-            );
-
-
-            let resultado;
-
-
-            try {
-
-                resultado =
-                    JSON.parse(texto);
-
-            }
-
-            catch (erro) {
-
-
-                alert(
-
-                    "O servidor retornou uma resposta inválida:\n\n" +
-                    texto
-
-                );
-
-
-                return;
-
-            }
-
-
-
-            /* =====================================
-               ERRO DO PHP
-            ====================================== */
-
-            if (
-                !resultado.sucesso
-            ) {
-
-                alert(
-
-                    "Erro ao finalizar venda:\n\n" +
-                    resultado.mensagem
-
-                );
-
-                return;
-
-            }
-
-
-
-            /* =====================================
-               SUCESSO
-            ====================================== */
-
-            alert(
-
-                "Venda realizada com sucesso!\n\n" +
-
-                "Venda Nº " +
-
-                resultado.idVenda
-
-            );
-
-
-
-            /* =====================================
-               LIMPA CARRINHO
-            ====================================== */
-
-            document.getElementById(
-                "lista"
-            ).innerHTML =
-                "";
-
-
-            total =
-                0;
-
-
-            document.getElementById(
-                "total"
-            ).textContent =
-                "0.00";
-
-
-
-            /* =====================================
-               FECHA MODAL
-            ====================================== */
-
-            const modalElement =
-                document.getElementById(
-                    "modalPagamento"
-                );
-
-
-            const modal =
-                bootstrap.Modal.getInstance(
-                    modalElement
-                );
-
-
-            if (modal) {
-
-                modal.hide();
-
-            }
-
-
-
-            /* =====================================
-               LIMPA CÓDIGO
-            ====================================== */
-
-            document.getElementById(
-                "codigo"
-            ).value =
-                "";
-
-
-            document.getElementById(
-                "codigo"
-            ).focus();
-
-
-
-            /* =====================================
-               VOLTA AO DASHBOARD
-            ====================================== */
-
-            setTimeout(
-                function() {
-
-                    window.location.href =
-                        "index.php";
-
-                },
-                500
-            );
-
-        }
-    )
-
-
-    /* =========================================
-       ERRO DE COMUNICAÇÃO
-    ========================================== */
-
-    .catch(
-        error => {
-
-
-            console.error(
-                "Erro:",
-                error
-            );
-
-
-            alert(
-
-                "Erro de comunicação com o servidor:\n\n" +
-                error.message
-
-            );
-
-        }
+    const nomesFormas = {
+        Pix: "PIX",
+        Dinheiro: "DINHEIRO",
+        Crediario: "CREDIÁRIO",
+        Debito: "DÉBITO",
+        Credito: "CRÉDITO"
+    };
+
+    const confirmar = await confirmarNotificacao(
+        "Confirmar pagamento",
+        "Forma: " + nomesFormas[formaDePagamento] +
+        "\nValor: R$ " + total.toFixed(2) +
+        "\n\nDeseja confirmar esta venda?"
     );
 
+    if (!confirmar) return;
+
+    try {
+        const response = await fetch("finalizar_venda.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                valor: total,
+                formaDePagamento: formaDePagamento,
+                produtos: produtos
+            })
+        });
+
+        const texto = await response.text();
+        let resultado;
+
+        try {
+            resultado = JSON.parse(texto);
+        } catch (erro) {
+            console.error("Resposta inválida do PHP:", texto);
+
+            mostrarNotificacao(
+                "erro",
+                "Erro no servidor",
+                "O servidor retornou uma resposta inválida. Verifique o PHP e tente novamente."
+            );
+            return;
+        }
+
+        if (!response.ok || !resultado.sucesso) {
+            mostrarNotificacao(
+                "erro",
+                "Não foi possível concluir a venda",
+                resultado.mensagem || "O servidor não conseguiu registrar a venda."
+            );
+            return;
+        }
+
+        // Limpa o carrinho somente após a confirmação do PHP.
+        document.getElementById("lista").innerHTML = "";
+        total = 0;
+        document.getElementById("total").textContent = "0.00";
+        document.getElementById("codigo").value = "";
+
+        const modalElement = document.getElementById("modalPagamento");
+        const modal = bootstrap.Modal.getInstance(modalElement);
+
+        if (modal) modal.hide();
+
+        mostrarNotificacao(
+            "sucesso",
+            "Venda realizada com sucesso!",
+            "Pagamento registrado.\n\nVenda Nº " + resultado.idVenda,
+            "Continuar",
+            function() {
+                document.getElementById("codigo").focus();
+            }
+        );
+
+    } catch (erro) {
+        console.error("Erro de comunicação:", erro);
+
+        mostrarNotificacao(
+            "erro",
+            "Erro de comunicação",
+            "Não foi possível comunicar com o servidor. Verifique a conexão e tente novamente."
+        );
+    }
 }
+
 
 </script>
 
