@@ -12,7 +12,7 @@ unset($_SESSION['notificacao']);
         // =====================================================
         // CONEXÃO COM O BANCO
         // =====================================================
-        $conn = new mysqli("localhost","root","","containerdoqueijo");
+        $conn = new mysqli("localhost","root","","containerdoqueijo", 3308);
         if ($conn->connect_error) {
             die("Erro na conexão com o banco: " . $conn->connect_error);
         }
