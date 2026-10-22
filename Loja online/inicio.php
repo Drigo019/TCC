@@ -22,7 +22,7 @@ unset($_SESSION['abrir_cadastro']);
         // =====================================================
         // CONEXÃO COM O BANCO
         // =====================================================
-        $conn = new mysqli("localhost","root","","containerdoqueijo");
+        $conn = new mysqli("localhost","root","","containerdoqueijo", 3308);
         if ($conn->connect_error) {
             die("Erro na conexão com o banco: " . $conn->connect_error);
         }
@@ -986,11 +986,11 @@ if (
                                     <br>
                                     <!-- ADICIONAR -->
                                     <button
-    type="button"
-    class="adicionar-ao-carrinho"
-    data-id="<?php echo (int)$key; ?>">
-    Adicionar ao Carrinho
-</button>
+                                        type="button"
+                                        class="adicionar-ao-carrinho"
+                                        data-id="<?php echo (int)$key; ?>">
+                                        Adicionar ao Carrinho
+                                    </button>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
