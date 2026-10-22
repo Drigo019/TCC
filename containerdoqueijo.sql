@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Tempo de geração: 22/10/2026 às 02:46
+-- Tempo de geração: 22/10/2026 às 02:54
 -- Versão do servidor: 8.4.7
 -- Versão do PHP: 8.3.28
 
@@ -237,8 +237,6 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 --
 
 INSERT INTO `usuarios` (`idUsuario`, `nome`, `foto`, `cpf`, `email`, `senha`, `idFornecedor`, `idFuncionario`) VALUES
-(1, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$VgiEz..hrP9eJGhHrVdbQ..bjYK/F7tuBR9ndy4F6/NOapSiP8eWy', NULL, NULL),
-(2, 'Rodrigo', '', '111.111.111-11', 'rcarvalho15022009@gmail.com', '$2y$10$wV95HDGlgL720gsUxGYrPOK8.jY/4g99ceCewYq1OBTkfUDD2gSz.', NULL, NULL),
 (3, 'fellipy', '', '540.689.518-45', 'fellipysilva986@gmail.com', '$2y$10$HBGpE83aucpb39yvNykqCu5IEHVKn3japM8Q9ycZ9J84dQ.2v6J7i', NULL, NULL),
 (9, 'Leonardo Luis', '', '180.096.986-44', 'leonardoluis1427@gmail.com', '$2y$10$TRFLKZGpwthHrj4Xzr49p.S2/B84yM1lc2mAmphIO9CzHZUk31fHC', NULL, NULL);
 
