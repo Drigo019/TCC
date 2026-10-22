@@ -2,6 +2,9 @@
 
         session_start();
 
+        $dadosCadastro = $_SESSION['dados_cadastro'] ?? [];
+unset($_SESSION['dados_cadastro']);
+
         // Recuperar a posição da tela após atualizar o carrinho.
 $posicaoRolagem = $_SESSION['posicao_rolagem'] ?? null;
 unset($_SESSION['posicao_rolagem']);
@@ -9,10 +12,17 @@ unset($_SESSION['posicao_rolagem']);
         $notificacaoCompra = $_SESSION['notificacao'] ?? null;
 unset($_SESSION['notificacao']);
 
+// Recuperar mensagens de erro do cadastro.
+$mensagemCadastro = $_SESSION['mensagem_cadastro'] ?? null;
+unset($_SESSION['mensagem_cadastro']);
+
+$abrirCadastro = !empty($_SESSION['abrir_cadastro']);
+unset($_SESSION['abrir_cadastro']);
+
         // =====================================================
         // CONEXÃO COM O BANCO
         // =====================================================
-        $conn = new mysqli("localhost","root","","containerdoqueijo", 3308);
+        $conn = new mysqli("localhost","root","","containerdoqueijo");
         if ($conn->connect_error) {
             die("Erro na conexão com o banco: " . $conn->connect_error);
         }
@@ -438,6 +448,57 @@ if (
         width: 100%;
     }
 }
+
+
+.forca-senha-container {
+    margin-top: -10px;
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.forca-senha-trilho {
+    width: 100%;
+    height: 7px;
+    background-color: #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.forca-senha-barra {
+    width: 0%;
+    height: 100%;
+    background-color: #dc3545;
+    border-radius: 10px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+#textoForcaSenha {
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #6b7280;
+    transition: color 0.3s ease;
+}
+
+.link-esqueci-senha {
+    width: 100%;
+    text-align: right;
+    margin-top: -5px;
+    margin-bottom: 12px;
+}
+
+.link-esqueci-senha a {
+    color: #a47700;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.link-esqueci-senha a:hover {
+    color: #d4a000;
+    text-decoration: underline;
+}
 </style>
 
         </head>
@@ -518,6 +579,7 @@ if (
 
 
 
+
             </tr>
             <!-- =====================================================
                 CATEGORIAS
@@ -563,15 +625,43 @@ if (
             <form action="verificacao_cadastro_cliente.php" method="post">
                 <div class="dados-compra">
                     <label for="cpf">CPF:</label>
-                    <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
-                    <label for="senha_tela_de_login">Senha:</label>
-                    <input type="password" name="senha" id="senha_tela_de_login" placeholder="Digite sua senha" required>
-                    <button type="submit" class="btn-finalizar-compra">
-                        Entrar
-                    </button>
-                    <button type="button" class="btn-cancelar-compra" onclick="abrirPopupcadastro()">
-                        Não possuo uma conta
-                    </button>
+                  <input type="text"
+       name="cpf"
+       id="cpfCadastro"
+       maxlength="14"
+       placeholder="000.000.000-00"
+       oninput="mascaraCPF(this)"
+       inputmode="numeric"
+       autocomplete="off"
+       required>
+                    
+<label for="senha_tela_de_login">Senha:</label>
+
+<input
+    type="password"
+    name="senha"
+    id="senha_tela_de_login"
+    placeholder="Digite sua senha"
+    required
+>
+
+<div class="link-esqueci-senha">
+    <a href="esqueci_senha.php">
+        Esqueci minha senha
+    </a>
+</div>
+
+<button type="submit" class="btn-finalizar-compra">
+    Entrar
+</button>
+
+<button
+    type="button"
+    class="btn-cancelar-compra"
+    onclick="abrirPopupcadastro()"
+>
+    Não possuo uma conta
+</button>
                 </div>
             </form>
         </div>
@@ -592,32 +682,100 @@ if (
                     <h2>Dados pessoais</h2>
                     <div class="dados-compra">
                         <label for="nomeCadastro">Nome:</label>
-                        <input type="text" id="nomeCadastro" name="nome" placeholder="Digite seu nome" required>
+                        <input type="text" id="nomeCadastro" name="nome"
+       placeholder="Digite seu nome" required
+       value="<?= htmlspecialchars($dadosCadastro['nome'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                         <label for="emailCadastro">E-mail:</label>
-                        <input type="email" id="emailCadastro" name="email" placeholder="Digite seu e-mail" required>
+                        <input type="email" id="emailCadastro" name="email"
+       placeholder="Digite seu e-mail" required
+       value="<?= htmlspecialchars($dadosCadastro['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
                         <label for="cpfCadastro">CPF:</label>
-                        <input type="text" name="cpf" id="cpf" maxlength="14" placeholder="000.000.000-00" oninput="mascaraCPF(this)" required>
-                        <label for="senhaCadastro">Senha:</label>
-                        <input type="password" id="senhaCadastro" name="senha" placeholder="Digite sua senha" required>
+                        <input type="text" name="cpf" id="cpfCadastro"
+       maxlength="14" placeholder="000.000.000-00"
+       oninput="mascaraCPF(this)" required
+       value="<?= htmlspecialchars($dadosCadastro['cpf'] ?? '', ENT_QUOTES, 'UTF-8') ?>">
+                       <label for="senhaCadastro">Senha:</label>
+
+<input type="password"
+       id="senhaCadastro"
+       name="senha"
+       placeholder="Digite sua senha"
+       minlength="8"
+       autocomplete="new-password"
+       required>
+
+       
+<div class="forca-senha-container">
+    <div class="forca-senha-trilho">
+        <div id="barraForcaSenha" class="forca-senha-barra"></div>
+    </div>
+    <small id="textoForcaSenha">Digite uma senha</small>
+</div>
+
+<label for="confirmarSenhaCadastro">Confirme sua senha:</label>
+
+<input type="password"
+       id="confirmarSenhaCadastro"
+       name="confirmar_senha"
+       placeholder="Digite sua senha novamente"
+       minlength="8"
+       autocomplete="new-password"
+       required>
                     </div>
-                    <h2>Endereço</h2>
-                    <div class="dados-compra">
-                        <label for="cep">CEP:</label>
-                        <input type="text" name="cep" id="cep" placeholder="Digite o CEP do seu endereço" maxlength="9" oninput="mascaraCEP(this)" required>
-                        <label for="rua">Rua:</label>
-                        <input type="text" name="rua" id="rua" placeholder="Digite sua rua" required>
-                        <label for="numero">Número:</label>
-                        <input type="number" name="numero" id="numero" placeholder="Digite o número" required>
-                        <label for="bairro">Bairro:</label>
-                        <input type="text" name="bairro" id="bairro" placeholder="Digite seu bairro" required>
-                    </div>
+                
+<h2>Endereço</h2>
+
+<div class="dados-compra">
+    <label for="cepCadastro">CEP:</label>
+<input
+    type="text"
+    name="cep"
+    id="cepCadastro"
+    placeholder="00000-000"
+    maxlength="9"
+    inputmode="numeric"
+    oninput="mascaraCEP(this)"
+    required
+    value="<?= htmlspecialchars($dadosCadastro['cep'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+>
+
+    <label for="ruaCadastro">Rua:</label>
+    <input
+        type="text"
+        name="rua"
+        id="ruaCadastro"
+        placeholder="Digite sua rua"
+        value="<?= htmlspecialchars($dadosCadastro['rua'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+        required
+    >
+
+    <label for="numeroCadastro">Número:</label>
+    <input
+        type="number"
+        name="numero"
+        id="numeroCadastro"
+        placeholder="Digite o número"
+        value="<?= htmlspecialchars($dadosCadastro['numero'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+        required
+    >
+
+    <label for="bairroCadastro">Bairro:</label>
+    <input
+        type="text"
+        name="bairro"
+        id="bairroCadastro"
+        placeholder="Digite seu bairro"
+        value="<?= htmlspecialchars($dadosCadastro['bairro'] ?? '', ENT_QUOTES, 'UTF-8') ?>"
+        required
+    >
+</div>
                     <div class="botoes-finalizacao">
                         <button type="submit" class="btn-finalizar-compra" onclick="vazio()">
                             Cadastrar
                         </button>
-                        <button type="button" class="btn-cancelar-compra" onclick="fecharPopupcadastro()">
-                            Voltar
-                        </button>
+                        <button type="button" onclick="fecharPopupFimCompra()">
+    Voltar
+</button>
                     </div>
                 </form>
             </div>
@@ -692,10 +850,24 @@ if (
                         Nome:
                     </label>
                     <input type="text" id="nomeCliente" name="nome" placeholder="Digite seu nome" required>
-                    <label for="telefoneCliente">
-                        Telefone:
-                    </label>
-                    <input type="text" name="telefone" id="telefone" maxlength="15" placeholder="(00) 00000-0000" oninput="mascaraTelefone(this)" required>
+                    
+<label for="telefone">
+    Telefone:
+</label>
+
+<input
+    type="tel"
+    name="telefone"
+    id="telefone"
+    maxlength="15"
+    placeholder="(35) 99999-9999"
+    inputmode="numeric"
+    autocomplete="tel"
+    oninput="mascaraTelefone(this)"
+    required
+>
+<small id="erroTelefone" style="display:none; color:#c0392b; margin-top:5px;"></small>
+
                 </div>
                 <!-- =================================================
                     FORMA DE PAGAMENTO
@@ -711,8 +883,7 @@ if (
         <option value="">Selecione uma opção</option>
         <option value="Dinheiro">💵 Dinheiro</option>
         <option value="Cartão">💳 Cartão</option>
-        <option value="Pix">📱 Pix</option>
-        <option value="Crediário">🧾 Crediário</option>
+        <option value="Pix">📱 Pix</option> 
     </select>
 
     <!-- Aparece somente quando Cartão for selecionado -->
@@ -1241,6 +1412,15 @@ if (!clienteLogado) {
             document.addEventListener("DOMContentLoaded", function() {
                 atualizarContadorCarrinho();
                 });
+                
+function fecharPopupFimCompra() {
+    const popup = document.getElementById("modalFundoFimCompra");
+
+    if (popup) {
+        popup.style.display = "none";
+    }
+}
+
             function mascaraCPF(input) {
                 let valor = input.value.replace(/\D/g, '');
 
@@ -1377,6 +1557,33 @@ function confirmarLogout() {
         <?php unset($_SESSION['abrir_login']); ?>
     <?php endif; ?>
 
+    <?php if ($abrirCadastro): ?>
+
+    abrirPopupcadastro();
+
+<?php endif; ?>
+
+<?php if ($mensagemCadastro): ?>
+
+    mostrarNotificacao(
+        "erro",
+        "Não foi possível cadastrar",
+        <?= json_encode(
+            $mensagemCadastro,
+            JSON_HEX_TAG |
+            JSON_HEX_APOS |
+            JSON_HEX_QUOT |
+            JSON_HEX_AMP
+        ) ?>,
+        [
+            {
+                texto: "Entendi",
+                principal: true
+            }
+        ]
+    );
+
+<?php endif; ?>
     
 const formaPagamentoBase = document.getElementById("form_pag_base");
 const opcoesCartao = document.getElementById("opcoesCartao");
@@ -1472,6 +1679,115 @@ if (notificacaoCompra) {
     }
 }
 
+
+function validarTelefoneBrasil(valor) {
+    const telefone = valor.replace(/\D/g, '');
+
+    // DDDs válidos do Brasil
+    const dddsValidos = [
+        '11','12','13','14','15','16','17','18','19',
+        '21','22','24','27','28',
+        '31','32','33','34','35','37','38',
+        '41','42','43','44','45','46','47','48','49',
+        '51','53','54','55',
+        '61','62','63','64','65','66','67','68','69',
+        '71','73','74','75','77','79',
+        '81','82','83','84','85','86','87','88','89',
+        '91','92','93','94','95','96','97','98','99'
+    ];
+
+    if (telefone.length !== 10 && telefone.length !== 11) {
+        return {
+            valido: false,
+            mensagem: 'Digite o DDD e o número completo do telefone.'
+        };
+    }
+
+    const ddd = telefone.substring(0, 2);
+    const numero = telefone.substring(2);
+
+    if (!dddsValidos.includes(ddd)) {
+        return {
+            valido: false,
+            mensagem: 'O DDD informado não é válido no Brasil.'
+        };
+    }
+
+    // Celular: 11 dígitos no total e número iniciado por 9.
+    if (telefone.length === 11) {
+        if (!/^9\d{8}$/.test(numero)) {
+            return {
+                valido: false,
+                mensagem: 'O celular deve ter 9 dígitos após o DDD e começar com 9.'
+            };
+        }
+    }
+
+    // Telefone fixo: 10 dígitos no total e número iniciado de 2 a 5.
+    if (telefone.length === 10) {
+        if (!/^[2-5]\d{7}$/.test(numero)) {
+            return {
+                valido: false,
+                mensagem: 'O telefone fixo deve ter 8 dígitos após o DDD.'
+            };
+        }
+    }
+
+    return {
+        valido: true,
+        mensagem: ''
+    };
+}
+
+
+// Validar antes de enviar o formulário da compra.
+const formularioCompra = document.querySelector(
+    '#modalFundoFimCompra form[action="finalizar_compra.php"]'
+);
+
+if (formularioCompra) {
+    formularioCompra.addEventListener('submit', function(event) {
+        const campoTelefone = document.getElementById('telefone');
+        const resultado = validarTelefoneBrasil(campoTelefone.value);
+        const erro = document.getElementById('erroTelefone');
+
+        if (!resultado.valido) {
+            event.preventDefault();
+
+            erro.textContent = resultado.mensagem;
+            erro.style.display = 'block';
+
+            mostrarNotificacao(
+                'erro',
+                'Telefone inválido',
+                resultado.mensagem,
+                [{
+                    texto: 'Corrigir telefone',
+                    principal: true,
+                    acao: function() {
+                        campoTelefone.focus();
+                    }
+                }]
+            );
+
+            return;
+        }
+
+        erro.textContent = '';
+        erro.style.display = 'none';
+    });
+}
+
+
+// Esconder a mensagem de erro enquanto o usuário corrige o telefone.
+document.getElementById('telefone')?.addEventListener('input', function() {
+    const erro = document.getElementById('erroTelefone');
+
+    if (erro) {
+        erro.style.display = 'none';
+        erro.textContent = '';
+    }
+});
 
 
 
@@ -1765,6 +2081,201 @@ document.querySelectorAll('.adicionar-ao-carrinho').forEach(function(botao) {
         }
     });
 });
+
+
+const formularioCadastro = document.querySelector(
+    '#modalFundoCadastro form[action="cadastro_cliente.php"]'
+);
+
+if (formularioCadastro) {
+    formularioCadastro.addEventListener("submit", function(event) {
+        const senha = document.getElementById("senhaCadastro");
+        const confirmacao = document.getElementById(
+            "confirmarSenhaCadastro"
+        );
+
+        if (senha.value.length < 8) {
+            event.preventDefault();
+
+            mostrarNotificacao(
+                "aviso",
+                "Senha muito curta",
+                "Sua senha precisa ter pelo menos 8 caracteres.",
+                [
+                    {
+                        texto: "Entendi",
+                        principal: true
+                    }
+                ]
+            );
+
+            senha.focus();
+            return;
+        }
+
+        if (senha.value !== confirmacao.value) {
+            event.preventDefault();
+
+            mostrarNotificacao(
+                "erro",
+                "Senhas diferentes",
+                "A confirmação precisa ser igual à senha digitada.",
+                [
+                    {
+                        texto: "Corrigir",
+                        principal: true
+                    }
+                ]
+            );
+
+            confirmacao.focus();
+        }
+    });
+}
+
+
+function mascaraCEP(campo) {
+    let cep = campo.value.replace(/\D/g, '').slice(0, 8);
+
+    if (cep.length > 5) {
+        cep = cep.replace(/^(\d{5})(\d+)/, '$1-$2');
+    }
+
+    campo.value = cep;
+}
+
+let consultandoCEP = false;
+let cepNotificacaoAberta = false;
+
+async function validarCEP(campo) {
+    // Impede notificações repetidas.
+    if (consultandoCEP || cepNotificacaoAberta) return;
+
+    const cep = campo.value.replace(/\D/g, '');
+
+    if (cep.length === 0) return;
+
+    if (cep.length !== 8) {
+        cepNotificacaoAberta = true;
+
+        mostrarNotificacao(
+            "erro",
+            "CEP incompleto",
+            "Digite os 8 números do CEP para continuar.",
+            [{
+                texto: "Corrigir",
+                principal: true,
+                acao: () => {
+                    cepNotificacaoAberta = false;
+                    campo.focus();
+                }
+            }]
+        );
+
+        return;
+    }
+
+    consultandoCEP = true;
+
+    try {
+        const resposta = await fetch(
+            `https://viacep.com.br/ws/${cep}/json/`
+        );
+
+        if (!resposta.ok) {
+            throw new Error("Falha na consulta do CEP.");
+        }
+
+        const dados = await resposta.json();
+
+        if (dados.erro) {
+            cepNotificacaoAberta = true;
+
+            mostrarNotificacao(
+                "erro",
+                "CEP não encontrado",
+                "O CEP informado não existe. Confira os números e tente novamente.",
+                [{
+                    texto: "Entendi",
+                    principal: true,
+                    acao: () => {
+                        cepNotificacaoAberta = false;
+                        campo.value = "";
+                        campo.focus();
+                    }
+                }]
+            );
+        }
+    } catch (erro) {
+        cepNotificacaoAberta = true;
+
+        mostrarNotificacao(
+            "erro",
+            "Erro ao consultar CEP",
+            "Não foi possível verificar o CEP. Confira sua conexão e tente novamente.",
+            [{
+                texto: "Entendi",
+                principal: true,
+                acao: () => {
+                    cepNotificacaoAberta = false;
+                    campo.focus();
+                }
+            }]
+        );
+    } finally {
+        consultandoCEP = false;
+    }
+}
+
+document.getElementById('cepCadastro')
+    ?.addEventListener('blur', function () {
+        validarCEP(this);
+    });
+
+
+const campoSenha = document.getElementById('senhaCadastro');
+const barraForca = document.getElementById('barraForcaSenha');
+const textoForca = document.getElementById('textoForcaSenha');
+
+if (campoSenha && barraForca && textoForca) {
+    campoSenha.addEventListener('input', function () {
+        const senha = this.value;
+
+        let pontos = 0;
+
+        if (senha.length >= 8) pontos++;
+        if (/[a-z]/.test(senha) && /[A-Z]/.test(senha)) pontos++;
+        if (/\d/.test(senha)) pontos++;
+        if (/[^A-Za-z0-9]/.test(senha)) pontos++;
+
+        if (senha.length === 0) {
+            barraForca.style.width = '0%';
+            barraForca.style.backgroundColor = '#dc3545';
+            textoForca.textContent = 'Digite uma senha';
+            textoForca.style.color = '#6b7280';
+            return;
+        }
+
+        if (senha.length < 6 || pontos <= 1) {
+            barraForca.style.width = '25%';
+            barraForca.style.backgroundColor = '#dc3545';
+            textoForca.textContent = 'Senha fraca';
+            textoForca.style.color = '#dc3545';
+        } else if (senha.length < 10 || pontos <= 2) {
+            barraForca.style.width = '60%';
+            barraForca.style.backgroundColor = '#f0ad00';
+            textoForca.textContent = 'Senha mediana';
+            textoForca.style.color = '#b78100';
+        } else {
+            barraForca.style.width = '100%';
+            barraForca.style.backgroundColor = '#198754';
+            textoForca.textContent = 'Senha forte';
+            textoForca.style.color = '#198754';
+        }
+    });
+}
+
+
 
 </script>
 </body>

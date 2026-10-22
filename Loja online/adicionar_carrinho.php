@@ -23,7 +23,7 @@ if (!$idProduto || $idProduto < 1) {
     responder(false, 'Produto inválido.');
 }
 
-$conn = new mysqli('localhost', 'root', '', 'containerdoqueijo', 3308);
+$conn = new mysqli('localhost', 'root', '', 'containerdoqueijo');
 
 if ($conn->connect_error) {
     responder(false, 'Não foi possível conectar ao banco de dados.');

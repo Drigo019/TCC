@@ -49,8 +49,7 @@ $formasPermitidas = [
     'Cartao',
     'Debito',
     'Credito',
-    'Pix',
-    'Crediario'
+    'Pix'
 ];
 
 // Aceitar também os rótulos apresentados na interface.
@@ -62,9 +61,7 @@ $mapaPagamento = [
     'Débito'    => 'Debito',
     'Credito'   => 'Credito',
     'Crédito'   => 'Credito',
-    'Pix'       => 'Pix',
-    'Crediário' => 'Crediario',
-    'Crediario' => 'Crediario'
+    'Pix'       => 'Pix'
 ];
 
 if (!isset($mapaPagamento[$formaPagamento])) {
