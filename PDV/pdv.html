@@ -500,6 +500,71 @@ transform: rotate(180deg);
     }
 }
 
+
+/* =========================================
+   JANELA PERSONALIZADA DO CREDIÁRIO
+========================================= */
+
+.crediario-modal .modal-content {
+    border: none;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.crediario-cabecalho {
+    padding: 25px;
+    color: #fff;
+    background: linear-gradient(135deg, #343a40, #59636d);
+    border: none;
+}
+
+.crediario-icone {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    border-radius: 17px;
+    color: #343a40;
+    background: #ffe08a;
+    font-size: 28px;
+}
+
+.crediario-modal .modal-body {
+    padding: 26px;
+}
+
+.crediario-modal .form-label {
+    font-weight: 600;
+    color: #343a40;
+}
+
+.crediario-modal .form-control {
+    min-height: 48px;
+    border-radius: 12px;
+}
+
+.crediario-modal .form-control:focus {
+    border-color: #e6b832;
+    box-shadow: 0 0 0 0.2rem rgba(245, 197, 66, 0.2);
+}
+
+.crediario-resumo {
+    padding: 15px;
+    border-radius: 14px;
+    background: #fff8df;
+    color: #594719;
+}
+
+.crediario-modal .btn {
+    min-height: 44px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+
     </style>
 
 </head>
@@ -1169,6 +1234,115 @@ transform: rotate(180deg);
     </div>
 
 </div>
+
+<!-- =========================================
+     MODAL PERSONALIZADO DO CREDIÁRIO
+========================================= -->
+
+<div
+    class="modal fade crediario-modal"
+    id="modalCrediario"
+    tabindex="-1"
+    aria-labelledby="tituloCrediario"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header crediario-cabecalho">
+                <div>
+                    <div class="crediario-icone">
+                        <i class="bi bi-journal-check"></i>
+                    </div>
+
+                    <h4 class="modal-title fw-bold" id="tituloCrediario">
+                        Registrar crediário
+                    </h4>
+
+                    <p class="mb-0 mt-2 text-white-50">
+                        Informe os dados para registrar a compra a prazo.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-close btn-close-white"
+                    data-bs-dismiss="modal"
+                    aria-label="Fechar"
+                ></button>
+            </div>
+
+            <form id="formCrediario">
+                <div class="modal-body">
+
+                    <div class="crediario-resumo mb-4">
+                        <div class="small">Valor da compra</div>
+
+                        <div class="fs-3 fw-bold">
+                            R$ <span id="valorCrediario">0,00</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nomeClienteCrediario" class="form-label">
+                            <i class="bi bi-person me-1"></i>
+                            Nome do cliente
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nomeClienteCrediario"
+                            class="form-control"
+                            maxlength="150"
+                            autocomplete="off"
+                            placeholder="Digite o nome completo"
+                            required
+                        >
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="dataVencimentoCrediario" class="form-label">
+                            <i class="bi bi-calendar-event me-1"></i>
+                            Data de vencimento
+                        </label>
+
+                        <input
+                            type="date"
+                            id="dataVencimentoCrediario"
+                            class="form-control"
+                            required
+                        >
+
+                        <div class="form-text">
+                            Selecione o dia em que o pagamento deverá ser realizado.
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button
+                            type="button"
+                            class="btn btn-light border flex-fill"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancelar
+                        </button>
+
+                        <button
+                            type="submit"
+                            class="btn btn-warning flex-fill"
+                        >
+                            <i class="bi bi-check-circle me-1"></i>
+                            Continuar
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
 
 <div
     id="notificacaoOverlay"
@@ -2081,11 +2255,173 @@ function selecionarDinheiro() {
    CREDIÁRIO
 ========================================================= */
 
+
+/* =========================================================
+   CREDIÁRIO — SOLICITAR DADOS DO CLIENTE
+========================================================= */
+
 function selecionarCrediario() {
+    if (total <= 0) {
+        mostrarNotificacao(
+            "info",
+            "Carrinho vazio",
+            "Adicione produtos antes de registrar um crediário."
+        );
+        return;
+    }
 
-    confirmarPagamento("Crediario");
+    document.getElementById("valorCrediario").textContent =
+        total.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
 
+    const campoData = document.getElementById(
+        "dataVencimentoCrediario"
+    );
+
+    const hoje = new Date();
+    const ano = hoje.getFullYear();
+    const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+    const dia = String(hoje.getDate()).padStart(2, "0");
+
+    campoData.min = `${ano}-${mes}-${dia}`;
+    campoData.value = "";
+
+    document.getElementById("nomeClienteCrediario").value = "";
+
+    const modalPagamento = bootstrap.Modal.getInstance(
+        document.getElementById("modalPagamento")
+    );
+
+    const modalCrediario = new bootstrap.Modal(
+        document.getElementById("modalCrediario")
+    );
+
+    if (modalPagamento) {
+        document.getElementById("modalPagamento").addEventListener(
+            "hidden.bs.modal",
+            function abrirCrediario() {
+                document.getElementById("modalPagamento").removeEventListener(
+                    "hidden.bs.modal",
+                    abrirCrediario
+                );
+
+                modalCrediario.show();
+
+                setTimeout(() => {
+                    document.getElementById(
+                        "nomeClienteCrediario"
+                    ).focus();
+                }, 250);
+            }
+        );
+
+        modalPagamento.hide();
+    } else {
+        modalCrediario.show();
+    }
 }
+
+/* =========================================================
+   VALIDAR DADOS E CONTINUAR
+========================================================= */
+
+document.getElementById("formCrediario").addEventListener(
+    "submit",
+    async function(event) {
+        event.preventDefault();
+
+        const nomeCliente = document.getElementById(
+            "nomeClienteCrediario"
+        ).value.trim();
+
+        const dataVencimento = document.getElementById(
+            "dataVencimentoCrediario"
+        ).value;
+
+        if (!nomeCliente) {
+            mostrarNotificacao(
+                "erro",
+                "Nome obrigatório",
+                "Informe o nome do cliente para continuar."
+            );
+            return;
+        }
+
+        if (!dataVencimento) {
+            mostrarNotificacao(
+                "erro",
+                "Vencimento obrigatório",
+                "Selecione a data de vencimento do crediário."
+            );
+            return;
+        }
+
+        const hoje = new Date();
+        const ano = hoje.getFullYear();
+        const mes = String(hoje.getMonth() + 1).padStart(2, "0");
+        const dia = String(hoje.getDate()).padStart(2, "0");
+        const dataHoje = `${ano}-${mes}-${dia}`;
+
+        if (dataVencimento < dataHoje) {
+            mostrarNotificacao(
+                "erro",
+                "Data inválida",
+                "A data de vencimento não pode estar no passado."
+            );
+            return;
+        }
+
+        const dataFormatada = new Date(
+            dataVencimento + "T12:00:00"
+        ).toLocaleDateString("pt-BR");
+
+        const valorFormatado = total.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        });
+
+        const modalElemento = document.getElementById("modalCrediario");
+        const modal = bootstrap.Modal.getInstance(modalElemento);
+
+        if (modal) {
+            modal.hide();
+        }
+
+        // Espera a janela terminar de fechar antes da confirmação.
+        await new Promise(resolve => {
+            modalElemento.addEventListener(
+                "hidden.bs.modal",
+                resolve,
+                { once: true }
+            );
+        });
+
+        const confirmado = await confirmarNotificacao(
+            "Confirmar crediário",
+            "Cliente: " + nomeCliente +
+            "\nValor: R$ " + valorFormatado +
+            "\nVencimento: " + dataFormatada +
+            "\n\nDeseja registrar esta venda a prazo?"
+        );
+
+        if (!confirmado) {
+            const modalPagamento = new bootstrap.Modal(
+                document.getElementById("modalPagamento")
+            );
+
+            modalPagamento.show();
+            return;
+        }
+
+        await confirmarPagamento("Crediario", {
+            nomeCliente: nomeCliente,
+            dataVencimento: dataVencimento
+        });
+    }
+);
+
 
 
 
@@ -2199,8 +2535,15 @@ function voltarPagamento() {
 ========================================================= */
 
 
-async function confirmarPagamento(formaDePagamento) {
 
+/* =========================================================
+   CONFIRMAR PAGAMENTO
+========================================================= */
+
+async function confirmarPagamento(
+    formaDePagamento,
+    dadosCrediario = null
+) {
     if (total <= 0) {
         mostrarNotificacao(
             "info",
@@ -2224,6 +2567,11 @@ async function confirmarPagamento(formaDePagamento) {
             "Pagamento inválido",
             "A forma de pagamento selecionada não é válida."
         );
+        return;
+    }
+
+    if (formaDePagamento === "Crediario" && !dadosCrediario) {
+        selecionarCrediario();
         return;
     }
 
@@ -2258,26 +2606,36 @@ async function confirmarPagamento(formaDePagamento) {
         Credito: "CRÉDITO"
     };
 
-    const confirmar = await confirmarNotificacao(
-        "Confirmar pagamento",
-        "Forma: " + nomesFormas[formaDePagamento] +
-        "\nValor: R$ " + total.toFixed(2) +
-        "\n\nDeseja confirmar esta venda?"
-    );
+    // As vendas comuns continuam com a confirmação habitual.
+    if (formaDePagamento !== "Crediario") {
+        const confirmar = await confirmarNotificacao(
+            "Confirmar pagamento",
+            "Forma: " + nomesFormas[formaDePagamento] +
+            "\nValor: R$ " + total.toFixed(2) +
+            "\n\nDeseja confirmar esta venda?"
+        );
 
-    if (!confirmar) return;
+        if (!confirmar) return;
+    }
 
     try {
+        const dadosVenda = {
+            valor: total,
+            formaDePagamento: formaDePagamento,
+            produtos: produtos
+        };
+
+        if (formaDePagamento === "Crediario") {
+            dadosVenda.nomeCliente = dadosCrediario.nomeCliente;
+            dadosVenda.dataVencimento = dadosCrediario.dataVencimento;
+        }
+
         const response = await fetch("finalizar_venda.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                valor: total,
-                formaDePagamento: formaDePagamento,
-                produtos: produtos
-            })
+            body: JSON.stringify(dadosVenda)
         });
 
         const texto = await response.text();
@@ -2291,7 +2649,7 @@ async function confirmarPagamento(formaDePagamento) {
             mostrarNotificacao(
                 "erro",
                 "Erro no servidor",
-                "O servidor retornou uma resposta inválida. Verifique o PHP e tente novamente."
+                "O servidor retornou uma resposta inválida. Verifique o PHP."
             );
             return;
         }
@@ -2300,26 +2658,45 @@ async function confirmarPagamento(formaDePagamento) {
             mostrarNotificacao(
                 "erro",
                 "Não foi possível concluir a venda",
-                resultado.mensagem || "O servidor não conseguiu registrar a venda."
+                resultado.mensagem ||
+                    "O servidor não conseguiu registrar a venda."
             );
+
+            // Se o crediário falhou, permite tentar novamente.
+            if (formaDePagamento === "Crediario") {
+                const modalPagamento = new bootstrap.Modal(
+                    document.getElementById("modalPagamento")
+                );
+                modalPagamento.show();
+            }
+
             return;
         }
 
-        // Limpa o carrinho somente após a confirmação do PHP.
+        // Limpar o carrinho somente após sucesso confirmado pelo PHP.
         document.getElementById("lista").innerHTML = "";
         total = 0;
         document.getElementById("total").textContent = "0.00";
         document.getElementById("codigo").value = "";
 
-        const modalElement = document.getElementById("modalPagamento");
-        const modal = bootstrap.Modal.getInstance(modalElement);
+        const modalElemento = document.getElementById("modalPagamento");
+        const modal = bootstrap.Modal.getInstance(modalElemento);
 
         if (modal) modal.hide();
 
         mostrarNotificacao(
             "sucesso",
-            "Venda realizada com sucesso!",
-            "Pagamento registrado.\n\nVenda Nº " + resultado.idVenda,
+            formaDePagamento === "Crediario"
+                ? "Crediário registrado!"
+                : "Venda realizada com sucesso!",
+            formaDePagamento === "Crediario"
+                ? "Cliente: " + dadosCrediario.nomeCliente +
+                  "\nVencimento: " +
+                  new Date(
+                      dadosCrediario.dataVencimento + "T12:00:00"
+                  ).toLocaleDateString("pt-BR") +
+                  "\nVenda Nº " + resultado.idVenda
+                : "Pagamento registrado.\n\nVenda Nº " + resultado.idVenda,
             "Continuar",
             function() {
                 document.getElementById("codigo").focus();
@@ -2336,6 +2713,7 @@ async function confirmarPagamento(formaDePagamento) {
         );
     }
 }
+
 
 
 </script>

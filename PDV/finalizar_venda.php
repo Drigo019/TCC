@@ -1,408 +1,301 @@
+
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
 include 'conexao.php';
 
 header('Content-Type: application/json; charset=utf-8');
 
-
-/* =====================================================
-   RECEBER DADOS
-===================================================== */
-
-$dados = json_decode(
-    file_get_contents("php://input"),
-    true
-);
-
-
-if (!$dados) {
-
-    echo json_encode([
-        "sucesso" => false,
-        "mensagem" => "Não foi possível receber os dados da venda."
-    ]);
-
+function responder($sucesso, $mensagem, $dados = []) {
+    echo json_encode(
+        array_merge([
+            'sucesso' => $sucesso,
+            'mensagem' => $mensagem
+        ], $dados),
+        JSON_UNESCAPED_UNICODE
+    );
     exit;
 }
 
+// =====================================================
+// RECEBER E VALIDAR OS DADOS
+// =====================================================
 
-/* =====================================================
-   DADOS RECEBIDOS
-===================================================== */
+$dados = json_decode(file_get_contents('php://input'), true);
+
+if (!is_array($dados)) {
+    responder(false, 'Não foi possível receber os dados da venda.');
+}
 
 $produtos = $dados['produtos'] ?? [];
+$valorInformado = (float) ($dados['valor'] ?? 0);
+$formaRecebida = trim($dados['formaDePagamento'] ?? '');
 
-$valor = floatval(
-    $dados['valor'] ?? 0
-);
+$mapaPagamento = [
+    'dinheiro' => 'Dinheiro',
+    'debito' => 'Debito',
+    'crédito' => 'Credito',
+    'credito' => 'Credito',
+    'pix' => 'Pix',
+    'crediario' => 'Crediario'
+];
 
-$formaDePagamento = trim(
-    $dados['formaDePagamento'] ?? ''
-);
+$chavePagamento = strtolower($formaRecebida);
 
-
-/* =====================================================
-   VALIDAR FORMA DE PAGAMENTO
-===================================================== */
-
-$formaRecebida = strtolower(
-    $formaDePagamento
-);
-
-
-switch ($formaRecebida) {
-
-    case 'dinheiro':
-
-        $formaPagamento = 'Dinheiro';
-
-        break;
-
-
-    case 'debito':
-
-        $formaPagamento = 'Debito';
-
-        break;
-
-        case 'credito':
-
-            $formaPagamento = 'Credito';
-    
-            break;
-
-
-    case 'pix':
-
-        $formaPagamento = 'Pix';
-
-        break;
-
-
-    case 'crediario':
-
-        $formaPagamento = 'Crediario';
-
-        break;
-
-
-    default:
-
-        echo json_encode([
-
-            "sucesso" => false,
-
-            "mensagem" =>
-                "Forma de pagamento inválida: " .
-                $formaDePagamento
-
-        ]);
-
-        exit;
+if (!isset($mapaPagamento[$chavePagamento])) {
+    responder(false, 'Forma de pagamento inválida.');
 }
 
+$formaPagamento = $mapaPagamento[$chavePagamento];
 
-
-
-/* =====================================================
-   VALIDAR PRODUTOS
-===================================================== */
-
-if (empty($produtos)) {
-
-    echo json_encode([
-
-        "sucesso" => false,
-
-        "mensagem" =>
-            "Nenhum produto foi informado."
-
-    ]);
-
-    exit;
+if (!is_array($produtos) || empty($produtos)) {
+    responder(false, 'Nenhum produto foi informado.');
 }
 
-
-/* =====================================================
-   VALIDAR VALOR
-===================================================== */
-
-if ($valor <= 0) {
-
-    echo json_encode([
-
-        "sucesso" => false,
-
-        "mensagem" =>
-            "Valor da venda inválido."
-
-    ]);
-
-    exit;
+if ($valorInformado <= 0) {
+    responder(false, 'O valor da venda deve ser maior que zero.');
 }
 
+// =====================================================
+// DADOS ESPECÍFICOS DO CREDIÁRIO
+// =====================================================
 
-/* =====================================================
-   INICIAR TRANSAÇÃO
-===================================================== */
+$nomeCliente = null;
+$dataVencimento = null;
+$statusCrediario = null;
 
-mysqli_begin_transaction($conn);
+if ($formaPagamento === 'Crediario') {
 
+    $nomeCliente = trim($dados['nomeCliente'] ?? '');
+    $dataVencimento = trim($dados['dataVencimento'] ?? '');
+
+    if ($nomeCliente === '') {
+        responder(false, 'Informe o nome do cliente para o crediário.');
+    }
+
+    if (mb_strlen($nomeCliente, 'UTF-8') > 150) {
+        responder(false, 'O nome do cliente deve ter no máximo 150 caracteres.');
+    }
+
+    $dataValida = DateTime::createFromFormat(
+        '!Y-m-d',
+        $dataVencimento
+    );
+
+    if (
+        !$dataValida ||
+        $dataValida->format('Y-m-d') !== $dataVencimento
+    ) {
+        responder(false, 'Informe uma data de vencimento válida.');
+    }
+
+    if ($dataVencimento < date('Y-m-d')) {
+        responder(false, 'A data de vencimento não pode estar no passado.');
+    }
+
+    $statusCrediario = 'Pendente';
+}
+
+// =====================================================
+// INICIAR TRANSAÇÃO
+// =====================================================
+
+if (!$conn->begin_transaction()) {
+    responder(false, 'Não foi possível iniciar a transação.');
+}
 
 try {
 
+    // -------------------------------------------------
+    // VALIDAR ESTOQUE E CALCULAR O VALOR REAL
+    // -------------------------------------------------
 
-    /* =================================================
-       VERIFICAR ESTOQUE
-    ================================================= */
+    $stmtProduto = $conn->prepare(
+        'SELECT nome, valor, estoque
+         FROM produtos
+         WHERE idProduto = ?
+         FOR UPDATE'
+    );
+
+    if (!$stmtProduto) {
+        throw new Exception('Erro ao preparar consulta dos produtos.');
+    }
+
+    $produtosValidados = [];
+    $valorTotal = 0;
 
     foreach ($produtos as $produto) {
 
-        $idProduto =
-            intval(
-                $produto['id'] ?? 0
-            );
+        $idProduto = (int) ($produto['id'] ?? $produto['idProduto'] ?? 0);
+        $quantidade = (int) ($produto['quantidade'] ?? 0);
 
-        $quantidade =
-            intval(
-                $produto['quantidade'] ?? 0
-            );
-
-
-        if ($idProduto <= 0) {
-
-            throw new Exception(
-                "ID de produto inválido."
-            );
-
+        if ($idProduto <= 0 || $quantidade <= 0) {
+            throw new Exception('Produto ou quantidade inválida.');
         }
 
+        $stmtProduto->bind_param('i', $idProduto);
 
-        if ($quantidade <= 0) {
-
-            throw new Exception(
-                "Quantidade inválida."
-            );
-
+        if (!$stmtProduto->execute()) {
+            throw new Exception('Erro ao consultar o estoque.');
         }
 
+        $resultado = $stmtProduto->get_result();
+        $dadosProduto = $resultado->fetch_assoc();
 
-        /* =============================================
-           BUSCAR ESTOQUE
-        ============================================= */
-
-        $sqlEstoque = "
-    SELECT estoque
-    FROM produtos
-    WHERE idProduto = $idProduto
-    FOR UPDATE
-";
-
-
-        $resultadoEstoque =
-            mysqli_query(
-                $conn,
-                $sqlEstoque
-            );
-
-
-        if (!$resultadoEstoque) {
-
+        if (!$dadosProduto) {
             throw new Exception(
-
-                "Erro ao consultar estoque: " .
-                mysqli_error($conn)
-
+                'O produto de código interno ' . $idProduto . ' não foi encontrado.'
             );
-
         }
 
-
-        $produtoBanco =
-            mysqli_fetch_assoc(
-                $resultadoEstoque
-            );
-
-
-        if (!$produtoBanco) {
-
+        if ((int) $dadosProduto['estoque'] < $quantidade) {
             throw new Exception(
-
-                "Produto ID " .
-                $idProduto .
-                " não encontrado."
-
+                'Estoque insuficiente para ' . $dadosProduto['nome'] .
+                '. Disponível: ' . $dadosProduto['estoque'] . '.'
             );
-
         }
 
+        $subtotal = round(
+            (float) $dadosProduto['valor'] * $quantidade,
+            2
+        );
 
-        $estoqueAtual =
-            intval(
-                $produtoBanco['estoque']
-            );
+        $valorTotal += $subtotal;
 
-
-        /* =============================================
-           VERIFICAR ESTOQUE SUFICIENTE
-        ============================================= */
-
-        if ($quantidade > $estoqueAtual) {
-
-            throw new Exception(
-
-                "Estoque insuficiente para o produto ID " .
-                $idProduto .
-                ".\n\n" .
-
-                "Estoque disponível: " .
-                $estoqueAtual .
-                "\n" .
-
-                "Quantidade solicitada: " .
-                $quantidade
-
-            );
-
-        }
-
+        $produtosValidados[] = [
+            'id' => $idProduto,
+            'nome' => $dadosProduto['nome'],
+            'quantidade' => $quantidade
+        ];
     }
 
+    $stmtProduto->close();
 
-    /* =================================================
-       REGISTRAR VENDA
-    ================================================= */
+    $valorTotal = round($valorTotal, 2);
 
-    $valorBanco =
-        number_format(
-            $valor,
-            2,
-            '.',
-            ''
-        );
+    if ($valorTotal <= 0) {
+        throw new Exception('O valor calculado da venda é inválido.');
+    }
 
-
-    $formaPagamentoSql =
-        mysqli_real_escape_string(
-            $conn,
-            $formaPagamento
-        );
-
-
-        $stmt = $conn->prepare("
-        INSERT INTO vendas (valor, data, formaDePagamento)
-        VALUES (?, NOW(), ?)
-    ");
-    
-    $stmt->bind_param("ds", $valor, $formaPagamento);
-    
-    if (!$stmt->execute()) {
+    // Evita registrar um valor diferente daquele calculado
+    // a partir dos preços atuais do banco.
+    if (abs($valorTotal - $valorInformado) > 0.02) {
         throw new Exception(
-            "Erro ao registrar venda: " . $stmt->error
+            'O valor do carrinho mudou. Confira os produtos e tente novamente.'
         );
     }
-    
-    $idVenda = $conn->insert_id;
-    $stmt->close();
 
+    // -------------------------------------------------
+    // REGISTRAR VENDA E DADOS DO CREDIÁRIO
+    // -------------------------------------------------
 
-    /* =================================================
-       BAIXAR ESTOQUE
-    ================================================= */
+    $sqlVenda = '
+        INSERT INTO vendas
+            (
+                valor,
+                data,
+                formaDePagamento,
+                nomeCliente,
+                dataVencimento,
+                statusCrediario,
+                dataPagamento
+            )
+        VALUES (?, CURDATE(), ?, ?, ?, ?, NULL)
+    ';
 
-    foreach ($produtos as $produto) {
+    $stmtVenda = $conn->prepare($sqlVenda);
 
-        $idProduto =
-            intval(
-                $produto['id']
-            );
-
-        $quantidade =
-            intval(
-                $produto['quantidade']
-            );
-
-
-            $sqlBaixa = "
-            UPDATE produtos
-            SET estoque = estoque - $quantidade
-            WHERE idProduto = $idProduto
-        ";
-
-
-        $resultadoBaixa =
-            mysqli_query(
-                $conn,
-                $sqlBaixa
-            );
-
-
-        if (!$resultadoBaixa) {
-
-            throw new Exception(
-
-                "Erro ao baixar estoque do produto ID " .
-                $idProduto .
-                ":\n\n" .
-                mysqli_error($conn)
-
-            );
-
-        }
-
+    if (!$stmtVenda) {
+        throw new Exception('Erro ao preparar o registro da venda.');
     }
 
+    $stmtVenda->bind_param(
+        'dssss',
+        $valorTotal,
+        $formaPagamento,
+        $nomeCliente,
+        $dataVencimento,
+        $statusCrediario
+    );
 
-    /* =================================================
-       CONFIRMAR TRANSAÇÃO
-    ================================================= */
+    if (!$stmtVenda->execute()) {
+        throw new Exception('Erro ao registrar a venda: ' . $stmtVenda->error);
+    }
 
-    mysqli_commit($conn);
+    $idVenda = $conn->insert_id;
+    $stmtVenda->close();
 
+    // -------------------------------------------------
+    // BAIXAR ESTOQUE
+    // -------------------------------------------------
 
-    /* =================================================
-       RETORNAR SUCESSO
-    ================================================= */
+    $stmtEstoque = $conn->prepare(
+        'UPDATE produtos
+         SET estoque = estoque - ?
+         WHERE idProduto = ?
+           AND estoque >= ?'
+    );
 
-    echo json_encode([
+    if (!$stmtEstoque) {
+        throw new Exception('Erro ao preparar a baixa do estoque.');
+    }
 
-        "sucesso" => true,
+    foreach ($produtosValidados as $produto) {
 
-        "mensagem" =>
-            "Venda realizada com sucesso!",
+        $idProduto = $produto['id'];
+        $quantidade = $produto['quantidade'];
 
-        "idVenda" =>
-            $idVenda,
+        $stmtEstoque->bind_param(
+            'iii',
+            $quantidade,
+            $idProduto,
+            $quantidade
+        );
 
-        "formaDePagamento" =>
-            $formaPagamento
+        if (!$stmtEstoque->execute()) {
+            throw new Exception(
+                'Erro ao atualizar o estoque de ' . $produto['nome'] . '.'
+            );
+        }
 
+        if ($stmtEstoque->affected_rows !== 1) {
+            throw new Exception(
+                'Não foi possível atualizar o estoque de ' . $produto['nome'] . '.'
+            );
+        }
+    }
+
+    $stmtEstoque->close();
+
+    // -------------------------------------------------
+    // CONFIRMAR TRANSAÇÃO
+    // -------------------------------------------------
+
+    if (!$conn->commit()) {
+        throw new Exception('Não foi possível confirmar a venda no banco.');
+    }
+
+    responder(true, 'Venda realizada com sucesso!', [
+        'idVenda' => $idVenda,
+        'formaDePagamento' => $formaPagamento,
+        'valor' => $valorTotal
     ]);
 
+} catch (Throwable $e) {
 
-} catch (Exception $e) {
+    $conn->rollback();
 
+    error_log('Erro ao finalizar venda: ' . $e->getMessage());
 
-    /* =================================================
-       DESFAZER TRANSAÇÃO
-    ================================================= */
+    responder(
+        false,
+        $e->getMessage()
+    );
 
-    mysqli_rollback($conn);
+} finally {
 
-
-    echo json_encode([
-
-        "sucesso" => false,
-
-        "mensagem" =>
-            $e->getMessage()
-
-    ]);
-
+    $conn->close();
 }
-
 ?>
