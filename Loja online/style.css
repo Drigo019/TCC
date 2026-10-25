@@ -1186,22 +1186,15 @@ button {
         word-break: break-word !important;
     }
 
-    .produto button {
-
-        width: 100% !important;
-
-        max-width: 180px !important;
-
-        min-height: 34px !important;
-
-        height: auto !important;
-
-        padding: 6px 4px !important;
-
-        font-size: 10px !important;
-
-        margin-top: auto !important;
-    }
+    .produto .adicionar-ao-carrinho {
+    width: 100% !important;
+    max-width: 180px !important;
+    min-height: 34px !important;
+    height: auto !important;
+    padding: 6px 4px !important;
+    font-size: 10px !important;
+    margin-top: auto !important;
+}
 
 
     /* =========================
@@ -1587,3 +1580,30 @@ button {
     }
 
 }
+
+
+/* Ícone de cliente no topo */
+.btn_cliente {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+
+.btn_cliente img {
+    height: 40px;
+    width: 40px;
+    object-fit: contain;
+}
+
+.btn_cliente span {
+    color: #FFD700;
+    font-size: 14px;
+    font-weight: bold;
+}
+
